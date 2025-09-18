@@ -1,0 +1,686 @@
+[
+  {
+    "oid": "5f6f37587e3ab05a56597b14198902232ba69e83",
+    "message": "Added functionality to enable/disable gestures in GestureCropImageView",
+    "date": "2022-01-25T13:50:49Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/5f6f37587e3ab05a56597b14198902232ba69e83",
+    "details": {
+      "sha": "e3644e184baf247f08e46dba201de8b763ef9208",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/GestureCropImageView.java",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 2,
+      "changes": 14,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/5f6f37587e3ab05a56597b14198902232ba69e83/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FGestureCropImageView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/5f6f37587e3ab05a56597b14198902232ba69e83/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FGestureCropImageView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FGestureCropImageView.java?ref=5f6f37587e3ab05a56597b14198902232ba69e83",
+      "patch": "@@ -21,7 +21,7 @@ public class GestureCropImageView extends CropImageView {\n \n     private float mMidPntX, mMidPntY;\n \n-    private boolean mIsRotateEnabled = true, mIsScaleEnabled = true;\n+    private boolean mIsRotateEnabled = true, mIsScaleEnabled = true, mIsGestureEnabled = true;\n     private int mDoubleTapScaleSteps = 5;\n \n     public GestureCropImageView(Context context) {\n@@ -52,6 +52,14 @@ public boolean isRotateEnabled() {\n         return mIsRotateEnabled;\n     }\n \n+    public void setGestureEnabled(boolean gestureEnabled) {\n+        mIsGestureEnabled = gestureEnabled;\n+    }\n+\n+    public boolean isGestureEnabled() {\n+        return mIsGestureEnabled;\n+    }\n+\n     public void setDoubleTapScaleSteps(int doubleTapScaleSteps) {\n         mDoubleTapScaleSteps = doubleTapScaleSteps;\n     }\n@@ -77,7 +85,9 @@ public boolean onTouchEvent(MotionEvent event) {\n             mMidPntY = (event.getY(0) + event.getY(1)) / 2;\n         }\n \n-        mGestureDetector.onTouchEvent(event);\n+        if (mIsGestureEnabled) {\n+            mGestureDetector.onTouchEvent(event);\n+        }\n \n         if (mIsScaleEnabled) {\n             mScaleDetector.onTouchEvent(event);",
+      "parent_sha": "037ac7785a671e999f70f35975533bdde74647dc"
+    }
+  },
+  {
+    "oid": "7f2d55673a8b2c08f6c5f0af7ed6f01518a384fa",
+    "message": "Fixed 'high resolution' crash.",
+    "date": "2020-08-20T07:53:14Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/7f2d55673a8b2c08f6c5f0af7ed6f01518a384fa",
+    "details": {
+      "sha": "72784e5b54beeb79b316e975263f8f49c818050e",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/task/BitmapLoadTask.java",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 1,
+      "changes": 13,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/7f2d55673a8b2c08f6c5f0af7ed6f01518a384fa/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapLoadTask.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/7f2d55673a8b2c08f6c5f0af7ed6f01518a384fa/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapLoadTask.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapLoadTask.java?ref=7f2d55673a8b2c08f6c5f0af7ed6f01518a384fa",
+      "patch": "@@ -37,6 +37,8 @@ public class BitmapLoadTask extends AsyncTask<Void, Void, BitmapLoadTask.BitmapW\n \n     private static final String TAG = \"BitmapWorkerTask\";\n \n+    private static final int MAX_BITMAP_SIZE = 100 * 1024 * 1024;   // 100 MB\n+\n     private final Context mContext;\n     private Uri mInputUri;\n     private Uri mOutputUri;\n@@ -106,6 +108,7 @@ protected BitmapWorkerResult doInBackground(Void... params) {\n                 } finally {\n                     BitmapLoadUtils.close(stream);\n                 }\n+                if (checkSize(decodeSampledBitmap, options)) continue;\n                 decodeAttemptSuccess = true;\n             } catch (OutOfMemoryError error) {\n                 Log.e(TAG, \"doInBackground: BitmapFactory.decodeFileDescriptor: \", error);\n@@ -243,4 +246,12 @@ protected void onPostExecute(@NonNull BitmapWorkerResult result) {\n         }\n     }\n \n-}\n+    private boolean checkSize(Bitmap bitmap, BitmapFactory.Options options) {\n+        int bitmapSize = bitmap != null ? bitmap.getByteCount() : 0;\n+        if (bitmapSize > MAX_BITMAP_SIZE) {\n+            options.inSampleSize *= 2;\n+            return true;\n+        }\n+        return false;\n+    }\n+}\n\\ No newline at end of file",
+      "parent_sha": "464a8ea59d2ce3a061f27125f084bad751a7af25"
+    }
+  },
+  {
+    "oid": "53e220260ececb07bd54a60b99fa7cf5d99e7754",
+    "message": "Fixed samsung hardware menu button crash",
+    "date": "2019-04-04T10:57:56Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/53e220260ececb07bd54a60b99fa7cf5d99e7754",
+    "details": {
+      "sha": "50bb08a76698553e6b3f2ac5f5c8eb84f08eb6d6",
+      "filename": "sample/src/main/java/com/yalantis/ucrop/sample/SampleActivity.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/53e220260ececb07bd54a60b99fa7cf5d99e7754/sample%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fsample%2FSampleActivity.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/53e220260ececb07bd54a60b99fa7cf5d99e7754/sample%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fsample%2FSampleActivity.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/sample%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fsample%2FSampleActivity.java?ref=53e220260ececb07bd54a60b99fa7cf5d99e7754",
+      "patch": "@@ -524,7 +524,7 @@ public boolean onCreateOptionsMenu(final Menu menu) {\n         }\n \n         MenuItem menuItemCrop = menu.findItem(R.id.menu_crop);\n-        Drawable menuItemCropIcon = ContextCompat.getDrawable(this, mToolbarCropDrawable);\n+        Drawable menuItemCropIcon = ContextCompat.getDrawable(this, mToolbarCropDrawable == 0 ? R.drawable.ucrop_ic_done : mToolbarCropDrawable);\n         if (menuItemCropIcon != null) {\n             menuItemCropIcon.mutate();\n             menuItemCropIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);\n@@ -544,7 +544,7 @@ public boolean onPrepareOptionsMenu(Menu menu) {\n     @Override\n     public boolean onOptionsItemSelected(MenuItem item) {\n         if (item.getItemId() == R.id.menu_crop) {\n-            if (fragment.isAdded())\n+            if (fragment != null && fragment.isAdded())\n                 fragment.cropAndSaveImage();\n         } else if (item.getItemId() == android.R.id.home) {\n             removeFragmentFromScreen();",
+      "parent_sha": "cd20315e9f8b221332a0041ef04e52f30e2dc057"
+    }
+  },
+  {
+    "oid": "830e413f9d7b2c9caf8a3169a009392cdce53669",
+    "message": "Revert \"Revert \"1\"\"\n\nThis reverts commit 69cd509d4a9f5c2479815f2503accbbe892b7adc.",
+    "date": "2016-04-03T11:28:24Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/830e413f9d7b2c9caf8a3169a009392cdce53669",
+    "details": {
+      "sha": "e016609963d2c250a158772f6e1dbd737304379e",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/CropImageView.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/830e413f9d7b2c9caf8a3169a009392cdce53669/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/830e413f9d7b2c9caf8a3169a009392cdce53669/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java?ref=830e413f9d7b2c9caf8a3169a009392cdce53669",
+      "patch": "@@ -83,7 +83,7 @@ public Bitmap cropImage() {\n         Bitmap viewBitmap = getViewBitmap();\n         if (viewBitmap == null || viewBitmap.isRecycled()) {\n             return null;\n-        }\n+        }123\n \n         cancelAllAnimations();\n         setImageToWrapCropBounds(false);",
+      "parent_sha": "69cd509d4a9f5c2479815f2503accbbe892b7adc"
+    }
+  },
+  {
+    "oid": "f140b2cd793c51b8a66ae5a300cbf22d0d05f1a0",
+    "message": "min limit for all",
+    "date": "2018-03-28T15:50:29Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/f140b2cd793c51b8a66ae5a300cbf22d0d05f1a0",
+    "details": {
+      "sha": "04d971d95d9d14594942bfed2a59a94fa225f717",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/UCrop.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 4,
+      "changes": 8,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/f140b2cd793c51b8a66ae5a300cbf22d0d05f1a0/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCrop.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/f140b2cd793c51b8a66ae5a300cbf22d0d05f1a0/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCrop.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCrop.java?ref=f140b2cd793c51b8a66ae5a300cbf22d0d05f1a0",
+      "patch": "@@ -100,7 +100,7 @@ public UCrop useSourceImageAspectRatio() {\n      * @param width  max cropped image width\n      * @param height max cropped image height\n      */\n-    public UCrop withMaxResultSize(@IntRange(from = 100) int width, @IntRange(from = 100) int height) {\n+    public UCrop withMaxResultSize(@IntRange(from = MIN_SIZE) int width, @IntRange(from = MIN_SIZE) int height) {\n         if (width < MIN_SIZE) {\n             width = MIN_SIZE;\n         }\n@@ -348,7 +348,7 @@ public void setMaxScaleMultiplier(@FloatRange(from = 1.0, fromInclusive = false)\n          *\n          * @param durationMillis - duration in milliseconds\n          */\n-        public void setImageToCropBoundsAnimDuration(@IntRange(from = 100) int durationMillis) {\n+        public void setImageToCropBoundsAnimDuration(@IntRange(from = MIN_SIZE) int durationMillis) {\n             mOptionBundle.putInt(EXTRA_IMAGE_TO_CROP_BOUNDS_ANIM_DURATION, durationMillis);\n         }\n \n@@ -357,7 +357,7 @@ public void setImageToCropBoundsAnimDuration(@IntRange(from = 100) int durationM\n          *\n          * @param maxBitmapSize - size in pixels\n          */\n-        public void setMaxBitmapSize(@IntRange(from = 100) int maxBitmapSize) {\n+        public void setMaxBitmapSize(@IntRange(from = MIN_SIZE) int maxBitmapSize) {\n             mOptionBundle.putInt(EXTRA_MAX_BITMAP_SIZE, maxBitmapSize);\n         }\n \n@@ -551,7 +551,7 @@ public void useSourceImageAspectRatio() {\n          * @param width  max cropped image width\n          * @param height max cropped image height\n          */\n-        public void withMaxResultSize(@IntRange(from = 100) int width, @IntRange(from = 100) int height) {\n+        public void withMaxResultSize(@IntRange(from = MIN_SIZE) int width, @IntRange(from = MIN_SIZE) int height) {\n             mOptionBundle.putInt(EXTRA_MAX_SIZE_X, width);\n             mOptionBundle.putInt(EXTRA_MAX_SIZE_Y, height);\n         }",
+      "parent_sha": "9f402187b43777fae1cab3d21e88ac39b8d174d4"
+    }
+  },
+  {
+    "oid": "91bf702812fa69a9e70ac5886eba675fc6f21a84",
+    "message": "compatibled for using in fragment",
+    "date": "2019-03-19T19:55:07Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/91bf702812fa69a9e70ac5886eba675fc6f21a84",
+    "details": {
+      "sha": "ef29f137a5a10dce5f5cd9d59e9fe699a6ced803",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/UCropFragment.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 4,
+      "changes": 9,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/91bf702812fa69a9e70ac5886eba675fc6f21a84/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/91bf702812fa69a9e70ac5886eba675fc6f21a84/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java?ref=91bf702812fa69a9e70ac5886eba675fc6f21a84",
+      "patch": "@@ -95,12 +95,13 @@ public static UCropFragment newInstance(Bundle uCrop) {\n     @Override\n     public void onAttach(Context context) {\n         super.onAttach(context);\n-        try {\n+        if (getParentFragment() instanceof UCropFragmentCallback)\n+            callback = (UCropFragmentCallback) getParentFragment();\n+        else if (context instanceof UCropFragmentCallback)\n             callback = (UCropFragmentCallback) context;\n-        } catch (ClassCastException e) {\n-            throw new ClassCastException(context.toString()\n+        else\n+            throw new IllegalArgumentException(context.toString()\n                     + \" must implement UCropFragmentCallback\");\n-        }\n     }\n \n     public void setCallback(UCropFragmentCallback callback) {",
+      "parent_sha": "f5b4801ed21ba265a75ace5cc0e41a197eb68449"
+    }
+  },
+  {
+    "oid": "d2810098432dd547166c9c163d3fe78f0dd07c52",
+    "message": "Freestyle overlay can be moved with the finger.",
+    "date": "2016-09-08T18:04:47Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/d2810098432dd547166c9c163d3fe78f0dd07c52",
+    "details": {
+      "sha": "85d85ff6243cd439c9ed32099faff95488b3c661",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/OverlayView.java",
+      "status": "modified",
+      "additions": 49,
+      "deletions": 6,
+      "changes": 55,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/d2810098432dd547166c9c163d3fe78f0dd07c52/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FOverlayView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/d2810098432dd547166c9c163d3fe78f0dd07c52/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FOverlayView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FOverlayView.java?ref=d2810098432dd547166c9c163d3fe78f0dd07c52",
+      "patch": "@@ -53,6 +53,8 @@ public class OverlayView extends View {\n \n     private boolean mIsFreestyleCropEnabled = DEFAULT_FREESTYLE_CROP_ENABLED;\n     protected float[] mCropGridCorners;\n+    protected float[] mCropGridCenter;\n+    private float mPreviousTouchX = -1, mPreviousTouchY = -1;\n     private int mCurrentTouchCornerIndex = -1;\n     private int mTouchPointThreshold;\n     private int mCropRectMinSize;\n@@ -225,6 +227,7 @@ public void setupCropBounds() {\n \n     private void updateGridPoints() {\n         mCropGridCorners = RectUtils.getCornersFromRect(mCropViewRect);\n+        mCropGridCenter = RectUtils.getCenterFromRect(mCropViewRect);\n \n         mGridPoints = null;\n         mCircularPath.reset();\n@@ -275,7 +278,11 @@ public boolean onTouchEvent(MotionEvent event) {\n         float y = event.getY();\n \n         if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {\n-            mCurrentTouchCornerIndex = getCurrentTouchCorner(x, y);\n+            if (mPreviousTouchX < 0) {\n+                mPreviousTouchX = x;\n+                mPreviousTouchY = y;\n+            }\n+            mCurrentTouchCornerIndex = getCurrentTouchIndex(x, y);\n             return mCurrentTouchCornerIndex != -1;\n         }\n \n@@ -285,14 +292,20 @@ public boolean onTouchEvent(MotionEvent event) {\n                 x = Math.min(Math.max(x, getPaddingLeft()), getWidth() - getPaddingRight());\n                 y = Math.min(Math.max(y, getPaddingTop()), getHeight() - getPaddingBottom());\n \n-                resizeCropViewRect(x, y);\n+                updateCropViewRect(x, y);\n+\n+                mPreviousTouchX = x;\n+                mPreviousTouchY = y;\n \n                 return true;\n             }\n         }\n \n         if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {\n+            mPreviousTouchX = -1;\n+            mPreviousTouchY = -1;\n             mCurrentTouchCornerIndex = -1;\n+\n             if (mCallback != null) {\n                 mCallback.onCropRectUpdated(mCropViewRect);\n             }\n@@ -305,14 +318,15 @@ public boolean onTouchEvent(MotionEvent event) {\n      * * The order of the corners is:\n      * 0------->1\n      * ^        |\n-     * |        |\n+     * |   4    |\n      * |        v\n      * 3<-------2\n      */\n-    private void resizeCropViewRect(float touchX, float touchY) {\n+    private void updateCropViewRect(float touchX, float touchY) {\n         mTempRect.set(mCropViewRect);\n \n         switch (mCurrentTouchCornerIndex) {\n+            // resize rectangle\n             case 0:\n                 mTempRect.set(touchX, touchY, mCropViewRect.right, mCropViewRect.bottom);\n                 break;\n@@ -325,6 +339,16 @@ private void resizeCropViewRect(float touchX, float touchY) {\n             case 3:\n                 mTempRect.set(touchX, mCropViewRect.top, mCropViewRect.right, touchY);\n                 break;\n+            // move rectangle\n+            case 4:\n+                mTempRect.offset(touchX - mPreviousTouchX, touchY - mPreviousTouchY);\n+                if (mTempRect.left > getLeft() && mTempRect.top > getTop()\n+                        && mTempRect.right < getRight() && mTempRect.bottom < getBottom()) {\n+                    mCropViewRect.set(mTempRect);\n+                    updateGridPoints();\n+                    postInvalidate();\n+                }\n+                return;\n         }\n \n         boolean changeHeight = mTempRect.height() >= mCropRectMinSize;\n@@ -345,13 +369,13 @@ private void resizeCropViewRect(float touchX, float touchY) {\n      * * The order of the corners in the float array is:\n      * 0------->1\n      * ^        |\n-     * |        |\n+     * |   4    |\n      * |        v\n      * 3<-------2\n      *\n      * @return - index of corner that is being dragged\n      */\n-    private int getCurrentTouchCorner(float touchX, float touchY) {\n+    private int getCurrentTouchIndex(float touchX, float touchY) {\n         int closestPointIndex = -1;\n         double closestPointDistance = mTouchPointThreshold;\n         for (int i = 0; i < 8; i += 2) {\n@@ -362,6 +386,25 @@ private int getCurrentTouchCorner(float touchX, float touchY) {\n                 closestPointIndex = i / 2;\n             }\n         }\n+        if (closestPointIndex < 0 && mCropViewRect.contains(touchX, touchY)) {\n+            return 4;\n+        }\n+\n+//        for (int i = 0; i <= 8; i += 2) {\n+//\n+//            double distanceToCorner;\n+//            if (i < 8) { // corners\n+//                distanceToCorner = Math.sqrt(Math.pow(touchX - mCropGridCorners[i], 2)\n+//                        + Math.pow(touchY - mCropGridCorners[i + 1], 2));\n+//            } else { // center\n+//                distanceToCorner = Math.sqrt(Math.pow(touchX - mCropGridCenter[0], 2)\n+//                        + Math.pow(touchY - mCropGridCenter[1], 2));\n+//            }\n+//            if (distanceToCorner < closestPointDistance) {\n+//                closestPointDistance = distanceToCorner;\n+//                closestPointIndex = i / 2;\n+//            }\n+//        }\n         return closestPointIndex;\n     }\n ",
+      "parent_sha": "50d2d748259682554f6a626e0104bebcb518a14b"
+    }
+  },
+  {
+    "oid": "007605759c6ba47cd25faad4df341f7fdc97cc0f",
+    "message": "Fixed bug with rotation without cropping in non-native variant.",
+    "date": "2019-03-18T15:16:29Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/007605759c6ba47cd25faad4df341f7fdc97cc0f",
+    "details": {
+      "sha": "3de4ef54f150cc00322d5c9e3643559b1889fec4",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/task/BitmapCropTask.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "changes": 3,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/007605759c6ba47cd25faad4df341f7fdc97cc0f/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapCropTask.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/007605759c6ba47cd25faad4df341f7fdc97cc0f/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapCropTask.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapCropTask.java?ref=007605759c6ba47cd25faad4df341f7fdc97cc0f",
+      "patch": "@@ -191,7 +191,8 @@ private boolean shouldCrop(int width, int height) {\n                 || Math.abs(mCropRect.left - mCurrentImageRect.left) > pixelError\n                 || Math.abs(mCropRect.top - mCurrentImageRect.top) > pixelError\n                 || Math.abs(mCropRect.bottom - mCurrentImageRect.bottom) > pixelError\n-                || Math.abs(mCropRect.right - mCurrentImageRect.right) > pixelError;\n+                || Math.abs(mCropRect.right - mCurrentImageRect.right) > pixelError\n+                || mCurrentAngle != 0;\n     }\n \n     @Override",
+      "parent_sha": "bc8a5bed7806125a25931d224401a5790bc47e92"
+    }
+  },
+  {
+    "oid": "6a683094069c30d3f0002a18eda4800d75a6e58c",
+    "message": "Dot placed little upper\n\n(cherry picked from commit ef97e61117643633993cb2d7932f667da031d2bc)",
+    "date": "2019-09-09T10:59:02Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/6a683094069c30d3f0002a18eda4800d75a6e58c",
+    "details": {
+      "sha": "29e6d3a5816a259607cc11fab281b0950948cfbd",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/widget/AspectRatioTextView.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 2,
+      "changes": 8,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/6a683094069c30d3f0002a18eda4800d75a6e58c/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2Fwidget%2FAspectRatioTextView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/6a683094069c30d3f0002a18eda4800d75a6e58c/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2Fwidget%2FAspectRatioTextView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2Fwidget%2FAspectRatioTextView.java?ref=6a683094069c30d3f0002a18eda4800d75a6e58c",
+      "patch": "@@ -28,6 +28,7 @@\n  */\n public class AspectRatioTextView extends AppCompatTextView {\n \n+    private final float MARGIN_MULTIPLIER = 1.5f;\n     private final Rect mCanvasClipBounds = new Rect();\n     private Paint mDotPaint;\n     private int mDotSize;\n@@ -94,8 +95,11 @@ protected void onDraw(Canvas canvas) {\n \n         if (isSelected()) {\n             canvas.getClipBounds(mCanvasClipBounds);\n-            canvas.drawCircle((mCanvasClipBounds.right - mCanvasClipBounds.left) / 2.0f, mCanvasClipBounds.bottom - mDotSize,\n-                    mDotSize / 2, mDotPaint);\n+\n+            float x = (mCanvasClipBounds.right - mCanvasClipBounds.left) / 2.0f;\n+            float y = (mCanvasClipBounds.bottom - mCanvasClipBounds.top / 2f) - mDotSize * MARGIN_MULTIPLIER;\n+\n+            canvas.drawCircle(x, y, mDotSize / 2f, mDotPaint);\n         }\n     }\n ",
+      "parent_sha": "858921359ed9795341052ebd1961f4216eccc204"
+    }
+  },
+  {
+    "oid": "2ed9a82fa03cf73d875ead4ccad57270167522ca",
+    "message": "support destination uri as a content provider uri",
+    "date": "2023-07-04T02:20:04Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/2ed9a82fa03cf73d875ead4ccad57270167522ca",
+    "details": {
+      "sha": "6222e92ba10905402dc0f4a3430981ac132c01c7",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/task/BitmapLoadTask.java",
+      "status": "modified",
+      "additions": 34,
+      "deletions": 7,
+      "changes": 41,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/2ed9a82fa03cf73d875ead4ccad57270167522ca/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapLoadTask.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/2ed9a82fa03cf73d875ead4ccad57270167522ca/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapLoadTask.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapLoadTask.java?ref=2ed9a82fa03cf73d875ead4ccad57270167522ca",
+      "patch": "@@ -145,23 +145,23 @@ protected BitmapWorkerResult doInBackground(Void... params) {\n     }\n \n     private void processInputUri() throws NullPointerException, IOException {\n-        String inputUriScheme = mInputUri.getScheme();\n-        Log.d(TAG, \"Uri scheme: \" + inputUriScheme);\n-        if (\"http\".equals(inputUriScheme) || \"https\".equals(inputUriScheme)) {\n+        Log.d(TAG, \"Uri scheme: \" + mInputUri.getScheme());\n+        if (isDownloadUri(mInputUri)) {\n             try {\n                 downloadFile(mInputUri, mOutputUri);\n             } catch (NullPointerException | IOException e) {\n                 Log.e(TAG, \"Downloading failed\", e);\n                 throw e;\n             }\n-        } else if (\"content\".equals(inputUriScheme)) {\n+        } else if (isContentUri(mInputUri)) {\n             try {\n                 copyFile(mInputUri, mOutputUri);\n             } catch (NullPointerException | IOException e) {\n                 Log.e(TAG, \"Copying failed\", e);\n                 throw e;\n             }\n-        } else if (!\"file\".equals(inputUriScheme)) {\n+        } else if (!isFileUri(mInputUri)) {\n+            String inputUriScheme = mInputUri.getScheme();\n             Log.e(TAG, \"Invalid Uri scheme \" + inputUriScheme);\n             throw new IllegalArgumentException(\"Invalid Uri scheme\" + inputUriScheme);\n         }\n@@ -178,11 +178,16 @@ private void copyFile(@NonNull Uri inputUri, @Nullable Uri outputUri) throws Nul\n         OutputStream outputStream = null;\n         try {\n             inputStream = mContext.getContentResolver().openInputStream(inputUri);\n-            outputStream = new FileOutputStream(new File(outputUri.getPath()));\n             if (inputStream == null) {\n                 throw new NullPointerException(\"InputStream for given input Uri is null\");\n             }\n \n+            if (isContentUri(outputUri)) {\n+                outputStream = mContext.getContentResolver().openOutputStream(outputUri);\n+            } else {\n+                outputStream = new FileOutputStream(new File(outputUri.getPath()));\n+            }\n+\n             byte buffer[] = new byte[1024];\n             int length;\n             while ((length = inputStream.read(buffer)) > 0) {\n@@ -217,7 +222,14 @@ private void downloadFile(@NonNull Uri inputUri, @Nullable Uri outputUri) throws\n             response = client.newCall(request).execute();\n             source = response.body().source();\n \n-            OutputStream outputStream = mContext.getContentResolver().openOutputStream(outputUri);\n+            OutputStream outputStream;\n+\n+            if (isContentUri(mOutputUri)) {\n+                outputStream = mContext.getContentResolver().openOutputStream(outputUri);\n+            } else {\n+                outputStream = new FileOutputStream(new File(outputUri.getPath()));\n+            }\n+\n             if (outputStream != null) {\n                 sink = Okio.sink(outputStream);\n                 source.readAll(sink);\n@@ -255,4 +267,19 @@ private boolean checkSize(Bitmap bitmap, BitmapFactory.Options options) {\n         }\n         return false;\n     }\n+\n+    private boolean isDownloadUri(Uri uri) {\n+        final String schema = uri.getScheme();\n+        return schema.equals(\"http\") || schema.equals(\"https\");\n+    }\n+\n+    private boolean isContentUri(Uri uri) {\n+        final String schema = uri.getScheme();\n+        return schema.equals(\"content\");\n+    }\n+\n+    private boolean isFileUri(Uri uri) {\n+        final String schema = uri.getScheme();\n+        return schema.equals(\"file\");\n+    }\n }\n\\ No newline at end of file",
+      "parent_sha": "63dda2e17138ed1b6b91a1dd83224452e7c51f6c"
+    }
+  },
+  {
+    "oid": "42367864121c67ec58d193310bb826b7f832ca0f",
+    "message": "Improve setLayerType.",
+    "date": "2016-01-30T14:47:14Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/42367864121c67ec58d193310bb826b7f832ca0f",
+    "details": {
+      "sha": "e0eacefa76b77bc903077478b694a30dfe0a040e",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/OverlayView.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "changes": 3,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/42367864121c67ec58d193310bb826b7f832ca0f/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FOverlayView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/42367864121c67ec58d193310bb826b7f832ca0f/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FOverlayView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FOverlayView.java?ref=42367864121c67ec58d193310bb826b7f832ca0f",
+      "patch": "@@ -172,7 +172,8 @@ public void setupCropBounds() {\n     }\n \n     protected void init() {\n-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {\n+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 &&\n+\t\t        Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {\n             setLayerType(LAYER_TYPE_SOFTWARE, null);\n         }\n     }",
+      "parent_sha": "f43ea4c5ec7382a9af9c4066f3f0232f3c034ddd"
+    }
+  },
+  {
+    "oid": "c8055edee3a6b36bb2b9f81a578df60a81276680",
+    "message": "Added fix for case when Bitmap.createBitmap method returns the same object.",
+    "date": "2016-01-22T10:56:43Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/c8055edee3a6b36bb2b9f81a578df60a81276680",
+    "details": {
+      "sha": "87d5af3123ca6ee5b03482fd6e3a63692583df98",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/CropImageView.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 2,
+      "changes": 6,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/c8055edee3a6b36bb2b9f81a578df60a81276680/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/c8055edee3a6b36bb2b9f81a578df60a81276680/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java?ref=c8055edee3a6b36bb2b9f81a578df60a81276680",
+      "patch": "@@ -127,8 +127,10 @@ public Bitmap cropImage() throws Exception {\n         int height = (int) (mCropRect.height() / currentScale);\n \n         Bitmap croppedBitmap = Bitmap.createBitmap(viewBitmap, left, top, width, height);\n-        viewBitmap.recycle();\n-\n+        // Bitmap.createBitmap may return the same object in this case\n+        if (croppedBitmap != viewBitmap) {\n+            viewBitmap.recycle();\n+        }\n         return croppedBitmap;\n     }\n ",
+      "parent_sha": "87d978287f6d8e790937b856f757acdc42262e5f"
+    }
+  },
+  {
+    "oid": "06379f1481887d43bc28fe64b2bbd3e56e7df8c3",
+    "message": "CropActivity rotate fix",
+    "date": "2016-03-31T13:01:47Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/06379f1481887d43bc28fe64b2bbd3e56e7df8c3",
+    "details": {
+      "sha": "f670f2db2665104ab41bf2ee74831c7885a3e79d",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/UCropActivity.java",
+      "status": "modified",
+      "additions": 9,
+      "deletions": 15,
+      "changes": 24,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/06379f1481887d43bc28fe64b2bbd3e56e7df8c3/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropActivity.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/06379f1481887d43bc28fe64b2bbd3e56e7df8c3/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropActivity.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropActivity.java?ref=06379f1481887d43bc28fe64b2bbd3e56e7df8c3",
+      "patch": "@@ -507,29 +507,23 @@ public void onClick(View v) {\n     };\n \n     private void setInitialState() {\n-        if (!mShowBottomControls) {\n-            return;\n-        }\n-\n-        if (mWrapperStateAspectRatio.getVisibility() == View.VISIBLE) {\n+        if (mWrapperStateAspectRatio != null && mWrapperStateAspectRatio.getVisibility() == View.VISIBLE) {\n             setWidgetState(R.id.state_aspect_ratio);\n         } else {\n             setWidgetState(R.id.state_scale);\n         }\n     }\n \n     private void setWidgetState(@IdRes int stateViewId) {\n-        if (!mShowBottomControls) {\n-            return;\n-        }\n-\n-        mWrapperStateAspectRatio.setSelected(stateViewId == R.id.state_aspect_ratio);\n-        mWrapperStateRotate.setSelected(stateViewId == R.id.state_rotate);\n-        mWrapperStateScale.setSelected(stateViewId == R.id.state_scale);\n+        if (mShowBottomControls) {\n+            mWrapperStateAspectRatio.setSelected(stateViewId == R.id.state_aspect_ratio);\n+            mWrapperStateRotate.setSelected(stateViewId == R.id.state_rotate);\n+            mWrapperStateScale.setSelected(stateViewId == R.id.state_scale);\n \n-        mLayoutAspectRatio.setVisibility(stateViewId == R.id.state_aspect_ratio ? View.VISIBLE : View.GONE);\n-        mLayoutRotate.setVisibility(stateViewId == R.id.state_rotate ? View.VISIBLE : View.GONE);\n-        mLayoutScale.setVisibility(stateViewId == R.id.state_scale ? View.VISIBLE : View.GONE);\n+            mLayoutAspectRatio.setVisibility(stateViewId == R.id.state_aspect_ratio ? View.VISIBLE : View.GONE);\n+            mLayoutRotate.setVisibility(stateViewId == R.id.state_rotate ? View.VISIBLE : View.GONE);\n+            mLayoutScale.setVisibility(stateViewId == R.id.state_scale ? View.VISIBLE : View.GONE);\n+        }\n \n         if (stateViewId == R.id.state_scale) {\n             setAllowedGestures(0);",
+      "parent_sha": "7b0713c8a09b0ccf7369c8ef42c9766b3eb85052"
+    }
+  },
+  {
+    "oid": "7bf45fab0589f5576603693ca9d705202cb51dd8",
+    "message": "Update deprecated tag",
+    "date": "2018-04-17T17:21:24Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/7bf45fab0589f5576603693ca9d705202cb51dd8",
+    "details": {
+      "sha": "d3283cffe3516252aed2f3754f0a5d4d6724c451",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/util/ImageHeaderParser.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/7bf45fab0589f5576603693ca9d705202cb51dd8/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FImageHeaderParser.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/7bf45fab0589f5576603693ca9d705202cb51dd8/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FImageHeaderParser.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FImageHeaderParser.java?ref=7bf45fab0589f5576603693ca9d705202cb51dd8",
+      "patch": "@@ -392,7 +392,7 @@ public static void copyExif(ExifInterface originalExif, int width, int height, S\n                 ExifInterface.TAG_GPS_LONGITUDE_REF,\n                 ExifInterface.TAG_GPS_PROCESSING_METHOD,\n                 ExifInterface.TAG_GPS_TIMESTAMP,\n-                ExifInterface.TAG_ISO_SPEED_RATINGS,\n+                ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY,\n                 ExifInterface.TAG_MAKE,\n                 ExifInterface.TAG_MODEL,\n                 ExifInterface.TAG_SUBSEC_TIME,",
+      "parent_sha": "8dd1e9c7a3f1a0e84dca54d0575a10d194068785"
+    }
+  },
+  {
+    "oid": "154b7f77bf171282d4898880b526447bc4342b6e",
+    "message": "log fix",
+    "date": "2018-04-05T07:52:41Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/154b7f77bf171282d4898880b526447bc4342b6e",
+    "details": {
+      "sha": "2e64450c4091424e40af5f79ae6095a51d69e853",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/UCropFragment.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/154b7f77bf171282d4898880b526447bc4342b6e/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/154b7f77bf171282d4898880b526447bc4342b6e/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java?ref=154b7f77bf171282d4898880b526447bc4342b6e",
+      "patch": "@@ -99,7 +99,7 @@ public void onAttach(Context context) {\n             callback = (UCropFragmentCallback) context;\n         } catch (ClassCastException e) {\n             throw new ClassCastException(context.toString()\n-                    + \" must implement OnHeadlineSelectedListener\");\n+                    + \" must implement UCropFragmentCallback\");\n         }\n     }\n ",
+      "parent_sha": "7ddf640147691fe869a3922e20ee7a1e03b78222"
+    }
+  },
+  {
+    "oid": "dc1f5aeb1eec38733de6616c1f46db1bca834db4",
+    "message": "log fix",
+    "date": "2018-04-05T07:49:13Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/dc1f5aeb1eec38733de6616c1f46db1bca834db4",
+    "details": {
+      "sha": "2e64450c4091424e40af5f79ae6095a51d69e853",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/UCropFragment.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/dc1f5aeb1eec38733de6616c1f46db1bca834db4/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/dc1f5aeb1eec38733de6616c1f46db1bca834db4/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java?ref=dc1f5aeb1eec38733de6616c1f46db1bca834db4",
+      "patch": "@@ -99,7 +99,7 @@ public void onAttach(Context context) {\n             callback = (UCropFragmentCallback) context;\n         } catch (ClassCastException e) {\n             throw new ClassCastException(context.toString()\n-                    + \" must implement OnHeadlineSelectedListener\");\n+                    + \" must implement UCropFragmentCallback\");\n         }\n     }\n ",
+      "parent_sha": "5444c55d1672d1128fb59ce8de06f05f535a37e3"
+    }
+  },
+  {
+    "oid": "5792149a95ffa4785b98007fa04c094ce3c3f4ab",
+    "message": "Added API to set all configs via UCrop.Options class.",
+    "date": "2016-06-24T14:57:17Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/5792149a95ffa4785b98007fa04c094ce3c3f4ab",
+    "details": {
+      "sha": "042f6d8d91c742b6859af819a68ede111e1de5e5",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/UCrop.java",
+      "status": "modified",
+      "additions": 37,
+      "deletions": 2,
+      "changes": 39,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/5792149a95ffa4785b98007fa04c094ce3c3f4ab/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCrop.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/5792149a95ffa4785b98007fa04c094ce3c3f4ab/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCrop.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCrop.java?ref=5792149a95ffa4785b98007fa04c094ce3c3f4ab",
+      "patch": "@@ -87,8 +87,8 @@ public UCrop withAspectRatio(float x, float y) {\n      */\n     public UCrop useSourceImageAspectRatio() {\n         mCropOptionsBundle.putBoolean(EXTRA_ASPECT_RATIO_SET, true);\n-        mCropOptionsBundle.putInt(EXTRA_ASPECT_RATIO_X, 0);\n-        mCropOptionsBundle.putInt(EXTRA_ASPECT_RATIO_Y, 0);\n+        mCropOptionsBundle.putFloat(EXTRA_ASPECT_RATIO_X, 0);\n+        mCropOptionsBundle.putFloat(EXTRA_ASPECT_RATIO_Y, 0);\n         return this;\n     }\n \n@@ -458,6 +458,41 @@ public void setAspectRatioOptions(int selectedByDefault, AspectRatio... aspectRa\n             mOptionBundle.putParcelableArrayList(EXTRA_ASPECT_RATIO_OPTIONS, new ArrayList<Parcelable>(Arrays.asList(aspectRatio)));\n         }\n \n+        /**\n+         * Set an aspect ratio for crop bounds.\n+         * User won't see the menu with other ratios options.\n+         *\n+         * @param x aspect ratio X\n+         * @param y aspect ratio Y\n+         */\n+        public void withAspectRatio(float x, float y) {\n+            mOptionBundle.putBoolean(EXTRA_ASPECT_RATIO_SET, true);\n+            mOptionBundle.putFloat(EXTRA_ASPECT_RATIO_X, x);\n+            mOptionBundle.putFloat(EXTRA_ASPECT_RATIO_Y, y);\n+        }\n+\n+        /**\n+         * Set an aspect ratio for crop bounds that is evaluated from source image width and height.\n+         * User won't see the menu with other ratios options.\n+         */\n+        public void useSourceImageAspectRatio() {\n+            mOptionBundle.putBoolean(EXTRA_ASPECT_RATIO_SET, true);\n+            mOptionBundle.putFloat(EXTRA_ASPECT_RATIO_X, 0);\n+            mOptionBundle.putFloat(EXTRA_ASPECT_RATIO_Y, 0);\n+        }\n+\n+        /**\n+         * Set maximum size for result cropped image.\n+         *\n+         * @param width  max cropped image width\n+         * @param height max cropped image height\n+         */\n+        public void withMaxResultSize(@IntRange(from = 100) int width, @IntRange(from = 100) int height) {\n+            mOptionBundle.putBoolean(EXTRA_MAX_SIZE_SET, true);\n+            mOptionBundle.putInt(EXTRA_MAX_SIZE_X, width);\n+            mOptionBundle.putInt(EXTRA_MAX_SIZE_Y, height);\n+        }\n+\n     }\n \n }",
+      "parent_sha": "13d1afae7a23502db8f83fc069114e1dcbe824c1"
+    }
+  },
+  {
+    "oid": "e73f98e2e2691ea0ce4850b41dc3ac12788a5399",
+    "message": "fixed initial min scale",
+    "date": "2016-09-08T18:56:10Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/e73f98e2e2691ea0ce4850b41dc3ac12788a5399",
+    "details": {
+      "sha": "9d6dbd4110174c851a2f034613f09fd64134fe7d",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/CropImageView.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 3,
+      "changes": 11,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/e73f98e2e2691ea0ce4850b41dc3ac12788a5399/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/e73f98e2e2691ea0ce4850b41dc3ac12788a5399/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java?ref=e73f98e2e2691ea0ce4850b41dc3ac12788a5399",
+      "patch": "@@ -479,11 +479,16 @@ private void setupInitialImagePosition(float drawableWidth, float drawableHeight\n         float cropRectWidth = mCropRect.width();\n         float cropRectHeight = mCropRect.height();\n \n-        float tw = (cropRectWidth - drawableWidth * mMinScale) / 2.0f + mCropRect.left;\n-        float th = (cropRectHeight - drawableHeight * mMinScale) / 2.0f + mCropRect.top;\n+        float widthScale = mCropRect.width() / drawableWidth;\n+        float heightScale = mCropRect.height() / drawableHeight;\n+\n+        float initialMinScale = Math.max(widthScale, heightScale);\n+\n+        float tw = (cropRectWidth - drawableWidth * initialMinScale) / 2.0f + mCropRect.left;\n+        float th = (cropRectHeight - drawableHeight * initialMinScale) / 2.0f + mCropRect.top;\n \n         mCurrentImageMatrix.reset();\n-        mCurrentImageMatrix.postScale(mMinScale, mMinScale);\n+        mCurrentImageMatrix.postScale(initialMinScale, initialMinScale);\n         mCurrentImageMatrix.postTranslate(tw, th);\n         setImageMatrix(mCurrentImageMatrix);\n     }",
+      "parent_sha": "60921af6fb8dbcaea2f5d0c36e88d31d88ff9d67"
+    }
+  },
+  {
+    "oid": "b119acebc1d3ec62d77a58d5cff71ef835d63af8",
+    "message": "Fixed rounding by using Math.round instead of casting to int",
+    "date": "2016-04-04T18:37:51Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/b119acebc1d3ec62d77a58d5cff71ef835d63af8",
+    "details": {
+      "sha": "d739e019511259e72e36d4a7d64a2e82d578efc4",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/CropImageView.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 6,
+      "changes": 12,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/b119acebc1d3ec62d77a58d5cff71ef835d63af8/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/b119acebc1d3ec62d77a58d5cff71ef835d63af8/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java?ref=b119acebc1d3ec62d77a58d5cff71ef835d63af8",
+      "patch": "@@ -107,8 +107,8 @@ public Bitmap cropImage() {\n                 float resizeScale = Math.min(scaleX, scaleY);\n \n                 Bitmap resizedBitmap = Bitmap.createScaledBitmap(viewBitmap,\n-                        (int) (viewBitmap.getWidth() * resizeScale),\n-                        (int) (viewBitmap.getHeight() * resizeScale), false);\n+                        Math.round(viewBitmap.getWidth() * resizeScale),\n+                        Math.round(viewBitmap.getHeight() * resizeScale), false);\n                 if (viewBitmap != resizedBitmap) {\n                     viewBitmap.recycle();\n                 }\n@@ -130,10 +130,10 @@ public Bitmap cropImage() {\n             viewBitmap = rotatedBitmap;\n         }\n \n-        int top = (int) ((mCropRect.top - currentImageRect.top) / currentScale);\n-        int left = (int) ((mCropRect.left - currentImageRect.left) / currentScale);\n-        int width = (int) (mCropRect.width() / currentScale);\n-        int height = (int) (mCropRect.height() / currentScale);\n+        int top = Math.round((mCropRect.top - currentImageRect.top) / currentScale);\n+        int left = Math.round((mCropRect.left - currentImageRect.left) / currentScale);\n+        int width = Math.round(mCropRect.width() / currentScale);\n+        int height = Math.round(mCropRect.height() / currentScale);\n \n         return Bitmap.createBitmap(viewBitmap, left, top, width, height);\n     }",
+      "parent_sha": "ba406d3fe10ec66a5686f31b0ab828f6e15595a8"
+    }
+  },
+  {
+    "oid": "c3df5cd9b5d3e2f5a2c640d5122a7328f34a0f41",
+    "message": "Update deprecated tag",
+    "date": "2018-04-18T13:43:39Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/c3df5cd9b5d3e2f5a2c640d5122a7328f34a0f41",
+    "details": {
+      "sha": "d3283cffe3516252aed2f3754f0a5d4d6724c451",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/util/ImageHeaderParser.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/c3df5cd9b5d3e2f5a2c640d5122a7328f34a0f41/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FImageHeaderParser.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/c3df5cd9b5d3e2f5a2c640d5122a7328f34a0f41/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FImageHeaderParser.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FImageHeaderParser.java?ref=c3df5cd9b5d3e2f5a2c640d5122a7328f34a0f41",
+      "patch": "@@ -392,7 +392,7 @@ public static void copyExif(ExifInterface originalExif, int width, int height, S\n                 ExifInterface.TAG_GPS_LONGITUDE_REF,\n                 ExifInterface.TAG_GPS_PROCESSING_METHOD,\n                 ExifInterface.TAG_GPS_TIMESTAMP,\n-                ExifInterface.TAG_ISO_SPEED_RATINGS,\n+                ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY,\n                 ExifInterface.TAG_MAKE,\n                 ExifInterface.TAG_MODEL,\n                 ExifInterface.TAG_SUBSEC_TIME,",
+      "parent_sha": "4c212f9bb47bb31b864fb4662fcfe6d2e648e994"
+    }
+  },
+  {
+    "oid": "454e723c7d410c2b986888005d87d002b8dab756",
+    "message": "HotFix for #271",
+    "date": "2017-04-03T13:31:34Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/454e723c7d410c2b986888005d87d002b8dab756",
+    "details": {
+      "sha": "5de97f3d09415b983080736fba975b96fdb29ce2",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/UCropView.java",
+      "status": "modified",
+      "additions": 16,
+      "deletions": 1,
+      "changes": 17,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/454e723c7d410c2b986888005d87d002b8dab756/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FUCropView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/454e723c7d410c2b986888005d87d002b8dab756/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FUCropView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FUCropView.java?ref=454e723c7d410c2b986888005d87d002b8dab756",
+      "patch": "@@ -14,7 +14,7 @@\n \n public class UCropView extends FrameLayout {\n \n-    private final GestureCropImageView mGestureCropImageView;\n+    private GestureCropImageView mGestureCropImageView;\n     private final OverlayView mViewOverlay;\n \n     public UCropView(Context context, AttributeSet attrs) {\n@@ -34,6 +34,10 @@ public UCropView(Context context, AttributeSet attrs, int defStyleAttr) {\n         a.recycle();\n \n \n+        setListenersToViews();\n+    }\n+\n+    private void setListenersToViews() {\n         mGestureCropImageView.setCropBoundsChangeListener(new CropBoundsChangeListener() {\n             @Override\n             public void onCropAspectRatioChanged(float cropRatio) {\n@@ -63,4 +67,15 @@ public OverlayView getOverlayView() {\n         return mViewOverlay;\n     }\n \n+    /**\n+     * Method for reset state for UCropImageView such as rotation, scale, translation.\n+     * Be careful: this method recreate UCropImageView instance and reattach it to layout.\n+     */\n+    public void resetCropImageView() {\n+        removeView(mGestureCropImageView);\n+        mGestureCropImageView = new GestureCropImageView(getContext());\n+        setListenersToViews();\n+        mGestureCropImageView.setCropRect(getOverlayView().getCropViewRect());\n+        addView(mGestureCropImageView, 0);\n+    }\n }\n\\ No newline at end of file",
+      "parent_sha": "0add52a8b2bc08c93d76ab665ea5eb4c3db36914"
+    }
+  },
+  {
+    "oid": "0aebfe3b7c36a3d0fabcb025214b6211a4b2e7b1",
+    "message": "Fix: In freestyle crop, where user tap inside of the crop rect then outside, and then inside again would make the crop rect jump.  Reset previous touch points.",
+    "date": "2016-11-21T21:17:51Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/0aebfe3b7c36a3d0fabcb025214b6211a4b2e7b1",
+    "details": {
+      "sha": "19d19270fed012c368af6aea86470f904b5c3afd",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/OverlayView.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 3,
+      "changes": 10,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/0aebfe3b7c36a3d0fabcb025214b6211a4b2e7b1/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FOverlayView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/0aebfe3b7c36a3d0fabcb025214b6211a4b2e7b1/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FOverlayView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FOverlayView.java?ref=0aebfe3b7c36a3d0fabcb025214b6211a4b2e7b1",
+      "patch": "@@ -278,12 +278,16 @@ public boolean onTouchEvent(MotionEvent event) {\n         float y = event.getY();\n \n         if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {\n-            if (mPreviousTouchX < 0) {\n+            mCurrentTouchCornerIndex = getCurrentTouchIndex(x, y);\n+            boolean shouldHandle = mCurrentTouchCornerIndex != -1;\n+            if (!shouldHandle) {\n+                mPreviousTouchX = -1;\n+                mPreviousTouchY = -1;\n+            } else if (mPreviousTouchX < 0) {\n                 mPreviousTouchX = x;\n                 mPreviousTouchY = y;\n             }\n-            mCurrentTouchCornerIndex = getCurrentTouchIndex(x, y);\n-            return mCurrentTouchCornerIndex != -1;\n+            return shouldHandle;\n         }\n \n         if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_MOVE) {",
+      "parent_sha": "c6429967b62cfa9795ddc10e32ebe3fed4cda929"
+    }
+  },
+  {
+    "oid": "9e2bb067631ac3bd3817c0fb55c51db3d61edfe0",
+    "message": "Fix issue #318. FileUtils NumberFormatException",
+    "date": "2017-08-11T15:17:29Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/9e2bb067631ac3bd3817c0fb55c51db3d61edfe0",
+    "details": {
+      "sha": "6b2a29a576ddb9462c3046e45d44480cb3cb551a",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/util/FileUtils.java",
+      "status": "modified",
+      "additions": 11,
+      "deletions": 3,
+      "changes": 14,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/9e2bb067631ac3bd3817c0fb55c51db3d61edfe0/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FFileUtils.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/9e2bb067631ac3bd3817c0fb55c51db3d61edfe0/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FFileUtils.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FFileUtils.java?ref=9e2bb067631ac3bd3817c0fb55c51db3d61edfe0",
+      "patch": "@@ -26,6 +26,7 @@\n import android.provider.DocumentsContract;\n import android.provider.MediaStore;\n import android.support.annotation.NonNull;\n+import android.text.TextUtils;\n import android.util.Log;\n \n import java.io.File;\n@@ -155,10 +156,17 @@ public static String getPath(final Context context, final Uri uri) {\n             else if (isDownloadsDocument(uri)) {\n \n                 final String id = DocumentsContract.getDocumentId(uri);\n-                final Uri contentUri = ContentUris.withAppendedId(\n-                        Uri.parse(\"content://downloads/public_downloads\"), Long.valueOf(id));\n+                if (!TextUtils.isEmpty(id)) {\n+                    try {\n+                        final Uri contentUri = ContentUris.withAppendedId(\n+                                Uri.parse(\"content://downloads/public_downloads\"), Long.valueOf(id));\n+                        return getDataColumn(context, contentUri, null, null);\n+                    } catch (NumberFormatException e) {\n+                        Log.i(TAG, e.getMessage());\n+                        return null;\n+                    }\n+                }\n \n-                return getDataColumn(context, contentUri, null, null);\n             }\n             // MediaProvider\n             else if (isMediaDocument(uri)) {",
+      "parent_sha": "1c447c0aca71917017babbbec830e27bc2141e6a"
+    }
+  },
+  {
+    "oid": "7ad26de5178e3c5a43f1bc1873a26d48e42f88ec",
+    "message": "lil refactoring for BitmapLoadUtils.java",
+    "date": "2016-04-08T15:32:16Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/7ad26de5178e3c5a43f1bc1873a26d48e42f88ec",
+    "details": {
+      "sha": "b963386bbc1e26523c6c6b662afcaae31fa72f29",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/util/BitmapLoadUtils.java",
+      "status": "modified",
+      "additions": 45,
+      "deletions": 30,
+      "changes": 75,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/7ad26de5178e3c5a43f1bc1873a26d48e42f88ec/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FBitmapLoadUtils.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/7ad26de5178e3c5a43f1bc1873a26d48e42f88ec/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FBitmapLoadUtils.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FBitmapLoadUtils.java?ref=7ad26de5178e3c5a43f1bc1873a26d48e42f88ec",
+      "patch": "@@ -69,64 +69,44 @@ public BitmapWorkerResult(@Nullable Bitmap bitmapResult, @Nullable Exception bit\n     static class BitmapWorkerTask extends AsyncTask<Void, Void, BitmapWorkerResult> {\n \n         private final Context mContext;\n-        private Uri mUri;\n+        private Uri mInputUri;\n         private final Uri mOutputUri;\n         private final int mRequiredWidth;\n         private final int mRequiredHeight;\n \n         private final BitmapLoadCallback mBitmapLoadCallback;\n \n         public BitmapWorkerTask(@NonNull Context context,\n-                                @Nullable Uri uri, @Nullable Uri outputUri,\n+                                @Nullable Uri inputUri, @Nullable Uri outputUri,\n                                 int requiredWidth, int requiredHeight,\n                                 BitmapLoadCallback loadCallback) {\n             mContext = context;\n-            mUri = uri;\n+            mInputUri = inputUri;\n             mOutputUri = outputUri;\n             mRequiredWidth = requiredWidth;\n             mRequiredHeight = requiredHeight;\n             mBitmapLoadCallback = loadCallback;\n         }\n \n-        private void downloadFile() throws IOException {\n-            OkHttpClient client = new OkHttpClient();\n-            Request request = new Request.Builder()\n-                    .url(mUri.toString())\n-                    .build();\n-            Response response = client.newCall(request).execute();\n-            OutputStream outputStream = mContext.getContentResolver().openOutputStream(mOutputUri);\n-            BufferedSource source = response.body().source();\n-            Sink sink = Okio.sink(outputStream);\n-            source.readAll(sink);\n-\n-            source.close();\n-            sink.close();\n-            response.body().close();\n-            client.dispatcher().cancelAll();\n-\n-            mUri = mOutputUri;\n-        }\n-\n         @Override\n         @NonNull\n         protected BitmapWorkerResult doInBackground(Void... params) {\n-            if (mUri == null || mOutputUri == null) {\n+            if (mInputUri == null || mOutputUri == null) {\n                 return new BitmapWorkerResult(null, new NullPointerException(\"Uri cannot be null\"));\n             }\n \n-            if (mUri.getScheme().equals(\"http\") || mUri.getScheme().equals(\"https\")) {\n+            if (\"http\".equals(mInputUri.getScheme()) || \"https\".equals(mInputUri.getScheme())) {\n                 try {\n-                    downloadFile();\n-                } catch (IOException e) {\n-                    e.printStackTrace();\n-                    Log.e(TAG, \"Downloading failed\");\n+                    downloadFile(mInputUri, mOutputUri);\n+                } catch (NullPointerException | IOException e) {\n+                    Log.e(TAG, \"Downloading failed\", e);\n                     return new BitmapWorkerResult(null, e);\n                 }\n             }\n \n             final ParcelFileDescriptor parcelFileDescriptor;\n             try {\n-                parcelFileDescriptor = mContext.getContentResolver().openFileDescriptor(mUri, \"r\");\n+                parcelFileDescriptor = mContext.getContentResolver().openFileDescriptor(mInputUri, \"r\");\n             } catch (FileNotFoundException e) {\n                 return new BitmapWorkerResult(null, e);\n             }\n@@ -169,7 +149,7 @@ protected BitmapWorkerResult doInBackground(Void... params) {\n                 close(parcelFileDescriptor);\n             }\n \n-            int exifOrientation = getExifOrientation(mContext, mUri);\n+            int exifOrientation = getExifOrientation(mContext, mInputUri);\n             int exifDegrees = exifToDegrees(exifOrientation);\n             int exifTranslation = exifToTranslation(exifOrientation);\n \n@@ -187,6 +167,41 @@ protected BitmapWorkerResult doInBackground(Void... params) {\n             return new BitmapWorkerResult(decodeSampledBitmap, null);\n         }\n \n+        private void downloadFile(@NonNull Uri inputUri, @NonNull Uri outputUri) throws NullPointerException, IOException {\n+            OkHttpClient client = new OkHttpClient();\n+\n+            BufferedSource source = null;\n+            Sink sink = null;\n+            Response response = null;\n+            try {\n+                Request request = new Request.Builder()\n+                        .url(inputUri.toString())\n+                        .build();\n+                response = client.newCall(request).execute();\n+                source = response.body().source();\n+\n+                OutputStream outputStream = mContext.getContentResolver().openOutputStream(outputUri);\n+                if (outputStream != null) {\n+                    sink = Okio.sink(outputStream);\n+                    source.readAll(sink);\n+                } else {\n+                    throw new NullPointerException(\"OutputStream for given output Uri was null\");\n+                }\n+            } finally {\n+                close(source);\n+                close(sink);\n+                if (response != null) {\n+                    close(response.body());\n+                }\n+            }\n+\n+            client.dispatcher().cancelAll();\n+\n+            // swap uris, because input image was downloaded to the output destination\n+            // (cropped image will override it later)\n+            mInputUri = mOutputUri;\n+        }\n+\n         @Override\n         protected void onPostExecute(@NonNull BitmapWorkerResult result) {\n             if (result.mBitmapWorkerException == null) {",
+      "parent_sha": "53f62d792d01d8b4a9ed7e10c1ebd48fd9e70354"
+    }
+  },
+  {
+    "oid": "27dabba9f3b352956cf220cd737afd31f3c42beb",
+    "message": "Exit cropping if decoding from Uri failed.\n\nDecoding can fail if we fail to\nretrieve bounds for the bitmap (-1 for either\nwidth or height) or if we fail to decode\nthe actual bitmap pixels (BitmapFractory.decode's\nresult will be null",
+    "date": "2016-02-27T14:47:12Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/27dabba9f3b352956cf220cd737afd31f3c42beb",
+    "details": {
+      "sha": "eb6271142ab552be5ac0f1927951a45609757f95",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/util/BitmapLoadUtils.java",
+      "status": "modified",
+      "additions": 11,
+      "deletions": 3,
+      "changes": 14,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/27dabba9f3b352956cf220cd737afd31f3c42beb/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FBitmapLoadUtils.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/27dabba9f3b352956cf220cd737afd31f3c42beb/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FBitmapLoadUtils.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FBitmapLoadUtils.java?ref=27dabba9f3b352956cf220cd737afd31f3c42beb",
+      "patch": "@@ -100,22 +100,30 @@ protected BitmapWorkerResult doInBackground(Void... params) {\n             final BitmapFactory.Options options = new BitmapFactory.Options();\n             options.inJustDecodeBounds = true;\n             BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);\n+            if (options.outWidth == -1 || options.outHeight == -1) {\n+                return new BitmapWorkerResult(null, new IllegalArgumentException(\"Bounds for bitmap could not be retrieved from Uri\"));\n+            }\n+\n             options.inSampleSize = calculateInSampleSize(options, mRequiredWidth, mRequiredHeight);\n             options.inJustDecodeBounds = false;\n \n             Bitmap decodeSampledBitmap = null;\n \n-            boolean success = false;\n-            while (!success) {\n+            boolean decodeAttemptSuccess = false;\n+            while (!decodeAttemptSuccess) {\n                 try {\n                     decodeSampledBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);\n-                    success = true;\n+                    decodeAttemptSuccess = true;\n                 } catch (OutOfMemoryError error) {\n                     Log.e(TAG, \"doInBackground: BitmapFactory.decodeFileDescriptor: \", error);\n                     options.inSampleSize++;\n                 }\n             }\n \n+            if (decodeSampledBitmap == null) {\n+                return new BitmapWorkerResult(null, new IllegalArgumentException(\"Bitmap could not be decoded from Uri\"));\n+            }\n+\n             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {\n                 close(parcelFileDescriptor);\n             }",
+      "parent_sha": "3ffa94c47237d330e624e149b0c2e1d6af019050"
+    }
+  },
+  {
+    "oid": "9bfbf33d506925fbc582c46604403f7802783740",
+    "message": "1\n\n123",
+    "date": "2016-04-03T11:27:50Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/9bfbf33d506925fbc582c46604403f7802783740",
+    "details": {
+      "sha": "e016609963d2c250a158772f6e1dbd737304379e",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/CropImageView.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/9bfbf33d506925fbc582c46604403f7802783740/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/9bfbf33d506925fbc582c46604403f7802783740/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java?ref=9bfbf33d506925fbc582c46604403f7802783740",
+      "patch": "@@ -83,7 +83,7 @@ public Bitmap cropImage() {\n         Bitmap viewBitmap = getViewBitmap();\n         if (viewBitmap == null || viewBitmap.isRecycled()) {\n             return null;\n-        }\n+        }123\n \n         cancelAllAnimations();\n         setImageToWrapCropBounds(false);",
+      "parent_sha": "fa14c96e07f44646b4c373ef7703d079b2c69be0"
+    }
+  },
+  {
+    "oid": "aefb78c7a0986ee79312907180b7e52a3f8fa9fb",
+    "message": "Revert \"Revert \"Revert \"1\"\"\"\n\nThis reverts commit 830e413f9d7b2c9caf8a3169a009392cdce53669.",
+    "date": "2016-04-03T11:39:19Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/aefb78c7a0986ee79312907180b7e52a3f8fa9fb",
+    "details": {
+      "sha": "4c3529063b01cc8d8cc8b27f85a75fb410a726ff",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/CropImageView.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/aefb78c7a0986ee79312907180b7e52a3f8fa9fb/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/aefb78c7a0986ee79312907180b7e52a3f8fa9fb/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java?ref=aefb78c7a0986ee79312907180b7e52a3f8fa9fb",
+      "patch": "@@ -83,7 +83,7 @@ public Bitmap cropImage() {\n         Bitmap viewBitmap = getViewBitmap();\n         if (viewBitmap == null || viewBitmap.isRecycled()) {\n             return null;\n-        }123\n+        }\n \n         cancelAllAnimations();\n         setImageToWrapCropBounds(false);",
+      "parent_sha": "ea5936f94cd6b2e757d6e448ba51af3d43cc7e46"
+    }
+  },
+  {
+    "oid": "69cd509d4a9f5c2479815f2503accbbe892b7adc",
+    "message": "Revert \"1\"\n\nThis reverts commit 9bfbf33d506925fbc582c46604403f7802783740.",
+    "date": "2016-04-03T11:28:05Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/69cd509d4a9f5c2479815f2503accbbe892b7adc",
+    "details": {
+      "sha": "4c3529063b01cc8d8cc8b27f85a75fb410a726ff",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/CropImageView.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/69cd509d4a9f5c2479815f2503accbbe892b7adc/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/69cd509d4a9f5c2479815f2503accbbe892b7adc/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java?ref=69cd509d4a9f5c2479815f2503accbbe892b7adc",
+      "patch": "@@ -83,7 +83,7 @@ public Bitmap cropImage() {\n         Bitmap viewBitmap = getViewBitmap();\n         if (viewBitmap == null || viewBitmap.isRecycled()) {\n             return null;\n-        }123\n+        }\n \n         cancelAllAnimations();\n         setImageToWrapCropBounds(false);",
+      "parent_sha": "9bfbf33d506925fbc582c46604403f7802783740"
+    }
+  },
+  {
+    "oid": "4261c068a72cf5095fd79192a44a7be723ac5be6",
+    "message": "removed unused permission for picking",
+    "date": "2020-01-05T15:01:54Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/4261c068a72cf5095fd79192a44a7be723ac5be6",
+    "details": {
+      "sha": "6b82b6fdcd3d01b3256916bd4a95adfc151e7387",
+      "filename": "sample/src/main/java/com/yalantis/ucrop/sample/SampleActivity.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 36,
+      "changes": 44,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/4261c068a72cf5095fd79192a44a7be723ac5be6/sample%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fsample%2FSampleActivity.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/4261c068a72cf5095fd79192a44a7be723ac5be6/sample%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fsample%2FSampleActivity.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/sample%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fsample%2FSampleActivity.java?ref=4261c068a72cf5095fd79192a44a7be723ac5be6",
+      "patch": "@@ -1,9 +1,7 @@\n package com.yalantis.ucrop.sample;\n \n-import android.Manifest;\n import android.annotation.TargetApi;\n import android.content.Intent;\n-import android.content.pm.PackageManager;\n import android.graphics.Bitmap;\n import android.graphics.PorterDuff;\n import android.graphics.drawable.Animatable;\n@@ -41,7 +39,6 @@\n import androidx.annotation.NonNull;\n import androidx.appcompat.app.ActionBar;\n import androidx.appcompat.widget.Toolbar;\n-import androidx.core.app.ActivityCompat;\n import androidx.core.content.ContextCompat;\n \n /**\n@@ -106,23 +103,6 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {\n         }\n     }\n \n-    /**\n-     * Callback received when a permissions request has been completed.\n-     */\n-    @Override\n-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {\n-        switch (requestCode) {\n-            case REQUEST_STORAGE_READ_ACCESS_PERMISSION:\n-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {\n-                    pickFromGallery();\n-                }\n-                break;\n-            default:\n-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);\n-        }\n-    }\n-\n-\n     private TextWatcher mAspectRatioTextWatcher = new TextWatcher() {\n         @Override\n         public void beforeTextChanged(CharSequence s, int start, int count, int after) {\n@@ -227,24 +207,16 @@ public void onStopTrackingTouch(SeekBar seekBar) {\n     }\n \n     private void pickFromGallery() {\n-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN\n-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)\n-                != PackageManager.PERMISSION_GRANTED) {\n-            requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE,\n-                    getString(R.string.permission_read_storage_rationale),\n-                    REQUEST_STORAGE_READ_ACCESS_PERMISSION);\n-        } else {\n-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT)\n-                    .setType(\"image/*\")\n-                    .addCategory(Intent.CATEGORY_OPENABLE);\n+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT)\n+                .setType(\"image/*\")\n+                .addCategory(Intent.CATEGORY_OPENABLE);\n \n-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {\n-                String[] mimeTypes = {\"image/jpeg\", \"image/png\"};\n-                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);\n-            }\n-\n-            startActivityForResult(Intent.createChooser(intent, getString(R.string.label_select_picture)), requestMode);\n+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {\n+            String[] mimeTypes = {\"image/jpeg\", \"image/png\"};\n+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);\n         }\n+\n+        startActivityForResult(Intent.createChooser(intent, getString(R.string.label_select_picture)), requestMode);\n     }\n \n     private void startCrop(@NonNull Uri uri) {",
+      "parent_sha": "f876977dd318794d9c2c8dc0b2fce1901172964e"
+    }
+  },
+  {
+    "oid": "e3e7be6b8804284b37701f295cb99d6054faf57b",
+    "message": "Made cropCIMG static",
+    "date": "2016-07-31T23:00:15Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/e3e7be6b8804284b37701f295cb99d6054faf57b",
+    "details": {
+      "sha": "2875d0be7cf3053cfca450fc6cc7ba1fcd31d617",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/task/BitmapCropTask.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/e3e7be6b8804284b37701f295cb99d6054faf57b/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapCropTask.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/e3e7be6b8804284b37701f295cb99d6054faf57b/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapCropTask.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapCropTask.java?ref=e3e7be6b8804284b37701f295cb99d6054faf57b",
+      "patch": "@@ -169,7 +169,7 @@ private boolean shouldCrop(int width, int height) {\n     }\n \n     @SuppressWarnings(\"JniMissingFunction\")\n-    native public boolean\n+    native public static boolean\n     cropCImg(String inputPath, String outputPath,\n              int left, int top, int width, int height,\n              float angle, float resizeScale,",
+      "parent_sha": "b2b76902a631b481a938d4069fa1736ff8fc9346"
+    }
+  },
+  {
+    "oid": "32eb2b4db872fdba80211c46d8954f12976ca89c",
+    "message": "Fix shouldCrop\n\nWhen a square image is rotated by 90 (180, 270) degrees, it is not croped.",
+    "date": "2016-12-16T09:24:47Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/32eb2b4db872fdba80211c46d8954f12976ca89c",
+    "details": {
+      "sha": "ec5312b688c8a261dc51ed00e0d31f88b2004831",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/task/BitmapCropTask.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "changes": 3,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/32eb2b4db872fdba80211c46d8954f12976ca89c/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapCropTask.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/32eb2b4db872fdba80211c46d8954f12976ca89c/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapCropTask.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Ftask%2FBitmapCropTask.java?ref=32eb2b4db872fdba80211c46d8954f12976ca89c",
+      "patch": "@@ -167,7 +167,8 @@ private boolean shouldCrop(int width, int height) {\n                 || Math.abs(mCropRect.left - mCurrentImageRect.left) > pixelError\n                 || Math.abs(mCropRect.top - mCurrentImageRect.top) > pixelError\n                 || Math.abs(mCropRect.bottom - mCurrentImageRect.bottom) > pixelError\n-                || Math.abs(mCropRect.right - mCurrentImageRect.right) > pixelError;\n+                || Math.abs(mCropRect.right - mCurrentImageRect.right) > pixelError\n+                || mCurrentAngle != 0;\n     }\n \n     @SuppressWarnings(\"JniMissingFunction\")",
+      "parent_sha": "5535c7f536dfb21a1de99eec31fcf21784b7fec0"
+    }
+  },
+  {
+    "oid": "b294d140883d3174c70e686e437d90d2ddbf62da",
+    "message": "Fixed null file sent back (Issue #142)\n\nAs per issue 142 (https://github.com/Yalantis/uCrop/issues/142), it mentions the issue of files being sent back as null if they make no changes (No cropping). The solution was simply just to check the paths and confirm if they are identical. In the event that the paths are the same, trying to copy one file to the other will cause both files to become null. simply skipping this step if the paths are identical solves that problem. This pull request should fix that issue entirely",
+    "date": "2016-07-29T17:15:55Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/b294d140883d3174c70e686e437d90d2ddbf62da",
+    "details": {
+      "sha": "f482ba87bdf2a499ba7857dead631e6b2686b98d",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/util/FileUtils.java",
+      "status": "modified",
+      "additions": 9,
+      "deletions": 1,
+      "changes": 10,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/b294d140883d3174c70e686e437d90d2ddbf62da/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FFileUtils.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/b294d140883d3174c70e686e437d90d2ddbf62da/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FFileUtils.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Futil%2FFileUtils.java?ref=b294d140883d3174c70e686e437d90d2ddbf62da",
+      "patch": "@@ -520,6 +520,14 @@ public static Intent createGetContentIntent() {\n     }\n \n     public static void copyFile(@NonNull String pathFrom, @NonNull String pathTo) throws IOException {\n+        /*\n+        In the event that the paths are the same, trying to copy one file to the other\n+        will cause both files to become null. simply skipping this step if the paths\n+        are identical solves that problem\n+         */\n+        if(pathFrom.equalsIgnoreCase(pathTo)){\n+            return;\n+        }\n         FileChannel outputChannel = null;\n         FileChannel inputChannel = null;\n         try {\n@@ -534,4 +542,4 @@ public static void copyFile(@NonNull String pathFrom, @NonNull String pathTo) th\n \n     }\n \n-}\n\\ No newline at end of file\n+}",
+      "parent_sha": "b2b76902a631b481a938d4069fa1736ff8fc9346"
+    }
+  },
+  {
+    "oid": "ef97e61117643633993cb2d7932f667da031d2bc",
+    "message": "Dot placed little upper",
+    "date": "2019-03-31T14:45:42Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/ef97e61117643633993cb2d7932f667da031d2bc",
+    "details": {
+      "sha": "3083e55fb5779eb095b9cd2a716b8355114fdb0c",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/widget/AspectRatioTextView.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 2,
+      "changes": 8,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/ef97e61117643633993cb2d7932f667da031d2bc/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2Fwidget%2FAspectRatioTextView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/ef97e61117643633993cb2d7932f667da031d2bc/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2Fwidget%2FAspectRatioTextView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2Fwidget%2FAspectRatioTextView.java?ref=ef97e61117643633993cb2d7932f667da031d2bc",
+      "patch": "@@ -27,6 +27,7 @@\n  */\n public class AspectRatioTextView extends TextView {\n \n+    private final float MARGIN_MULTIPLIER = 1.5f;\n     private final Rect mCanvasClipBounds = new Rect();\n     private Paint mDotPaint;\n     private int mDotSize;\n@@ -93,8 +94,11 @@ protected void onDraw(Canvas canvas) {\n \n         if (isSelected()) {\n             canvas.getClipBounds(mCanvasClipBounds);\n-            canvas.drawCircle((mCanvasClipBounds.right - mCanvasClipBounds.left) / 2.0f, mCanvasClipBounds.bottom - mDotSize,\n-                    mDotSize / 2, mDotPaint);\n+\n+            float x = (mCanvasClipBounds.right - mCanvasClipBounds.left) / 2.0f;\n+            float y = (mCanvasClipBounds.bottom - mCanvasClipBounds.top / 2f) - mDotSize * MARGIN_MULTIPLIER;\n+\n+            canvas.drawCircle(x, y, mDotSize / 2f, mDotPaint);\n         }\n     }\n ",
+      "parent_sha": "005a019a8b0a0eb6778a03091217db4fea9e95bb"
+    }
+  },
+  {
+    "oid": "ffe7b490cb690ff5782e3e5d7c589ce3301788b9",
+    "message": "Fixed crash in UCrop.getOutputCropAspectRatio(data) for native variant",
+    "date": "2019-03-25T09:34:14Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/ffe7b490cb690ff5782e3e5d7c589ce3301788b9",
+    "details": {
+      "sha": "e0e9e13c324ba2ca75163ea81f0d6f05124e9b83",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/UCrop.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/ffe7b490cb690ff5782e3e5d7c589ce3301788b9/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCrop.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/ffe7b490cb690ff5782e3e5d7c589ce3301788b9/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCrop.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCrop.java?ref=ffe7b490cb690ff5782e3e5d7c589ce3301788b9",
+      "patch": "@@ -237,7 +237,7 @@ public static int getOutputImageHeight(@NonNull Intent intent) {\n      * @return aspect ratio as a floating point value (x:y) - so it will be 1 for 1:1 or 4/3 for 4:3\n      */\n     public static float getOutputCropAspectRatio(@NonNull Intent intent) {\n-        return intent.getParcelableExtra(EXTRA_OUTPUT_CROP_ASPECT_RATIO);\n+        return intent.getFloatExtra(EXTRA_OUTPUT_CROP_ASPECT_RATIO, 0f);\n     }\n \n     /**",
+      "parent_sha": "f5b4801ed21ba265a75ace5cc0e41a197eb68449"
+    }
+  },
+  {
+    "oid": "a2a8669935117007b99269fb765c54e2d79b094f",
+    "message": "Changed calculation for min scale.",
+    "date": "2016-09-08T18:18:31Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/a2a8669935117007b99269fb765c54e2d79b094f",
+    "details": {
+      "sha": "c50b4b7bdf46694a2c2337b1a3ada167d7f771c1",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/view/CropImageView.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 3,
+      "changes": 8,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/a2a8669935117007b99269fb765c54e2d79b094f/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/a2a8669935117007b99269fb765c54e2d79b094f/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2Fview%2FCropImageView.java?ref=a2a8669935117007b99269fb765c54e2d79b094f",
+      "patch": "@@ -10,6 +10,7 @@\n import android.support.annotation.NonNull;\n import android.support.annotation.Nullable;\n import android.util.AttributeSet;\n+import android.util.Log;\n \n import com.yalantis.ucrop.R;\n import com.yalantis.ucrop.callback.BitmapCropCallback;\n@@ -461,10 +462,11 @@ private void calculateImageScaleBounds() {\n      * @param drawableHeight - image height\n      */\n     private void calculateImageScaleBounds(float drawableWidth, float drawableHeight) {\n-        float widthScale = mCropRect.width() / drawableWidth;\n-        float heightScale = mCropRect.height() / drawableHeight;\n+        float widthScale = Math.min(mCropRect.width() / drawableWidth, mCropRect.width() / drawableHeight);\n+        float heightScale = Math.min(mCropRect.height() / drawableHeight, mCropRect.height() / drawableWidth);\n \n-        mMinScale = Math.max(widthScale, heightScale);\n+        mMinScale = Math.min(widthScale, heightScale);\n+        Log.d(\"WTF\", \"MIN SCALE : \" + mMinScale);\n         mMaxScale = mMinScale * mMaxScaleMultiplier;\n     }\n ",
+      "parent_sha": "d2810098432dd547166c9c163d3fe78f0dd07c52"
+    }
+  },
+  {
+    "oid": "57fb8238bbaffadbede387d0549737afb765f410",
+    "message": "Added support of ucrop fragment inside fragment",
+    "date": "2019-03-26T16:29:22Z",
+    "url": "https://github.com/Yalantis/uCrop/commit/57fb8238bbaffadbede387d0549737afb765f410",
+    "details": {
+      "sha": "ef29f137a5a10dce5f5cd9d59e9fe699a6ced803",
+      "filename": "ucrop/src/main/java/com/yalantis/ucrop/UCropFragment.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 4,
+      "changes": 9,
+      "blob_url": "https://github.com/Yalantis/uCrop/blob/57fb8238bbaffadbede387d0549737afb765f410/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java",
+      "raw_url": "https://github.com/Yalantis/uCrop/raw/57fb8238bbaffadbede387d0549737afb765f410/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java",
+      "contents_url": "https://api.github.com/repos/Yalantis/uCrop/contents/ucrop%2Fsrc%2Fmain%2Fjava%2Fcom%2Fyalantis%2Fucrop%2FUCropFragment.java?ref=57fb8238bbaffadbede387d0549737afb765f410",
+      "patch": "@@ -95,12 +95,13 @@ public static UCropFragment newInstance(Bundle uCrop) {\n     @Override\n     public void onAttach(Context context) {\n         super.onAttach(context);\n-        try {\n+        if (getParentFragment() instanceof UCropFragmentCallback)\n+            callback = (UCropFragmentCallback) getParentFragment();\n+        else if (context instanceof UCropFragmentCallback)\n             callback = (UCropFragmentCallback) context;\n-        } catch (ClassCastException e) {\n-            throw new ClassCastException(context.toString()\n+        else\n+            throw new IllegalArgumentException(context.toString()\n                     + \" must implement UCropFragmentCallback\");\n-        }\n     }\n \n     public void setCallback(UCropFragmentCallback callback) {",
+      "parent_sha": "cc75f9882c33d24619765f39046892d88fd49d6d"
+    }
+  }
+]

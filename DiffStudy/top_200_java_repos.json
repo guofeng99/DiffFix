@@ -1,0 +1,1402 @@
+[
+    {
+        "name": "Snailclimb/JavaGuide",
+        "url": "https://github.com/Snailclimb/JavaGuide",
+        "description": "「Java学习+面试指南」一份涵盖大部分 Java 程序员所需要掌握的核心知识。准备 Java 面试，首选 JavaGuide！",
+        "stars": 149191,
+        "language": "Java"
+    },
+    {
+        "name": "krahets/hello-algo",
+        "url": "https://github.com/krahets/hello-algo",
+        "description": "《Hello 算法》：动画图解、一键运行的数据结构与算法教程。支持 Python, Java, C++, C, C#, JS, Go, Swift, Rust, Ruby, Kotlin, TS, Dart 代码。简体版和繁体版同步更新，English version ongoing",
+        "stars": 111626,
+        "language": "Java"
+    },
+    {
+        "name": "iluwatar/java-design-patterns",
+        "url": "https://github.com/iluwatar/java-design-patterns",
+        "description": "Design patterns implemented in Java",
+        "stars": 91305,
+        "language": "Java"
+    },
+    {
+        "name": "macrozheng/mall",
+        "url": "https://github.com/macrozheng/mall",
+        "description": "mall项目是一套电商系统，包括前台商城系统及后台管理系统，基于Spring Boot+MyBatis实现，采用Docker容器化部署。 前台商城系统包含首页门户、商品推荐、商品搜索、商品展示、购物车、订单流程、会员中心、客户服务、帮助中心等模块。 后台管理系统包含商品管理、订单管理、会员管理、促销管理、运营管理、内容管理、统计报表、财务管理、权限管理、设置等模块。",
+        "stars": 79906,
+        "language": "Java"
+    },
+    {
+        "name": "doocs/advanced-java",
+        "url": "https://github.com/doocs/advanced-java",
+        "description": "😮 Core Interview Questions & Answers For Experienced Java(Backend) Developers | 互联网 Java 工程师进阶知识完全扫盲：涵盖高并发、分布式、高可用、微服务、海量数据处理等领域知识",
+        "stars": 77443,
+        "language": "Java"
+    },
+    {
+        "name": "spring-projects/spring-boot",
+        "url": "https://github.com/spring-projects/spring-boot",
+        "description": "Spring Boot helps you to create Spring-powered, production-grade applications and services with absolute minimum fuss.",
+        "stars": 76814,
+        "language": "Java"
+    },
+    {
+        "name": "MisterBooo/LeetCodeAnimation",
+        "url": "https://github.com/MisterBooo/LeetCodeAnimation",
+        "description": "Demonstrate all the questions on LeetCode in the form of animation.（用动画的形式呈现解LeetCode题目的思路）",
+        "stars": 75829,
+        "language": "Java"
+    },
+    {
+        "name": "elastic/elasticsearch",
+        "url": "https://github.com/elastic/elasticsearch",
+        "description": "Free and Open Source, Distributed, RESTful Search Engine",
+        "stars": 72356,
+        "language": "Java"
+    },
+    {
+        "name": "kdn251/interviews",
+        "url": "https://github.com/kdn251/interviews",
+        "description": "Everything you need to know to get the job.",
+        "stars": 64077,
+        "language": "Java"
+    },
+    {
+        "name": "TheAlgorithms/Java",
+        "url": "https://github.com/TheAlgorithms/Java",
+        "description": "All Algorithms implemented in Java",
+        "stars": 61332,
+        "language": "Java"
+    },
+    {
+        "name": "spring-projects/spring-framework",
+        "url": "https://github.com/spring-projects/spring-framework",
+        "description": "Spring Framework",
+        "stars": 57841,
+        "language": "Java"
+    },
+    {
+        "name": "NationalSecurityAgency/ghidra",
+        "url": "https://github.com/NationalSecurityAgency/ghidra",
+        "description": "Ghidra is a software reverse engineering (SRE) framework",
+        "stars": 56276,
+        "language": "Java"
+    },
+    {
+        "name": "Stirling-Tools/Stirling-PDF",
+        "url": "https://github.com/Stirling-Tools/Stirling-PDF",
+        "description": "#1 Locally hosted web application that allows you to perform various operations on PDF files",
+        "stars": 55985,
+        "language": "Java"
+    },
+    {
+        "name": "google/guava",
+        "url": "https://github.com/google/guava",
+        "description": "Google core libraries for Java",
+        "stars": 50675,
+        "language": "Java"
+    },
+    {
+        "name": "ReactiveX/RxJava",
+        "url": "https://github.com/ReactiveX/RxJava",
+        "description": "RxJava – Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.",
+        "stars": 48077,
+        "language": "Java"
+    },
+    {
+        "name": "skylot/jadx",
+        "url": "https://github.com/skylot/jadx",
+        "description": "Dex to Java decompiler",
+        "stars": 43587,
+        "language": "Java"
+    },
+    {
+        "name": "dbeaver/dbeaver",
+        "url": "https://github.com/dbeaver/dbeaver",
+        "description": "Free universal database tool and SQL client",
+        "stars": 43096,
+        "language": "Java"
+    },
+    {
+        "name": "jeecgboot/JeecgBoot",
+        "url": "https://github.com/jeecgboot/JeecgBoot",
+        "description": "🔥一款基于AIGC和低代码引擎的AI低代码平台，旨在帮助企业快速实现低代码开发和构建、部署个性化的 AI 应用。 前后端分离 SpringBoot，SpringCloud，Ant Design&Vue3，Mybatis，Shiro！强大的代码生成器让前后端代码一键生成，无需写任何代码! 成套AI大模型功能: AI模型管理、AI应用、知识库、AI流程编排、AI对话助手等；",
+        "stars": 42285,
+        "language": "Java"
+    },
+    {
+        "name": "apache/dubbo",
+        "url": "https://github.com/apache/dubbo",
+        "description": "The java implementation of Apache Dubbo. An RPC and microservice framework.",
+        "stars": 40899,
+        "language": "Java"
+    },
+    {
+        "name": "termux/termux-app",
+        "url": "https://github.com/termux/termux-app",
+        "description": "Termux - a terminal emulator application for Android OS extendible by variety of packages.",
+        "stars": 40591,
+        "language": "Java"
+    },
+    {
+        "name": "PhilJay/MPAndroidChart",
+        "url": "https://github.com/PhilJay/MPAndroidChart",
+        "description": "A powerful 🚀 Android chart view / graph view library, supporting line- bar- pie- radar- bubble- and candlestick charts as well as scaling, panning and animations.",
+        "stars": 37918,
+        "language": "Java"
+    },
+    {
+        "name": "eugenp/tutorials",
+        "url": "https://github.com/eugenp/tutorials",
+        "description": "Getting Started with Spring Boot 3: ",
+        "stars": 37126,
+        "language": "Java"
+    },
+    {
+        "name": "alibaba/arthas",
+        "url": "https://github.com/alibaba/arthas",
+        "description": "Alibaba Java Diagnostic Tool Arthas/Alibaba Java诊断利器Arthas",
+        "stars": 36160,
+        "language": "Java"
+    },
+    {
+        "name": "geekxh/hello-algorithm",
+        "url": "https://github.com/geekxh/hello-algorithm",
+        "description": "🌍 针对小白的算法训练 | 包括四部分：①.大厂面经 ②.力扣图解  ③.千本开源电子书 ④.百张技术思维导图（项目花了上百小时，希望可以点 star 支持，🌹感谢~）推荐免费ChatGPT使用网站",
+        "stars": 35575,
+        "language": "Java"
+    },
+    {
+        "name": "airbnb/lottie-android",
+        "url": "https://github.com/airbnb/lottie-android",
+        "description": "Render After Effects animations natively on Android and iOS, Web, and React Native",
+        "stars": 35281,
+        "language": "Java"
+    },
+    {
+        "name": "halo-dev/halo",
+        "url": "https://github.com/halo-dev/halo",
+        "description": "强大易用的开源建站工具。",
+        "stars": 35220,
+        "language": "Java"
+    },
+    {
+        "name": "bumptech/glide",
+        "url": "https://github.com/bumptech/glide",
+        "description": "An image loading and caching library for Android focused on smooth scrolling",
+        "stars": 34845,
+        "language": "Java"
+    },
+    {
+        "name": "netty/netty",
+        "url": "https://github.com/netty/netty",
+        "description": "Netty project - an event-driven asynchronous network application framework",
+        "stars": 34011,
+        "language": "Java"
+    },
+    {
+        "name": "doocs/leetcode",
+        "url": "https://github.com/doocs/leetcode",
+        "description": "🔥LeetCode solutions in any programming language | 多种编程语言实现 LeetCode、《剑指 Offer（第 2 版）》、《程序员面试金典（第 6 版）》题解",
+        "stars": 33652,
+        "language": "Java"
+    },
+    {
+        "name": "xkcoding/spring-boot-demo",
+        "url": "https://github.com/xkcoding/spring-boot-demo",
+        "description": "🚀一个用来深入学习并实战 Spring Boot 的项目。",
+        "stars": 33576,
+        "language": "Java"
+    },
+    {
+        "name": "Blankj/AndroidUtilCode",
+        "url": "https://github.com/Blankj/AndroidUtilCode",
+        "description": ":fire: Android developers should collect the following utils(updating).",
+        "stars": 33538,
+        "language": "Java"
+    },
+    {
+        "name": "TeamNewPipe/NewPipe",
+        "url": "https://github.com/TeamNewPipe/NewPipe",
+        "description": "A libre lightweight streaming front-end for Android.",
+        "stars": 33505,
+        "language": "Java"
+    },
+    {
+        "name": "alibaba/easyexcel",
+        "url": "https://github.com/alibaba/easyexcel",
+        "description": "快速、简洁、解决大文件内存溢出的java处理Excel工具",
+        "stars": 33297,
+        "language": "Java"
+    },
+    {
+        "name": "zxing/zxing",
+        "url": "https://github.com/zxing/zxing",
+        "description": "ZXing (\"Zebra Crossing\") barcode scanning library for Java, Android",
+        "stars": 33227,
+        "language": "Java"
+    },
+    {
+        "name": "SeleniumHQ/selenium",
+        "url": "https://github.com/SeleniumHQ/selenium",
+        "description": "A browser automation framework and ecosystem.",
+        "stars": 32074,
+        "language": "Java"
+    },
+    {
+        "name": "alibaba/nacos",
+        "url": "https://github.com/alibaba/nacos",
+        "description": "an easy-to-use dynamic service discovery, configuration and service management platform for building cloud native applications.",
+        "stars": 31181,
+        "language": "Java"
+    },
+    {
+        "name": "binarywang/WxJava",
+        "url": "https://github.com/binarywang/WxJava",
+        "description": "微信开发 Java SDK ，支持包括微信支付，开放平台，小程序，企业微信，视频号，公众号等的后端开发",
+        "stars": 30934,
+        "language": "Java"
+    },
+    {
+        "name": "ityouknow/spring-boot-examples",
+        "url": "https://github.com/ityouknow/spring-boot-examples",
+        "description": "about learning Spring Boot via examples. Spring Boot 教程、技术栈示例代码，快速简单上手教程。 ",
+        "stars": 30433,
+        "language": "Java"
+    },
+    {
+        "name": "YunaiV/ruoyi-vue-pro",
+        "url": "https://github.com/YunaiV/ruoyi-vue-pro",
+        "description": "🔥 官方推荐 🔥 RuoYi-Vue 全新 Pro 版本，优化重构所有功能。基于 Spring Boot + MyBatis Plus + Vue & Element 实现的后台管理系统 + 微信小程序，支持 RBAC 动态权限、数据权限、SaaS 多租户、Flowable 工作流、三方登录、支付、短信、商城、CRM、ERP、AI 大模型等功能。你的 ⭐️ Star ⭐️，是作者生发的动力！",
+        "stars": 30390,
+        "language": "Java"
+    },
+    {
+        "name": "apache/kafka",
+        "url": "https://github.com/apache/kafka",
+        "description": "Mirror of Apache Kafka",
+        "stars": 29887,
+        "language": "Java"
+    },
+    {
+        "name": "chinabugotech/hutool",
+        "url": "https://github.com/chinabugotech/hutool",
+        "description": "🍬A set of tools that keep Java sweet.",
+        "stars": 29738,
+        "language": "Java"
+    },
+    {
+        "name": "apolloconfig/apollo",
+        "url": "https://github.com/apolloconfig/apollo",
+        "description": "Apollo is a reliable configuration management system suitable for microservice configuration management scenarios.",
+        "stars": 29434,
+        "language": "Java"
+    },
+    {
+        "name": "alibaba/canal",
+        "url": "https://github.com/alibaba/canal",
+        "description": "阿里巴巴 MySQL binlog 增量订阅&消费组件 ",
+        "stars": 28996,
+        "language": "Java"
+    },
+    {
+        "name": "wuyouzhuguli/SpringAll",
+        "url": "https://github.com/wuyouzhuguli/SpringAll",
+        "description": "循序渐进，学习Spring Boot、Spring Boot & Shiro、Spring Batch、Spring Cloud、Spring Cloud Alibaba、Spring Security & Spring Security OAuth2，博客Spring系列源码：https://mrbird.cc",
+        "stars": 28738,
+        "language": "Java"
+    },
+    {
+        "name": "xuxueli/xxl-job",
+        "url": "https://github.com/xuxueli/xxl-job",
+        "description": "A distributed task scheduling framework.（分布式任务调度平台XXL-JOB）",
+        "stars": 28601,
+        "language": "Java"
+    },
+    {
+        "name": "alibaba/spring-cloud-alibaba",
+        "url": "https://github.com/alibaba/spring-cloud-alibaba",
+        "description": "Spring Cloud Alibaba provides a one-stop solution for application development for the distributed solutions of Alibaba middleware.",
+        "stars": 28388,
+        "language": "Java"
+    },
+    {
+        "name": "alibaba/druid",
+        "url": "https://github.com/alibaba/druid",
+        "description": "阿里云计算平台DataWorks(https://help.aliyun.com/document_detail/137663.html) 团队出品，为监控而生的数据库连接池",
+        "stars": 28111,
+        "language": "Java"
+    },
+    {
+        "name": "lenve/vhr",
+        "url": "https://github.com/lenve/vhr",
+        "description": "微人事是一个前后端分离的人力资源管理系统，项目采用SpringBoot+Vue开发。",
+        "stars": 27721,
+        "language": "Java"
+    },
+    {
+        "name": "crossoverJie/JCSprout",
+        "url": "https://github.com/crossoverJie/JCSprout",
+        "description": "👨‍🎓 Java Core Sprout : basic, concurrent, algorithm ",
+        "stars": 27097,
+        "language": "Java"
+    },
+    {
+        "name": "keycloak/keycloak",
+        "url": "https://github.com/keycloak/keycloak",
+        "description": "Open Source Identity and Access Management For Modern Applications and Services",
+        "stars": 26626,
+        "language": "Java"
+    },
+    {
+        "name": "qiurunze123/miaosha",
+        "url": "https://github.com/qiurunze123/miaosha",
+        "description": "⭐⭐⭐⭐秒杀系统设计与实现.互联网工程师进阶与分析🙋🐓",
+        "stars": 26312,
+        "language": "Java"
+    },
+    {
+        "name": "DrKLO/Telegram",
+        "url": "https://github.com/DrKLO/Telegram",
+        "description": "Telegram for Android source",
+        "stars": 26021,
+        "language": "Java"
+    },
+    {
+        "name": "alibaba/fastjson",
+        "url": "https://github.com/alibaba/fastjson",
+        "description": "FASTJSON 2.0.x has been released, faster and more secure, recommend you upgrade.",
+        "stars": 25768,
+        "language": "Java"
+    },
+    {
+        "name": "apache/incubator-seata",
+        "url": "https://github.com/apache/incubator-seata",
+        "description": ":fire: Seata is an easy-to-use, high-performance, open source distributed transaction solution.",
+        "stars": 25594,
+        "language": "Java"
+    },
+    {
+        "name": "JakeWharton/butterknife",
+        "url": "https://github.com/JakeWharton/butterknife",
+        "description": "Bind Android views and callbacks to fields and methods.",
+        "stars": 25526,
+        "language": "Java"
+    },
+    {
+        "name": "hollischuang/toBeTopJavaer",
+        "url": "https://github.com/hollischuang/toBeTopJavaer",
+        "description": "To Be Top Javaer - Java工程师成神之路",
+        "stars": 25427,
+        "language": "Java"
+    },
+    {
+        "name": "scwang90/SmartRefreshLayout",
+        "url": "https://github.com/scwang90/SmartRefreshLayout",
+        "description": "🔥下拉刷新、上拉加载、二级刷新、淘宝二楼、RefreshLayout、OverScroll，Android智能下拉刷新框架，支持越界回弹、越界拖动，具有极强的扩展性，集成了几十种炫酷的Header和 Footer。",
+        "stars": 25073,
+        "language": "Java"
+    },
+    {
+        "name": "proxyee-down-org/proxyee-down",
+        "url": "https://github.com/proxyee-down-org/proxyee-down",
+        "description": "http下载工具，基于http代理，支持多连接分块下载",
+        "stars": 24906,
+        "language": "Java"
+    },
+    {
+        "name": "apache/flink",
+        "url": "https://github.com/apache/flink",
+        "description": "Apache Flink",
+        "stars": 24751,
+        "language": "Java"
+    },
+    {
+        "name": "greenrobot/EventBus",
+        "url": "https://github.com/greenrobot/EventBus",
+        "description": "Event bus for Android and Java that simplifies communication between Activities, Fragments, Threads, Services, etc. Less code, better quality.",
+        "stars": 24750,
+        "language": "Java"
+    },
+    {
+        "name": "Netflix/Hystrix",
+        "url": "https://github.com/Netflix/Hystrix",
+        "description": "Hystrix is a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.",
+        "stars": 24297,
+        "language": "Java"
+    },
+    {
+        "name": "apache/skywalking",
+        "url": "https://github.com/apache/skywalking",
+        "description": "APM, Application Performance Monitoring System",
+        "stars": 24232,
+        "language": "Java"
+    },
+    {
+        "name": "bazelbuild/bazel",
+        "url": "https://github.com/bazelbuild/bazel",
+        "description": "a fast, scalable, multi-language and extensible build system",
+        "stars": 23945,
+        "language": "Java"
+    },
+    {
+        "name": "libgdx/libgdx",
+        "url": "https://github.com/libgdx/libgdx",
+        "description": "Desktop/Android/HTML5/iOS Java game development framework",
+        "stars": 23925,
+        "language": "Java"
+    },
+    {
+        "name": "jenkinsci/jenkins",
+        "url": "https://github.com/jenkinsci/jenkins",
+        "description": "Jenkins automation server",
+        "stars": 23868,
+        "language": "Java"
+    },
+    {
+        "name": "redisson/redisson",
+        "url": "https://github.com/redisson/redisson",
+        "description": "Redisson - Valkey and Redis Java client. Real-Time Data Platform. Sync/Async/RxJava/Reactive API. Over 50 Valkey and Redis based Java objects and services: Set, Multimap, SortedSet, Map, List, Queue, Deque, Semaphore, Lock, AtomicLong, Map Reduce, Bloom filter, Spring, Tomcat, Scheduler, JCache API, Hibernate, RPC, local cache..",
+        "stars": 23723,
+        "language": "Java"
+    },
+    {
+        "name": "google/gson",
+        "url": "https://github.com/google/gson",
+        "description": "A Java serialization/deserialization library to convert Java Objects into JSON and back",
+        "stars": 23664,
+        "language": "Java"
+    },
+    {
+        "name": "Anuken/Mindustry",
+        "url": "https://github.com/Anuken/Mindustry",
+        "description": "The automation tower defense RTS",
+        "stars": 23628,
+        "language": "Java"
+    },
+    {
+        "name": "OpenAPITools/openapi-generator",
+        "url": "https://github.com/OpenAPITools/openapi-generator",
+        "description": "OpenAPI Generator allows generation of API client libraries (SDK generation), server stubs, documentation and configuration automatically given an OpenAPI Spec (v2, v3)",
+        "stars": 23433,
+        "language": "Java"
+    },
+    {
+        "name": "alibaba/Sentinel",
+        "url": "https://github.com/alibaba/Sentinel",
+        "description": "A powerful flow control component enabling reliability, resilience and monitoring for microservices. (面向云原生微服务的高可用流控防护组件)",
+        "stars": 22683,
+        "language": "Java"
+    },
+    {
+        "name": "doocs/source-code-hunter",
+        "url": "https://github.com/doocs/source-code-hunter",
+        "description": "😱 从源码层面，剖析挖掘互联网行业主流技术的底层实现原理，为广大开发者 “提升技术深度” 提供便利。目前开放 Spring 全家桶，Mybatis、Netty、Dubbo 框架，及 Redis、Tomcat 中间件等",
+        "stars": 22635,
+        "language": "Java"
+    },
+    {
+        "name": "CodePhiliaX/Chat2DB",
+        "url": "https://github.com/CodePhiliaX/Chat2DB",
+        "description": "🔥🔥🔥AI-driven database tool and SQL client, The hottest GUI client, supporting MySQL, Oracle, PostgreSQL, DB2, SQL Server, DB2, SQLite, H2, ClickHouse, and more.",
+        "stars": 22399,
+        "language": "Java"
+    },
+    {
+        "name": "EnterpriseQualityCoding/FizzBuzzEnterpriseEdition",
+        "url": "https://github.com/EnterpriseQualityCoding/FizzBuzzEnterpriseEdition",
+        "description": "FizzBuzz Enterprise Edition is a no-nonsense implementation of FizzBuzz made by serious businessmen for serious business purposes.",
+        "stars": 22335,
+        "language": "Java"
+    },
+    {
+        "name": "ashishps1/awesome-system-design-resources",
+        "url": "https://github.com/ashishps1/awesome-system-design-resources",
+        "description": "Learn System Design concepts and prepare for interviews using free resources.",
+        "stars": 22315,
+        "language": "Java"
+    },
+    {
+        "name": "yuliskov/SmartTube",
+        "url": "https://github.com/yuliskov/SmartTube",
+        "description": "Advanced player for set-top boxes and tvs running Android OS",
+        "stars": 22237,
+        "language": "Java"
+    },
+    {
+        "name": "google/ExoPlayer",
+        "url": "https://github.com/google/ExoPlayer",
+        "description": "This project is deprecated and stale. The latest ExoPlayer code is available in https://github.com/androidx/media",
+        "stars": 21817,
+        "language": "Java"
+    },
+    {
+        "name": "iBotPeaches/Apktool",
+        "url": "https://github.com/iBotPeaches/Apktool",
+        "description": "A tool for reverse engineering Android apk files",
+        "stars": 21768,
+        "language": "Java"
+    },
+    {
+        "name": "apache/rocketmq",
+        "url": "https://github.com/apache/rocketmq",
+        "description": "Apache RocketMQ is a cloud native messaging and streaming platform, making it simple to build event-driven applications.",
+        "stars": 21701,
+        "language": "Java"
+    },
+    {
+        "name": "elunez/eladmin",
+        "url": "https://github.com/elunez/eladmin",
+        "description": "eladmin jpa 版本：项目基于 Spring Boot 2.7.18、 Jpa、 Spring Security、Redis、Vue的前后端分离的后台管理系统，项目采用分模块开发方式， 权限控制采用 RBAC，支持数据字典与数据权限管理，支持一键生成前后端代码，支持动态路由",
+        "stars": 21594,
+        "language": "Java"
+    },
+    {
+        "name": "openjdk/jdk",
+        "url": "https://github.com/openjdk/jdk",
+        "description": "JDK main-line development https://openjdk.org/projects/jdk",
+        "stars": 20823,
+        "language": "Java"
+    },
+    {
+        "name": "oracle/graal",
+        "url": "https://github.com/oracle/graal",
+        "description": "GraalVM compiles Java applications into native executables that start instantly, scale fast, and use fewer compute resources 🚀",
+        "stars": 20790,
+        "language": "Java"
+    },
+    {
+        "name": "CarGuo/GSYVideoPlayer",
+        "url": "https://github.com/CarGuo/GSYVideoPlayer",
+        "description": "视频播放器（IJKplayer、ExoPlayer、MediaPlayer），HTTPS，16k page size，支持弹幕，外挂字幕，支持滤镜、水印、gif截图，片头广告、中间广告，多个同时播放，支持基本的拖动，声音、亮度调节，支持边播边缓存，支持视频自带rotation的旋转（90,270之类），重力旋转与手动旋转的同步支持，支持列表播放 ，列表全屏动画，视频加载速度，列表小窗口支持拖动，动画效果，调整比例，多分辨率切换，支持切换播放器，进度条小窗口预览，列表切换详情页面无缝播放，rtsp、concat、mpeg。 ",
+        "stars": 20684,
+        "language": "Java"
+    },
+    {
+        "name": "conductor-oss/conductor",
+        "url": "https://github.com/conductor-oss/conductor",
+        "description": "Conductor is an event driven orchestration platform providing durable and highly resilient execution engine for your applications",
+        "stars": 20416,
+        "language": "Java"
+    },
+    {
+        "name": "brettwooldridge/HikariCP",
+        "url": "https://github.com/brettwooldridge/HikariCP",
+        "description": "光 HikariCP・A solid, high-performance, JDBC connection pool at last.",
+        "stars": 20379,
+        "language": "Java"
+    },
+    {
+        "name": "didi/DoKit",
+        "url": "https://github.com/didi/DoKit",
+        "description": "一款面向泛前端产品研发全生命周期的效率平台。",
+        "stars": 20298,
+        "language": "Java"
+    },
+    {
+        "name": "apache/shardingsphere",
+        "url": "https://github.com/apache/shardingsphere",
+        "description": "Empowering Data Intelligence with Distributed SQL for Sharding, Scalability, and Security Across All Databases.",
+        "stars": 20186,
+        "language": "Java"
+    },
+    {
+        "name": "mybatis/mybatis-3",
+        "url": "https://github.com/mybatis/mybatis-3",
+        "description": "MyBatis SQL mapper framework for Java",
+        "stars": 20032,
+        "language": "Java"
+    },
+    {
+        "name": "dataease/dataease",
+        "url": "https://github.com/dataease/dataease",
+        "description": "🔥 人人可用的开源 BI 工具，数据可视化神器。",
+        "stars": 19899,
+        "language": "Java"
+    },
+    {
+        "name": "ReactiveX/RxAndroid",
+        "url": "https://github.com/ReactiveX/RxAndroid",
+        "description": "RxJava bindings for Android",
+        "stars": 19877,
+        "language": "Java"
+    },
+    {
+        "name": "LSPosed/LSPosed",
+        "url": "https://github.com/LSPosed/LSPosed",
+        "description": "LSPosed Framework",
+        "stars": 19848,
+        "language": "Java"
+    },
+    {
+        "name": "linlinjava/litemall",
+        "url": "https://github.com/linlinjava/litemall",
+        "description": "又一个小商城。litemall = Spring Boot后端 + Vue管理员前端 + 微信小程序用户前端 + Vue用户移动端",
+        "stars": 19602,
+        "language": "Java"
+    },
+    {
+        "name": "yudaocode/SpringBoot-Labs",
+        "url": "https://github.com/yudaocode/SpringBoot-Labs",
+        "description": "一个涵盖六个专栏：Spring Boot 2.X、Spring Cloud、Spring Cloud Alibaba、Dubbo、分布式消息队列、分布式事务的仓库。希望胖友小手一抖，右上角来个 Star，感恩 1024",
+        "stars": 19553,
+        "language": "Java"
+    },
+    {
+        "name": "Baseflow/PhotoView",
+        "url": "https://github.com/Baseflow/PhotoView",
+        "description": "Implementation of ImageView for Android that supports zooming, by various touch gestures.",
+        "stars": 18842,
+        "language": "Java"
+    },
+    {
+        "name": "dianping/cat",
+        "url": "https://github.com/dianping/cat",
+        "description": "CAT 作为服务端项目基础组件，提供了 Java, C/C++, Node.js, Python, Go 等多语言客户端，已经在美团点评的基础架构中间件框架（MVC框架，RPC框架，数据库框架，缓存框架等，消息队列，配置系统等）深度集成，为美团点评各业务线提供系统丰富的性能指标、健康状况、实时告警等。",
+        "stars": 18831,
+        "language": "Java"
+    },
+    {
+        "name": "kunal-kushwaha/DSA-Bootcamp-Java",
+        "url": "https://github.com/kunal-kushwaha/DSA-Bootcamp-Java",
+        "description": "This repository consists of the code samples, assignments, and notes for the Java data structures & algorithms + interview preparation bootcamp of WeMakeDevs.",
+        "stars": 18799,
+        "language": "Java"
+    },
+    {
+        "name": "thingsboard/thingsboard",
+        "url": "https://github.com/thingsboard/thingsboard",
+        "description": "Open-source IoT Platform - Device management, data collection, processing and visualization.",
+        "stars": 18633,
+        "language": "Java"
+    },
+    {
+        "name": "forezp/SpringCloudLearning",
+        "url": "https://github.com/forezp/SpringCloudLearning",
+        "description": "《史上最简单的Spring Cloud教程源码》",
+        "stars": 17936,
+        "language": "Java"
+    },
+    {
+        "name": "JetBrains/intellij-community",
+        "url": "https://github.com/JetBrains/intellij-community",
+        "description": "IntelliJ IDEA Community Edition & IntelliJ Platform",
+        "stars": 17835,
+        "language": "Java"
+    },
+    {
+        "name": "williamfiset/Algorithms",
+        "url": "https://github.com/williamfiset/Algorithms",
+        "description": "A collection of algorithms and data structures",
+        "stars": 17832,
+        "language": "Java"
+    },
+    {
+        "name": "antlr/antlr4",
+        "url": "https://github.com/antlr/antlr4",
+        "description": "ANTLR (ANother Tool for Language Recognition) is a powerful parser generator for reading, processing, executing, or translating structured text or binary files.",
+        "stars": 17809,
+        "language": "Java"
+    },
+    {
+        "name": "Tencent/APIJSON",
+        "url": "https://github.com/Tencent/APIJSON",
+        "description": "🏆 实时 零代码、全功能、强安全 ORM 库 🚀 后端接口和文档零代码，前端(客户端) 定制返回 JSON 的数据和结构 🏆 Real-Time coding-free, powerful and secure ORM 🚀  providing APIs and Docs without coding by Backend, and the returned JSON of API can be customized by Frontend(Client) users",
+        "stars": 17758,
+        "language": "Java"
+    },
+    {
+        "name": "LMAX-Exchange/disruptor",
+        "url": "https://github.com/LMAX-Exchange/disruptor",
+        "description": "High Performance Inter-Thread Messaging Library",
+        "stars": 17711,
+        "language": "Java"
+    },
+    {
+        "name": "dromara/Sa-Token",
+        "url": "https://github.com/dromara/Sa-Token",
+        "description": "一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！—— 登录认证、权限认证、分布式Session会话、微服务网关鉴权、单点登录、OAuth2.0",
+        "stars": 17366,
+        "language": "Java"
+    },
+    {
+        "name": "Tencent/tinker",
+        "url": "https://github.com/Tencent/tinker",
+        "description": "Tinker is a hot-fix solution library for Android, it supports dex, library and resources update without reinstall apk.",
+        "stars": 17282,
+        "language": "Java"
+    },
+    {
+        "name": "openzipkin/zipkin",
+        "url": "https://github.com/openzipkin/zipkin",
+        "description": "Zipkin is a distributed tracing system",
+        "stars": 17177,
+        "language": "Java"
+    },
+    {
+        "name": "facebook/fresco",
+        "url": "https://github.com/facebook/fresco",
+        "description": "An Android library for managing images and the memory they use.",
+        "stars": 17105,
+        "language": "Java"
+    },
+    {
+        "name": "YunaiV/yudao-cloud",
+        "url": "https://github.com/YunaiV/yudao-cloud",
+        "description": "ruoyi-vue-pro 全新 Cloud 版本，优化重构所有功能。基于 Spring Cloud Alibaba + MyBatis Plus + Vue & Element 实现的后台管理系统 + 用户小程序，支持 RBAC 动态权限、多租户、数据权限、工作流、三方登录、支付、短信、商城、CRM、ERP、AI 大模型等功能。你的 ⭐️ Star ⭐️，是作者生发的动力！",
+        "stars": 17060,
+        "language": "Java"
+    },
+    {
+        "name": "infinilabs/analysis-ik",
+        "url": "https://github.com/infinilabs/analysis-ik",
+        "description": "🚌 The IK Analysis plugin integrates Lucene IK analyzer into Elasticsearch and OpenSearch, support customized dictionary.",
+        "stars": 16935,
+        "language": "Java"
+    },
+    {
+        "name": "kestra-io/kestra",
+        "url": "https://github.com/kestra-io/kestra",
+        "description": ":zap: Workflow Automation Platform. Orchestrate & Schedule code in any language, run anywhere, 500+ plugins. Alternative to Zapier, Rundeck, Camunda, Airflow...",
+        "stars": 16912,
+        "language": "Java"
+    },
+    {
+        "name": "justauth/JustAuth",
+        "url": "https://github.com/justauth/JustAuth",
+        "description": "🏆Gitee 最有价值开源项目 🚀:100: 小而全而美的第三方登录开源组件。目前已支持Github、Gitee、微博、钉钉、百度、Coding、腾讯云开发者平台、OSChina、支付宝、QQ、微信、淘宝、Google、Facebook、抖音、领英、小米、微软、今日头条、Teambition、StackOverflow、Pinterest、人人、华为、企业微信、酷家乐、Gitlab、美团、饿了么、推特、飞书、京东、阿里云、喜马拉雅、Amazon、Slack和 Line 等第三方平台的授权登录。 Login, so easy!",
+        "stars": 16882,
+        "language": "Java"
+    },
+    {
+        "name": "nostra13/Android-Universal-Image-Loader",
+        "url": "https://github.com/nostra13/Android-Universal-Image-Loader",
+        "description": "Powerful and flexible library for loading, caching and displaying images on Android.",
+        "stars": 16786,
+        "language": "Java"
+    },
+    {
+        "name": "baomidou/mybatis-plus",
+        "url": "https://github.com/baomidou/mybatis-plus",
+        "description": "An powerful enhanced toolkit of MyBatis for simplify development",
+        "stars": 16780,
+        "language": "Java"
+    },
+    {
+        "name": "winterbe/java8-tutorial",
+        "url": "https://github.com/winterbe/java8-tutorial",
+        "description": "Modern Java - A Guide to Java 8",
+        "stars": 16763,
+        "language": "Java"
+    },
+    {
+        "name": "shuzheng/zheng",
+        "url": "https://github.com/shuzheng/zheng",
+        "description": "基于Spring+SpringMVC+Mybatis分布式敏捷开发系统架构，提供整套公共微服务服务模块：集中权限管理（单点登录）、内容管理、支付中心、用户管理（支持第三方登录）、微信平台、存储系统、配置中心、日志分析、任务和通知等，支持服务治理、监控和追踪，努力为中小型企业打造全方位J2EE企业级开发解决方案。",
+        "stars": 16721,
+        "language": "Java"
+    },
+    {
+        "name": "material-components/material-components-android",
+        "url": "https://github.com/material-components/material-components-android",
+        "description": "Modular and customizable Material Design UI components for Android",
+        "stars": 16660,
+        "language": "Java"
+    },
+    {
+        "name": "xiaojieonly/Ehviewer_CN_SXJ",
+        "url": "https://github.com/xiaojieonly/Ehviewer_CN_SXJ",
+        "description": "ehviewer，用爱发电，快乐前行",
+        "stars": 16655,
+        "language": "Java"
+    },
+    {
+        "name": "ben-manes/caffeine",
+        "url": "https://github.com/ben-manes/caffeine",
+        "description": "A high performance caching library for Java",
+        "stars": 16533,
+        "language": "Java"
+    },
+    {
+        "name": "Grasscutters/Grasscutter",
+        "url": "https://github.com/Grasscutters/Grasscutter",
+        "description": "A server software reimplementation for a certain anime game.",
+        "stars": 16482,
+        "language": "Java"
+    },
+    {
+        "name": "JeffLi1993/springboot-learning-example",
+        "url": "https://github.com/JeffLi1993/springboot-learning-example",
+        "description": "spring boot 实践学习案例，是 spring boot 初学者及核心技术巩固的最佳实践。",
+        "stars": 16474,
+        "language": "Java"
+    },
+    {
+        "name": "alibaba/DataX",
+        "url": "https://github.com/alibaba/DataX",
+        "description": "DataX是阿里云DataWorks数据集成的开源版本。",
+        "stars": 16380,
+        "language": "Java"
+    },
+    {
+        "name": "heibaiying/BigData-Notes",
+        "url": "https://github.com/heibaiying/BigData-Notes",
+        "description": "大数据入门指南  :star:",
+        "stars": 16338,
+        "language": "Java"
+    },
+    {
+        "name": "prestodb/presto",
+        "url": "https://github.com/prestodb/presto",
+        "description": "The official home of the Presto distributed SQL query engine for big data",
+        "stars": 16305,
+        "language": "Java"
+    },
+    {
+        "name": "dyc87112/SpringBoot-Learning",
+        "url": "https://github.com/dyc87112/SpringBoot-Learning",
+        "description": "《Spring Boot基础教程》，2.x版本持续连载中！点击下方链接直达教程目录！",
+        "stars": 15768,
+        "language": "Java"
+    },
+    {
+        "name": "gyoogle/tech-interview-for-developer",
+        "url": "https://github.com/gyoogle/tech-interview-for-developer",
+        "description": "👶🏻 신입 개발자 전공 지식 & 기술 면접 백과사전 📖",
+        "stars": 15738,
+        "language": "Java"
+    },
+    {
+        "name": "android-hacker/VirtualXposed",
+        "url": "https://github.com/android-hacker/VirtualXposed",
+        "description": "A simple app to use Xposed without root, unlock the bootloader or modify system image, etc.",
+        "stars": 15654,
+        "language": "Java"
+    },
+    {
+        "name": "android10/Android-CleanArchitecture",
+        "url": "https://github.com/android10/Android-CleanArchitecture",
+        "description": "This is a sample app that is part of a series of blog posts I have written about how to architect an android application using Uncle Bob's clean architecture approach.",
+        "stars": 15544,
+        "language": "Java"
+    },
+    {
+        "name": "mockito/mockito",
+        "url": "https://github.com/mockito/mockito",
+        "description": "Most popular Mocking framework for unit tests written in Java",
+        "stars": 15115,
+        "language": "Java"
+    },
+    {
+        "name": "questdb/questdb",
+        "url": "https://github.com/questdb/questdb",
+        "description": "QuestDB is a high performance, open-source, time-series database",
+        "stars": 15068,
+        "language": "Java"
+    },
+    {
+        "name": "apache/hadoop",
+        "url": "https://github.com/apache/hadoop",
+        "description": "Apache Hadoop",
+        "stars": 15039,
+        "language": "Java"
+    },
+    {
+        "name": "Konloch/bytecode-viewer",
+        "url": "https://github.com/Konloch/bytecode-viewer",
+        "description": "A Java 8+ Jar & Android APK Reverse Engineering Suite (Decompiler, Editor, Debugger & More)",
+        "stars": 14954,
+        "language": "Java"
+    },
+    {
+        "name": "zhisheng17/flink-learning",
+        "url": "https://github.com/zhisheng17/flink-learning",
+        "description": "flink learning blog. http://www.54tianzhisheng.cn/  含 Flink 入门、概念、原理、实战、性能调优、源码解析等内容。涉及 Flink Connector、Metrics、Library、DataStream API、Table API & SQL 等内容的学习案例，还有 Flink 落地应用的大型项目案例（PVUV、日志存储、百亿数据实时去重、监控告警）分享。欢迎大家支持我的专栏《大数据实时计算引擎 Flink 实战与性能优化》",
+        "stars": 14729,
+        "language": "Java"
+    },
+    {
+        "name": "apache/pulsar",
+        "url": "https://github.com/apache/pulsar",
+        "description": "Apache Pulsar - distributed pub-sub messaging system",
+        "stars": 14550,
+        "language": "Java"
+    },
+    {
+        "name": "hdodenhof/CircleImageView",
+        "url": "https://github.com/hdodenhof/CircleImageView",
+        "description": "A circular ImageView for Android",
+        "stars": 14549,
+        "language": "Java"
+    },
+    {
+        "name": "Tencent/QMUI_Android",
+        "url": "https://github.com/Tencent/QMUI_Android",
+        "description": "提高 Android UI 开发效率的 UI 库",
+        "stars": 14488,
+        "language": "Java"
+    },
+    {
+        "name": "alibaba/ARouter",
+        "url": "https://github.com/alibaba/ARouter",
+        "description": "💪 A framework for assisting in the renovation of Android componentization (帮助 Android App 进行组件化改造的路由框架)",
+        "stars": 14477,
+        "language": "Java"
+    },
+    {
+        "name": "java-decompiler/jd-gui",
+        "url": "https://github.com/java-decompiler/jd-gui",
+        "description": "A standalone Java Decompiler GUI",
+        "stars": 14450,
+        "language": "Java"
+    },
+    {
+        "name": "eclipse-vertx/vert.x",
+        "url": "https://github.com/eclipse-vertx/vert.x",
+        "description": "Vert.x is a tool-kit for building reactive applications on the JVM",
+        "stars": 14447,
+        "language": "Java"
+    },
+    {
+        "name": "elastic/logstash",
+        "url": "https://github.com/elastic/logstash",
+        "description": "Logstash - transport and process your logs, events, or other data",
+        "stars": 14432,
+        "language": "Java"
+    },
+    {
+        "name": "quarkusio/quarkus",
+        "url": "https://github.com/quarkusio/quarkus",
+        "description": "Quarkus: Supersonic Subatomic Java. ",
+        "stars": 14329,
+        "language": "Java"
+    },
+    {
+        "name": "arduino/Arduino",
+        "url": "https://github.com/arduino/Arduino",
+        "description": "Arduino IDE 1.x",
+        "stars": 14313,
+        "language": "Java"
+    },
+    {
+        "name": "neo4j/neo4j",
+        "url": "https://github.com/neo4j/neo4j",
+        "description": "Graphs for Everyone",
+        "stars": 14141,
+        "language": "Java"
+    },
+    {
+        "name": "supertokens/supertokens-core",
+        "url": "https://github.com/supertokens/supertokens-core",
+        "description": "Open source alternative to Auth0 / Firebase Auth / AWS Cognito ",
+        "stars": 14049,
+        "language": "Java"
+    },
+    {
+        "name": "deeplearning4j/deeplearning4j",
+        "url": "https://github.com/deeplearning4j/deeplearning4j",
+        "description": "Suite of tools for deploying and training deep learning models using the JVM. Highlights include model import for keras, tensorflow, and onnx/pytorch, a modular and tiny c++ library for running math code and a java based math library on top of the core c++ library. Also includes samediff: a pytorch/tensorflow like library for running deep learn...",
+        "stars": 13928,
+        "language": "Java"
+    },
+    {
+        "name": "GoogleContainerTools/jib",
+        "url": "https://github.com/GoogleContainerTools/jib",
+        "description": "🏗 Build container images for your Java applications.",
+        "stars": 13877,
+        "language": "Java"
+    },
+    {
+        "name": "theonedev/onedev",
+        "url": "https://github.com/theonedev/onedev",
+        "description": "Git Server with CI/CD, Kanban, and Packages. Seamless integration. Unparalleled experience.",
+        "stars": 13874,
+        "language": "Java"
+    },
+    {
+        "name": "orhanobut/logger",
+        "url": "https://github.com/orhanobut/logger",
+        "description": "✔️ Simple, pretty and powerful logger for android",
+        "stars": 13857,
+        "language": "Java"
+    },
+    {
+        "name": "Netflix/zuul",
+        "url": "https://github.com/Netflix/zuul",
+        "description": "Zuul is a gateway service that provides dynamic routing, monitoring, resiliency, security, and more.",
+        "stars": 13687,
+        "language": "Java"
+    },
+    {
+        "name": "apache/druid",
+        "url": "https://github.com/apache/druid",
+        "description": "Apache Druid: a high performance real-time analytics database.",
+        "stars": 13673,
+        "language": "Java"
+    },
+    {
+        "name": "Curzibn/Luban",
+        "url": "https://github.com/Curzibn/Luban",
+        "description": "Luban(鲁班)—Image compression with efficiency very close to WeChat Moments/可能是最接近微信朋友圈的图片压缩算法",
+        "stars": 13638,
+        "language": "Java"
+    },
+    {
+        "name": "seaswalker/spring-analysis",
+        "url": "https://github.com/seaswalker/spring-analysis",
+        "description": "Spring源码阅读",
+        "stars": 13621,
+        "language": "Java"
+    },
+    {
+        "name": "JessYanCoding/AndroidAutoSize",
+        "url": "https://github.com/JessYanCoding/AndroidAutoSize",
+        "description": "🔥 A low-cost Android screen adaptation solution (今日头条屏幕适配方案终极版，一个极低成本的 Android 屏幕适配方案).",
+        "stars": 13606,
+        "language": "Java"
+    },
+    {
+        "name": "pinpoint-apm/pinpoint",
+        "url": "https://github.com/pinpoint-apm/pinpoint",
+        "description": "APM, (Application Performance Management) tool for large-scale distributed systems. ",
+        "stars": 13564,
+        "language": "Java"
+    },
+    {
+        "name": "tink-crypto/tink",
+        "url": "https://github.com/tink-crypto/tink",
+        "description": "Tink is a multi-language, cross-platform, open source library that provides cryptographic APIs that are secure, easy to use correctly, and hard(er) to misuse.",
+        "stars": 13533,
+        "language": "Java"
+    },
+    {
+        "name": "lgvalle/Material-Animations",
+        "url": "https://github.com/lgvalle/Material-Animations",
+        "description": "Android Transition animations explanation with examples.",
+        "stars": 13523,
+        "language": "Java"
+    },
+    {
+        "name": "apache/doris",
+        "url": "https://github.com/apache/doris",
+        "description": "Apache Doris is an easy-to-use, high performance and unified analytics database.",
+        "stars": 13493,
+        "language": "Java"
+    },
+    {
+        "name": "zaproxy/zaproxy",
+        "url": "https://github.com/zaproxy/zaproxy",
+        "description": "The ZAP by Checkmarx Core project",
+        "stars": 13489,
+        "language": "Java"
+    },
+    {
+        "name": "Bigkoo/Android-PickerView",
+        "url": "https://github.com/Bigkoo/Android-PickerView",
+        "description": "This is a picker view for android , support linkage effect, timepicker and optionspicker.（时间选择器、省市区三级联动）",
+        "stars": 13474,
+        "language": "Java"
+    },
+    {
+        "name": "sqshq/piggymetrics",
+        "url": "https://github.com/sqshq/piggymetrics",
+        "description": "Microservice Architecture with Spring Boot, Spring Cloud and Docker",
+        "stars": 13464,
+        "language": "Java"
+    },
+    {
+        "name": "LuckSiege/PictureSelector",
+        "url": "https://github.com/LuckSiege/PictureSelector",
+        "description": "Picture Selector Library for Android or 图片选择器",
+        "stars": 13436,
+        "language": "Java"
+    },
+    {
+        "name": "apache/dolphinscheduler",
+        "url": "https://github.com/apache/dolphinscheduler",
+        "description": "Apache DolphinScheduler is the modern data orchestration platform. Agile to create high performance workflow with low-code",
+        "stars": 13410,
+        "language": "Java"
+    },
+    {
+        "name": "DuGuQiuBai/Java",
+        "url": "https://github.com/DuGuQiuBai/Java",
+        "description": "27天成为Java大神",
+        "stars": 13293,
+        "language": "Java"
+    },
+    {
+        "name": "janishar/mit-deep-learning-book-pdf",
+        "url": "https://github.com/janishar/mit-deep-learning-book-pdf",
+        "description": "MIT Deep Learning Book in PDF format (complete and parts) by Ian Goodfellow, Yoshua Bengio and Aaron Courville",
+        "stars": 13260,
+        "language": "Java"
+    },
+    {
+        "name": "macrozheng/mall-learning",
+        "url": "https://github.com/macrozheng/mall-learning",
+        "description": "mall学习教程，架构、业务、技术要点全方位解析。mall项目（60k+star）是一套电商系统，使用现阶段主流技术实现。涵盖了SpringBoot、MyBatis、Elasticsearch、RabbitMQ、Redis、MongoDB、MySQL等技术，采用Docker容器化部署。",
+        "stars": 13126,
+        "language": "Java"
+    },
+    {
+        "name": "projectlombok/lombok",
+        "url": "https://github.com/projectlombok/lombok",
+        "description": "Very spicy additions to the Java programming language.",
+        "stars": 13112,
+        "language": "Java"
+    },
+    {
+        "name": "languagetool-org/languagetool",
+        "url": "https://github.com/languagetool-org/languagetool",
+        "description": "Style and Grammar Checker for 25+ Languages",
+        "stars": 12997,
+        "language": "Java"
+    },
+    {
+        "name": "youth5201314/banner",
+        "url": "https://github.com/youth5201314/banner",
+        "description": "🔥🔥🔥Banner 2.0 来了！Android广告图片轮播控件，内部基于ViewPager2实现，Indicator和UI都可以自定义。",
+        "stars": 12982,
+        "language": "Java"
+    },
+    {
+        "name": "Netflix/conductor",
+        "url": "https://github.com/Netflix/conductor",
+        "description": "Conductor is a microservices orchestration engine.",
+        "stars": 12784,
+        "language": "Java"
+    },
+    {
+        "name": "facebook/stetho",
+        "url": "https://github.com/facebook/stetho",
+        "description": "Stetho is a debug bridge for Android applications, enabling the powerful Chrome Developer Tools and much more.",
+        "stars": 12696,
+        "language": "Java"
+    },
+    {
+        "name": "cryptomator/cryptomator",
+        "url": "https://github.com/cryptomator/cryptomator",
+        "description": "Cryptomator for Windows, macOS, and Linux: Secure client-side encryption for your cloud storage, ensuring privacy and control over your data.",
+        "stars": 12694,
+        "language": "Java"
+    },
+    {
+        "name": "pxb1988/dex2jar",
+        "url": "https://github.com/pxb1988/dex2jar",
+        "description": "Tools to work with android .dex and java .class files",
+        "stars": 12665,
+        "language": "Java"
+    },
+    {
+        "name": "greenrobot/greenDAO",
+        "url": "https://github.com/greenrobot/greenDAO",
+        "description": "greenDAO is a light & fast ORM solution for Android that maps objects to SQLite databases.",
+        "stars": 12625,
+        "language": "Java"
+    },
+    {
+        "name": "google/guice",
+        "url": "https://github.com/google/guice",
+        "description": "Guice (pronounced 'juice') is a lightweight dependency injection framework for Java 11 and above, brought to you by Google.",
+        "stars": 12583,
+        "language": "Java"
+    },
+    {
+        "name": "zhihu/Matisse",
+        "url": "https://github.com/zhihu/Matisse",
+        "description": ":fireworks: A well-designed local image and video selector for Android",
+        "stars": 12557,
+        "language": "Java"
+    },
+    {
+        "name": "codecentric/spring-boot-admin",
+        "url": "https://github.com/codecentric/spring-boot-admin",
+        "description": "Admin UI for administration of spring boot applications",
+        "stars": 12533,
+        "language": "Java"
+    },
+    {
+        "name": "Netflix/eureka",
+        "url": "https://github.com/Netflix/eureka",
+        "description": "AWS Service registry for resilient mid-tier load balancing and failover.",
+        "stars": 12525,
+        "language": "Java"
+    },
+    {
+        "name": "kekingcn/kkFileView",
+        "url": "https://github.com/kekingcn/kkFileView",
+        "description": "Universal File Online Preview Project based on Spring-Boot",
+        "stars": 12519,
+        "language": "Java"
+    },
+    {
+        "name": "daimajia/AndroidViewAnimations",
+        "url": "https://github.com/daimajia/AndroidViewAnimations",
+        "description": "Cute view animation collection.",
+        "stars": 12450,
+        "language": "Java"
+    },
+    {
+        "name": "apache/zookeeper",
+        "url": "https://github.com/apache/zookeeper",
+        "description": "Apache ZooKeeper",
+        "stars": 12449,
+        "language": "Java"
+    },
+    {
+        "name": "daimajia/AndroidSwipeLayout",
+        "url": "https://github.com/daimajia/AndroidSwipeLayout",
+        "description": "The Most Powerful Swipe Layout!",
+        "stars": 12400,
+        "language": "Java"
+    },
+    {
+        "name": "alibaba/COLA",
+        "url": "https://github.com/alibaba/COLA",
+        "description": "🥤 COLA: Clean Object-oriented & Layered Architecture",
+        "stars": 12364,
+        "language": "Java"
+    },
+    {
+        "name": "pagehelper/Mybatis-PageHelper",
+        "url": "https://github.com/pagehelper/Mybatis-PageHelper",
+        "description": "Mybatis通用分页插件",
+        "stars": 12285,
+        "language": "Java"
+    },
+    {
+        "name": "macrozheng/mall-swarm",
+        "url": "https://github.com/macrozheng/mall-swarm",
+        "description": "mall-swarm是一套微服务商城系统，采用了 Spring Cloud Alibaba、Spring Boot 3.2、Sa-Token、MyBatis、Elasticsearch、Docker、Kubernetes等核心技术，同时提供了基于Vue的管理后台方便快速搭建系统。mall-swarm在电商业务的基础集成了注册中心、配置中心、监控中心、网关等系统功能。",
+        "stars": 12261,
+        "language": "Java"
+    },
+    {
+        "name": "redis/jedis",
+        "url": "https://github.com/redis/jedis",
+        "description": "Redis Java client",
+        "stars": 12020,
+        "language": "Java"
+    },
+    {
+        "name": "Yalantis/uCrop",
+        "url": "https://github.com/Yalantis/uCrop",
+        "description": "Image Cropping Library for Android",
+        "stars": 11969,
+        "language": "Java"
+    },
+    {
+        "name": "metersphere/metersphere",
+        "url": "https://github.com/metersphere/metersphere",
+        "description": "MeterSphere 是新一代的开源持续测试工具，让软件测试工作更简单、更高效，不再成为持续交付的瓶颈。",
+        "stars": 11963,
+        "language": "Java"
+    },
+    {
+        "name": "Tencent/VasSonic",
+        "url": "https://github.com/Tencent/VasSonic",
+        "description": "VasSonic is a lightweight and high-performance Hybrid framework developed by tencent VAS team, which is intended to speed up the first screen of websites working on Android and iOS platform. ",
+        "stars": 11857,
+        "language": "Java"
+    },
+    {
+        "name": "Tencent/matrix",
+        "url": "https://github.com/Tencent/matrix",
+        "description": "Matrix is a plugin style, non-invasive APM system developed by WeChat.",
+        "stars": 11793,
+        "language": "Java"
+    },
+    {
+        "name": "amitshekhariitbhu/android-interview-questions",
+        "url": "https://github.com/amitshekhariitbhu/android-interview-questions",
+        "description": "Your Cheat Sheet For Android Interview - Android Interview Questions and Answers",
+        "stars": 11786,
+        "language": "Java"
+    },
+    {
+        "name": "grpc/grpc-java",
+        "url": "https://github.com/grpc/grpc-java",
+        "description": "The Java gRPC implementation. HTTP/2 based RPC",
+        "stars": 11681,
+        "language": "Java"
+    },
+    {
+        "name": "frank-lam/fullstack-tutorial",
+        "url": "https://github.com/frank-lam/fullstack-tutorial",
+        "description": "🚀 fullstack tutorial 2022，后台技术栈/架构师之路/全栈开发社区，春招/秋招/校招/面试",
+        "stars": 11638,
+        "language": "Java"
+    },
+    {
+        "name": "code4craft/webmagic",
+        "url": "https://github.com/code4craft/webmagic",
+        "description": "A scalable web crawler framework for Java.",
+        "stars": 11536,
+        "language": "Java"
+    },
+    {
+        "name": "realm/realm-java",
+        "url": "https://github.com/realm/realm-java",
+        "description": "Realm is a mobile database: a replacement for SQLite & ORMs",
+        "stars": 11482,
+        "language": "Java"
+    },
+    {
+        "name": "Team-xManager/xManager",
+        "url": "https://github.com/Team-xManager/xManager",
+        "description": "Ad-Free, New Features & Freedom",
+        "stars": 11412,
+        "language": "Java"
+    },
+    {
+        "name": "careercup/CtCI-6th-Edition",
+        "url": "https://github.com/careercup/CtCI-6th-Edition",
+        "description": "Cracking the Coding Interview 6th Ed. Solutions",
+        "stars": 11410,
+        "language": "Java"
+    },
+    {
+        "name": "gyf-dev/ImmersionBar",
+        "url": "https://github.com/gyf-dev/ImmersionBar",
+        "description": "android 4.4以上沉浸式状态栏和沉浸式导航栏管理，适配横竖屏切换、刘海屏、软键盘弹出等问题，可以修改状态栏字体颜色和导航栏图标颜色，以及不可修改字体颜色手机的适配，适用于Activity、Fragment、DialogFragment、Dialog，PopupWindow，一句代码轻松实现，以及对bar的其他设置，详见README。简书请参考：http://www.jianshu.com/p/2a884e211a62",
+        "stars": 11387,
+        "language": "Java"
+    },
+    {
+        "name": "plantuml/plantuml",
+        "url": "https://github.com/plantuml/plantuml",
+        "description": "Generate diagrams from textual description",
+        "stars": 11324,
+        "language": "Java"
+    },
+    {
+        "name": "newbee-ltd/newbee-mall",
+        "url": "https://github.com/newbee-ltd/newbee-mall",
+        "description": "🔥 🎉newbee-mall是一套电商系统，包括基础版本(Spring Boot+Thymeleaf)、前后端分离版本(Spring Boot+Vue 3+Element-Plus+Vue-Router 4+Pinia+Vant 4) 、秒杀版本、Go语言版本、微服务版本(Spring Cloud Alibaba+Nacos+Sentinel+Seata+Spring Cloud Gateway+OpenFeign+ELK)。 前台商城系统包含首页门户、商品分类、新品上线、首页轮播、商品推荐、商品搜索、商品展示、购物车、订单结算、订单流程、个人订单管理、会员中心、帮助中心等模块。 后台管理系统包含数据面板、轮播图管理、商品管理、订单管理、会员管理、分类管理、设置等模块。",
+        "stars": 11289,
+        "language": "Java"
+    },
+    {
+        "name": "debezium/debezium",
+        "url": "https://github.com/debezium/debezium",
+        "description": "Change data capture for a variety of databases. Please log issues at https://issues.redhat.com/browse/DBZ.",
+        "stars": 11282,
+        "language": "Java"
+    },
+    {
+        "name": "OpenRefine/OpenRefine",
+        "url": "https://github.com/OpenRefine/OpenRefine",
+        "description": "OpenRefine is a free, open source power tool for working with messy data and improving it",
+        "stars": 11267,
+        "language": "Java"
+    },
+    {
+        "name": "permissions-dispatcher/PermissionsDispatcher",
+        "url": "https://github.com/permissions-dispatcher/PermissionsDispatcher",
+        "description": "A declarative API to handle Android runtime permissions.",
+        "stars": 11227,
+        "language": "Java"
+    }
+]

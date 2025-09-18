@@ -1,0 +1,1047 @@
+[
+  {
+    "oid": "c6fc881c22d0d18312e1af20df7421c585514023",
+    "message": "fixes a bug in test",
+    "date": "2022-03-16T09:55:23Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/c6fc881c22d0d18312e1af20df7421c585514023",
+    "details": {
+      "sha": "7b6246649a89ba7ae0469ad372d8759695371085",
+      "filename": "src/test/java/io/supertokens/test/InMemoryDBTest.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 3,
+      "changes": 6,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/c6fc881c22d0d18312e1af20df7421c585514023/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FInMemoryDBTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/c6fc881c22d0d18312e1af20df7421c585514023/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FInMemoryDBTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FInMemoryDBTest.java?ref=c6fc881c22d0d18312e1af20df7421c585514023",
+      "patch": "@@ -31,7 +31,6 @@\n import io.supertokens.session.info.SessionInformationHolder;\n import io.supertokens.storageLayer.StorageLayer;\n import io.supertokens.usermetadata.UserMetadata;\n-\n import org.junit.AfterClass;\n import org.junit.Before;\n import org.junit.Rule;\n@@ -121,13 +120,14 @@ public void testCodeCreationRapidly() throws Exception {\n     public void testConcurrentMetadataUpdates() throws Exception {\n         String[] args = { \"../\" };\n \n-        TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n+        TestingProcessManager.TestingProcess process = TestingProcessManager.start(args, false);\n         process.getProcess().setForceInMemoryDB();\n+        process.startProcess();\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n         String userId = \"userId\";\n \n-        ExecutorService es = Executors.newCachedThreadPool();\n+        ExecutorService es = Executors.newFixedThreadPool(1000);\n \n         for (int i = 0; i < 3000; i++) {\n             final int ind = i;",
+      "parent_sha": "28444dbaeee664c21fa023829667bc4cc5bf64f1"
+    }
+  },
+  {
+    "oid": "74d37014ae89641c165bc1c8577ca520d9935401",
+    "message": "fix: mau related tests (#938)",
+    "date": "2024-02-26T12:29:59Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/74d37014ae89641c165bc1c8577ca520d9935401",
+    "details": {
+      "sha": "b8ba04cafd95493d0ecf5bb0d8ac3365e57469c1",
+      "filename": "src/test/java/io/supertokens/test/FeatureFlagTest.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/74d37014ae89641c165bc1c8577ca520d9935401/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FFeatureFlagTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/74d37014ae89641c165bc1c8577ca520d9935401/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FFeatureFlagTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FFeatureFlagTest.java?ref=74d37014ae89641c165bc1c8577ca520d9935401",
+      "patch": "@@ -97,7 +97,7 @@ public void noLicenseKeyShouldHaveEmptyFeatureFlag()\n \n         JsonObject stats = FeatureFlag.getInstance(process.getProcess()).getPaidFeatureStats();\n         Assert.assertEquals(stats.entrySet().size(), 1);\n-        Assert.assertEquals(stats.get(\"maus\").getAsJsonArray().size(), 30);\n+        Assert.assertEquals(stats.get(\"maus\").getAsJsonArray().size(), 31);\n         Assert.assertEquals(stats.get(\"maus\").getAsJsonArray().get(0).getAsInt(), 0);\n         Assert.assertEquals(stats.get(\"maus\").getAsJsonArray().get(29).getAsInt(), 0);\n \n@@ -251,7 +251,7 @@ public void testThatCallingGetFeatureFlagAPIReturnsTotpStats() throws Exception\n             }\n \n             assert features.contains(new JsonPrimitive(\"totp\"));\n-            assert maus.size() == 30;\n+            assert maus.size() == 31;\n             assert maus.get(0).getAsInt() == 2; // 2 users have signed up\n             assert maus.get(29).getAsInt() == 2;\n ",
+      "parent_sha": "0eef16fcc7d55ac1064081239badd58917a661d3"
+    }
+  },
+  {
+    "oid": "142e500fc1201c8a6ecb19460da4a637b8920e5a",
+    "message": "fix: fix failing cli options test (#1059)",
+    "date": "2024-10-09T12:53:01Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/142e500fc1201c8a6ecb19460da4a637b8920e5a",
+    "details": {
+      "sha": "e3bae94f00db4ba57fb91c100480ba149ee8967b",
+      "filename": "src/test/java/io/supertokens/test/CLIOptionsTest.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/142e500fc1201c8a6ecb19460da4a637b8920e5a/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FCLIOptionsTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/142e500fc1201c8a6ecb19460da4a637b8920e5a/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FCLIOptionsTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FCLIOptionsTest.java?ref=142e500fc1201c8a6ecb19460da4a637b8920e5a",
+      "patch": "@@ -302,7 +302,7 @@ public void cli2TempLocationTest() throws Exception {\n         assertNotNull(process.checkOrWaitForEvent(PROCESS_STATE.STOPPED));\n \n         //process starts with tempDirLocation param too.\n-        args = new String[]{\"../\", \"tempDirLocation=\" + new File(\"../temp/\").getAbsolutePath()};\n+        args = new String[]{\"../\", \"tempDirLocation=\" + new File(\"../tempDir/\").getAbsolutePath()};\n \n         process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(PROCESS_STATE.STARTED));",
+      "parent_sha": "7b22988c2b3f5bd3d2fe46d23dfb139cad962d79"
+    }
+  },
+  {
+    "oid": "092b0902cfb49ca733b35bcefc579a0141e821d4",
+    "message": "adds storage type check",
+    "date": "2023-03-27T17:28:43Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/092b0902cfb49ca733b35bcefc579a0141e821d4",
+    "details": {
+      "sha": "32fe8e51826c22951b5455331bd927711524220b",
+      "filename": "src/main/java/io/supertokens/storageLayer/StorageLayer.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 1,
+      "changes": 6,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/092b0902cfb49ca733b35bcefc579a0141e821d4/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FstorageLayer%2FStorageLayer.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/092b0902cfb49ca733b35bcefc579a0141e821d4/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FstorageLayer%2FStorageLayer.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FstorageLayer%2FStorageLayer.java?ref=092b0902cfb49ca733b35bcefc579a0141e821d4",
+      "patch": "@@ -27,7 +27,6 @@\n import io.supertokens.pluginInterface.STORAGE_TYPE;\n import io.supertokens.pluginInterface.Storage;\n import io.supertokens.pluginInterface.authRecipe.AuthRecipeStorage;\n-import io.supertokens.pluginInterface.dashboard.DashboardStorage;\n import io.supertokens.pluginInterface.dashboard.sqlStorage.DashboardSQLStorage;\n import io.supertokens.pluginInterface.emailpassword.sqlStorage.EmailPasswordSQLStorage;\n import io.supertokens.pluginInterface.emailverification.sqlStorage.EmailVerificationSQLStorage;\n@@ -181,6 +180,11 @@ public static ActiveUsersStorage getActiveUsersStorage(Main main) {\n             throw new QuitProgramException(\"please call init() before calling getStorageLayer\");\n         }\n \n+        if (getInstance(main).storage.getType() != STORAGE_TYPE.SQL) {\n+            // we only support SQL for now\n+            throw new UnsupportedOperationException(\"\");\n+        }\n+\n         return (ActiveUsersStorage) getInstance(main).storage;\n     }\n ",
+      "parent_sha": "f8503cbc09c9aa41bb20be0d1840298edd09f515"
+    }
+  },
+  {
+    "oid": "ac3cf844986aa1787181f562a8bce49d6d38a781",
+    "message": "fix: fix typo from last commit",
+    "date": "2024-10-23T21:27:10Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/ac3cf844986aa1787181f562a8bce49d6d38a781",
+    "details": {
+      "sha": "ee67436810f928d8a75976a3cdc51867e28d9a70",
+      "filename": "src/main/java/io/supertokens/webserver/api/oauth/OAuthTokenAPI.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/ac3cf844986aa1787181f562a8bce49d6d38a781/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Foauth%2FOAuthTokenAPI.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/ac3cf844986aa1787181f562a8bce49d6d38a781/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Foauth%2FOAuthTokenAPI.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Foauth%2FOAuthTokenAPI.java?ref=ac3cf844986aa1787181f562a8bce49d6d38a781",
+      "patch": "@@ -106,7 +106,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws I\n             String[] parsedHeader = Utils.convertFromBase64(authorizationHeader.replaceFirst(\"^Basic \", \"\").trim()).split(\":\");\n             clientId = parsedHeader[0];\n         } else {\n-            clientId = InputParser.parseStringOrThrowError(input, formFields.get(\"client_id\"), false);\n+            clientId = formFields.get(\"client_id\");\n         }\n \n         try {",
+      "parent_sha": "fd17adbd16a6820a4afe945ba1b4036e7b714dd2"
+    }
+  },
+  {
+    "oid": "18d3b661361ee7cc9f80ceae824bd03bee09a6c3",
+    "message": "fix: ignore reset error (#1101)",
+    "date": "2025-01-10T09:48:06Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/18d3b661361ee7cc9f80ceae824bd03bee09a6c3",
+    "details": {
+      "sha": "43ce47561e9aff8e9976578dc7ab6321854fd0e1",
+      "filename": "src/test/java/io/supertokens/test/oauth/api/OAuthAPIHelper.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 7,
+      "changes": 13,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/18d3b661361ee7cc9f80ceae824bd03bee09a6c3/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Foauth%2Fapi%2FOAuthAPIHelper.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/18d3b661361ee7cc9f80ceae824bd03bee09a6c3/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Foauth%2Fapi%2FOAuthAPIHelper.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Foauth%2Fapi%2FOAuthAPIHelper.java?ref=18d3b661361ee7cc9f80ceae824bd03bee09a6c3",
+      "patch": "@@ -16,19 +16,18 @@\n \n package io.supertokens.test.oauth.api;\n \n-import java.util.HashMap;\n-import java.util.Map;\n-import java.net.URLEncoder;\n-import java.nio.charset.StandardCharsets;\n-\n import com.google.gson.JsonElement;\n import com.google.gson.JsonObject;\n-\n import io.supertokens.Main;\n import io.supertokens.oauth.HttpRequestForOAuthProvider;\n import io.supertokens.test.httpRequest.HttpRequestForTesting;\n import io.supertokens.utils.SemVer;\n \n+import java.net.URLEncoder;\n+import java.nio.charset.StandardCharsets;\n+import java.util.HashMap;\n+import java.util.Map;\n+\n public class OAuthAPIHelper {\n     public static void resetOAuthProvider() {\n         try {\n@@ -47,7 +46,7 @@ public static void resetOAuthProvider() {\n             HttpRequestForOAuthProvider.doGet(\"http://localhost:4444/.well-known/jwks.json\", new HashMap<>(), new HashMap<>());\n             Thread.sleep(1000);\n         } catch (Exception e) {\n-            throw new RuntimeException(e);\n+            //ignore error. later on the tests would fail anyway\n         }\n     }\n ",
+      "parent_sha": "ba9d580a1cfaecdfe8b2c701ef7ddce2bc65e199"
+    }
+  },
+  {
+    "oid": "f8885e71acc81596ff11e59ee112e47aa4f47c69",
+    "message": "Optimize getUserIdMappingWithEitherSuperTokensUserIdOrExternalUserId query",
+    "date": "2025-01-06T18:58:39Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/f8885e71acc81596ff11e59ee112e47aa4f47c69",
+    "details": {
+      "sha": "4a1683392e0780170061b72962e48f65375e28c2",
+      "filename": "src/main/java/io/supertokens/inmemorydb/queries/UserIdMappingQueries.java",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 4,
+      "changes": 16,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/f8885e71acc81596ff11e59ee112e47aa4f47c69/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FUserIdMappingQueries.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/f8885e71acc81596ff11e59ee112e47aa4f47c69/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FUserIdMappingQueries.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FUserIdMappingQueries.java?ref=f8885e71acc81596ff11e59ee112e47aa4f47c69",
+      "patch": "@@ -107,12 +107,16 @@ public static UserIdMapping[] getUserIdMappingWithEitherSuperTokensUserIdOrExter\n                                                                                               String userId)\n             throws SQLException, StorageQueryException {\n         String QUERY = \"SELECT * FROM \" + Config.getConfig(start).getUserIdMappingTable()\n-                + \" WHERE app_id = ? AND (supertokens_user_id = ? OR external_user_id = ?)\";\n+                + \" WHERE app_id = ? AND supertokens_user_id = ? \"\n+                + \"UNION \"\n+                + \"SELECT * FROM \" + Config.getConfig(start).getUserIdMappingTable()\n+                + \" WHERE app_id = ? AND external_user_id = ?\";\n \n         return execute(start, QUERY, pst -> {\n             pst.setString(1, appIdentifier.getAppId());\n             pst.setString(2, userId);\n-            pst.setString(3, userId);\n+            pst.setString(3, appIdentifier.getAppId());\n+            pst.setString(4, userId);\n         }, result -> {\n             ArrayList<UserIdMapping> userIdMappingArray = new ArrayList<>();\n             while (result.next()) {\n@@ -129,12 +133,16 @@ public static UserIdMapping[] getUserIdMappingWithEitherSuperTokensUserIdOrExter\n                                                                                                           String userId)\n             throws SQLException, StorageQueryException {\n         String QUERY = \"SELECT * FROM \" + Config.getConfig(start).getUserIdMappingTable()\n-                + \" WHERE app_id = ? AND (supertokens_user_id = ? OR external_user_id = ?)\";\n+                + \" WHERE app_id = ? AND supertokens_user_id = ? \"\n+                + \"UNION \"\n+                + \"SELECT * FROM \" + Config.getConfig(start).getUserIdMappingTable()\n+                + \" WHERE app_id = ? AND external_user_id = ?\";\n \n         return execute(sqlCon, QUERY, pst -> {\n             pst.setString(1, appIdentifier.getAppId());\n             pst.setString(2, userId);\n-            pst.setString(3, userId);\n+            pst.setString(3, appIdentifier.getAppId());\n+            pst.setString(4, userId);\n         }, result -> {\n             ArrayList<UserIdMapping> userIdMappingArray = new ArrayList<>();\n             while (result.next()) {",
+      "parent_sha": "f9dea9562cf958a0869fea0bb32695b25516c56d"
+    }
+  },
+  {
+    "oid": "a68ef8cce934d76b16c1e4afed433ad7dee1bfd7",
+    "message": "fix: cud regex (#717)",
+    "date": "2023-06-15T07:45:09Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/a68ef8cce934d76b16c1e4afed433ad7dee1bfd7",
+    "details": {
+      "sha": "e39bc03bcffcf17fea1b756979669b9f5ca5a550",
+      "filename": "src/main/java/io/supertokens/webserver/Utils.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 4,
+      "changes": 11,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/a68ef8cce934d76b16c1e4afed433ad7dee1bfd7/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2FUtils.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/a68ef8cce934d76b16c1e4afed433ad7dee1bfd7/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2FUtils.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2FUtils.java?ref=a68ef8cce934d76b16c1e4afed433ad7dee1bfd7",
+      "patch": "@@ -43,17 +43,20 @@ public static String normalizeAndValidateConnectionUriDomain(String connectionUr\n             throw new ServletException(new WebserverAPI.BadRequestException(\"connectionUriDomain should not be an empty String\"));\n         }\n \n+        String hostnameRegex = \"^[a-z][a-z0-9-]+(\\\\.[a-z][a-z0-9-]+)*(:[0-9]+)?$\";\n+        String ipRegex = \"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:[0-9]+)?$\";\n+\n+        if (!connectionUriDomain.matches(hostnameRegex) && !connectionUriDomain.matches(ipRegex)) {\n+            throw new ServletException(new WebserverAPI.BadRequestException(\"connectionUriDomain is invalid\"));\n+        }\n+\n         try {\n             URL url = new URL(\"http://\" + connectionUriDomain);\n \n             if (url.getPath() != null && url.getPath().length() > 0) {\n                 throw new ServletException(new WebserverAPI.BadRequestException(\"connectionUriDomain is invalid\"));\n             }\n \n-            if (url.getAuthority() != null && url.getAuthority().length() > 0) {\n-                throw new ServletException(new WebserverAPI.BadRequestException(\"connectionUriDomain is invalid\"));\n-            }\n-\n             connectionUriDomain = url.getHost();\n         } catch (MalformedURLException e) {\n             throw new ServletException(new WebserverAPI.BadRequestException(\"connectionUriDomain is invalid\"));",
+      "parent_sha": "b896da19d02fb4f58b66e3a56fd5f6c6b67a87ae"
+    }
+  },
+  {
+    "oid": "c6a1fbd3bf7aa48a53b77da1980de4515b842cd2",
+    "message": "fix: do not rethrow in retry",
+    "date": "2025-01-03T15:18:47Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/c6a1fbd3bf7aa48a53b77da1980de4515b842cd2",
+    "details": {
+      "sha": "6c7d5428320013507d25fde28e650fb3b54434b1",
+      "filename": "src/main/java/io/supertokens/bulkimport/BulkImport.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "changes": 3,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/c6a1fbd3bf7aa48a53b77da1980de4515b842cd2/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fbulkimport%2FBulkImport.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/c6a1fbd3bf7aa48a53b77da1980de4515b842cd2/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fbulkimport%2FBulkImport.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fbulkimport%2FBulkImport.java?ref=c6a1fbd3bf7aa48a53b77da1980de4515b842cd2",
+      "patch": "@@ -115,8 +115,9 @@ public static void addUsers(AppIdentifier appIdentifier, Storage storage, List<B\n                     for (BulkImportUser user : users) {\n                         user.id = Utils.getUUID();\n                     }\n+                } else {\n+                    throw sqe;\n                 }\n-                throw sqe;\n             }\n         }\n     }",
+      "parent_sha": "a31f02e72588e89327e95405de8f3be92ef95732"
+    }
+  },
+  {
+    "oid": "cb439e57c78f8afcbc081fbc85f281ede62e457d",
+    "message": "fix: feature test fix (#1027)",
+    "date": "2024-08-20T07:09:56Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/cb439e57c78f8afcbc081fbc85f281ede62e457d",
+    "details": {
+      "sha": "39f079c72f8088c270f634a99368ee97f00b969f",
+      "filename": "src/test/java/io/supertokens/test/FeatureFlagTest.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 1,
+      "changes": 6,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/cb439e57c78f8afcbc081fbc85f281ede62e457d/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FFeatureFlagTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/cb439e57c78f8afcbc081fbc85f281ede62e457d/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FFeatureFlagTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FFeatureFlagTest.java?ref=cb439e57c78f8afcbc081fbc85f281ede62e457d",
+      "patch": "@@ -901,6 +901,9 @@ public void testNetworkCallIsMadeInCoreInit() throws Exception {\n     private final String OPAQUE_KEY_WTIH_MFA_FEATURE = \"F1a=1VUxo7-tHNqFDwuhkkCPCB378A57uRU4=rVW01XBv63YizRb6ItTBu\" +\n             \"FHXQIvmceLTlOekCmHv7mwzEZJJKmO9N8pclQSbs4UBz8pzW5d107TIctJgBwy4upnBHUf\";\n \n+    private final String OPAQUE_KEY_WITH_SECURITY_FEATURE = \"tje5MVjlRz0Kwzax-mKksdYpZvwNhQagFdHj=ma=W0H7WET9R0Hcpv\" +\n+            \"Aui9r3wIk=swO2TIBLQNa94y10VQkzAa0Q0iw6GPzMeftJ4uvbnb1qpGpyf4K0cUwIZ76Pd9kZ\";\n+\n     @Test\n     public void testPaidStatsContainsAllEnabledFeatures() throws Exception {\n         String[] args = {\"../\"};\n@@ -913,7 +916,8 @@ public void testPaidStatsContainsAllEnabledFeatures() throws Exception {\n                 OPAQUE_KEY_WITH_MULTITENANCY_FEATURE,\n                 OPAQUE_KEY_WITH_MFA_FEATURE,\n                 OPAQUE_KEY_WITH_DASHBOARD_FEATURE,\n-                OPAQUE_KEY_WITH_ACCOUNT_LINKING_FEATURE\n+                OPAQUE_KEY_WITH_ACCOUNT_LINKING_FEATURE,\n+                OPAQUE_KEY_WITH_SECURITY_FEATURE,\n         };\n \n         Set<EE_FEATURES> requiredFeatures = new HashSet<>();",
+      "parent_sha": "8d7801a5c72208695c160108cd05a932f18ac667"
+    }
+  },
+  {
+    "oid": "f7aabd0ab4775846298c2909d89e31f8243df2a3",
+    "message": "fix: fix jwt signing key generation in tests (#628)",
+    "date": "2023-04-05T17:17:35Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/f7aabd0ab4775846298c2909d89e31f8243df2a3",
+    "details": {
+      "sha": "145fa1485e2167a54acdde96a3233a18cc8fa3c3",
+      "filename": "src/main/java/io/supertokens/signingkeys/JWTSigningKey.java",
+      "status": "modified",
+      "additions": 29,
+      "deletions": 17,
+      "changes": 46,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/f7aabd0ab4775846298c2909d89e31f8243df2a3/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fsigningkeys%2FJWTSigningKey.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/f7aabd0ab4775846298c2909d89e31f8243df2a3/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fsigningkeys%2FJWTSigningKey.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fsigningkeys%2FJWTSigningKey.java?ref=f7aabd0ab4775846298c2909d89e31f8243df2a3",
+      "patch": "@@ -44,20 +44,24 @@ public static void init(Main main) {\n         // We want to control when/which key is generated during testing to test migration scenarios with exact DB setups.\n         if (!Main.isTesting) {\n             // init JWT signing keys, we create one key for each supported algorithm type\n-            for (int i = 0; i < JWTSigningKey.SupportedAlgorithms.values().length; i++) {\n-                JWTSigningKey.SupportedAlgorithms currentAlgorithm = JWTSigningKey.SupportedAlgorithms.values()[i];\n-                try {\n-                    JWTSigningKey.getInstance(main).getOrCreateAndGetKeyForAlgorithm(currentAlgorithm);\n-                } catch (StorageQueryException | StorageTransactionLogicException e) {\n-                    // Do nothing, when a call to /recipe/jwt POST is made the core will attempt to create a new key\n-                } catch (UnsupportedJWTSigningAlgorithmException e) {\n-                    /*\n-                     * In this case UnsupportedJWTSigningAlgorithmException should never be thrown because we use\n-                     * the enum to iterate all the supported algorithm values. If this does get thrown this should be\n-                     * considered a failure.\n-                     */\n-                    throw new QuitProgramException(\"Trying to create signing key for unsupported JWT signing algorithm\");\n-                }\n+            generateKeysForSupportedAlgos(main);\n+        }\n+    }\n+\n+    private static void generateKeysForSupportedAlgos(Main main) {\n+        for (int i = 0; i < SupportedAlgorithms.values().length; i++) {\n+            SupportedAlgorithms currentAlgorithm = SupportedAlgorithms.values()[i];\n+            try {\n+                JWTSigningKey.getInstance(main).getOrCreateAndGetKeyForAlgorithm(currentAlgorithm);\n+            } catch (StorageQueryException | StorageTransactionLogicException e) {\n+                // Do nothing, when a call to /recipe/jwt POST is made the core will attempt to create a new key\n+            } catch (UnsupportedJWTSigningAlgorithmException e) {\n+                /*\n+                 * In this case UnsupportedJWTSigningAlgorithmException should never be thrown because we use\n+                 * the enum to iterate all the supported algorithm values. If this does get thrown this should be\n+                 * considered a failure.\n+                 */\n+                throw new QuitProgramException(\"Trying to create signing key for unsupported JWT signing algorithm\");\n             }\n         }\n     }\n@@ -104,10 +108,11 @@ public static JWTSigningKey getInstance(Main main) {\n     public List<JWTSigningKeyInfo> getAllSigningKeys() throws StorageQueryException, StorageTransactionLogicException {\n         JWTRecipeStorage storage = StorageLayer.getJWTRecipeStorage(main);\n \n+        List<JWTSigningKeyInfo> res;\n         if (storage.getType() == STORAGE_TYPE.SQL) {\n             JWTRecipeSQLStorage sqlStorage = (JWTRecipeSQLStorage) storage;\n \n-            return sqlStorage.startTransaction(con -> {\n+            res = sqlStorage.startTransaction(con -> {\n                 List<JWTSigningKeyInfo> keys = sqlStorage.getJWTSigningKeys_Transaction(con);\n \n                 sqlStorage.commitTransaction(con);\n@@ -116,10 +121,17 @@ public List<JWTSigningKeyInfo> getAllSigningKeys() throws StorageQueryException,\n         } else if (storage.getType() == STORAGE_TYPE.NOSQL_1) {\n             JWTRecipeNoSQLStorage_1 noSQLStorage = (JWTRecipeNoSQLStorage_1) storage;\n \n-            return noSQLStorage.getJWTSigningKeys_Transaction();\n+            res = noSQLStorage.getJWTSigningKeys_Transaction();\n+        } else {\n+            throw new QuitProgramException(\"Unsupported storage type detected\");\n         }\n \n-        throw new QuitProgramException(\"Unsupported storage type detected\");\n+        if (res.size() == 0) {\n+            generateKeysForSupportedAlgos(main);\n+            return getAllSigningKeys();\n+        }\n+\n+        return res;\n     }\n \n     /**",
+      "parent_sha": "73001108ce3497b01d743bcace67c4b1cbdb593c"
+    }
+  },
+  {
+    "oid": "119134d23e76cfda04622301b63049aa44f65940",
+    "message": "adds more checks for pre parse jwt",
+    "date": "2023-06-18T06:19:02Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/119134d23e76cfda04622301b63049aa44f65940",
+    "details": {
+      "sha": "05b8288c0a8e86d85e35a775e12cffb2e3f020a8",
+      "filename": "src/main/java/io/supertokens/session/jwt/JWT.java",
+      "status": "modified",
+      "additions": 18,
+      "deletions": 5,
+      "changes": 23,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/119134d23e76cfda04622301b63049aa44f65940/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fsession%2Fjwt%2FJWT.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/119134d23e76cfda04622301b63049aa44f65940/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fsession%2Fjwt%2FJWT.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fsession%2Fjwt%2FJWT.java?ref=119134d23e76cfda04622301b63049aa44f65940",
+      "patch": "@@ -51,14 +51,16 @@ private static void initHeader() {\n         }\n     }\n \n-    public static String createAndSignLegacyAccessToken(JsonElement jsonObj, String privateSigningKey, AccessToken.VERSION version)\n+    public static String createAndSignLegacyAccessToken(JsonElement jsonObj, String privateSigningKey,\n+                                                        AccessToken.VERSION version)\n             throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, SignatureException {\n         initHeader();\n         String payload;\n         String header;\n         header = version == AccessToken.VERSION.V1 ? JWT.HEADERv1 : JWT.HEADERv2;\n         payload = Utils.convertToBase64(jsonObj.toString());\n-        String signature = Utils.signWithPrivateKey(header + \".\" + payload, privateSigningKey, version != AccessToken.VERSION.V1 && version != AccessToken.VERSION.V2);\n+        String signature = Utils.signWithPrivateKey(header + \".\" + payload, privateSigningKey,\n+                version != AccessToken.VERSION.V1 && version != AccessToken.VERSION.V2);\n         return header + \".\" + payload + \".\" + signature;\n     }\n \n@@ -79,11 +81,17 @@ public static JWTPreParseInfo preParseJWTInfo(String jwt) throws JWTException {\n \n         JsonObject parsedHeader = new JsonParser().parse(Utils.convertFromBase64(splittedInput[0])).getAsJsonObject();\n \n+        if (parsedHeader.get(\"typ\") == null) {\n+            throw new JWTException(\"JWT header missing - typ\");\n+        }\n         JsonPrimitive typ = parsedHeader.get(\"typ\").getAsJsonPrimitive();\n         if (!typ.isString() || !typ.getAsString().equals(\"JWT\")) {\n             throw new JWTException(\"JWT header mismatch - typ\");\n         }\n \n+        if (parsedHeader.get(\"alg\") == null) {\n+            throw new JWTException(\"JWT header missing - alg\");\n+        }\n         JsonPrimitive alg = parsedHeader.get(\"alg\").getAsJsonPrimitive();\n         if (!alg.isString() || !alg.getAsString().equals(\"RS256\")) {\n             throw new JWTException(\"JWT header mismatch - alg\");\n@@ -103,6 +111,9 @@ public static JWTPreParseInfo preParseJWTInfo(String jwt) throws JWTException {\n         }\n \n         JsonPrimitive kid = parsedHeader.get(\"kid\").getAsJsonPrimitive();\n+        if (parsedHeader.get(\"kid\") == null) {\n+            throw new JWTException(\"JWT header missing - kid\");\n+        }\n         if (!kid.isString()) {\n             throw new JWTException(\"JWT header mismatch - kid\");\n         }\n@@ -113,7 +124,8 @@ public static JWTInfo verifyJWTAndGetPayload(JWTPreParseInfo jwt, String publicS\n             throws InvalidKeyException, NoSuchAlgorithmException, JWTException {\n \n         try {\n-            if (!Utils.verifyWithPublicKey(jwt.header + \".\" + jwt.payload, jwt.signature, publicSigningKey, jwt.version != AccessToken.VERSION.V1 && jwt.version != AccessToken.VERSION.V2)) {\n+            if (!Utils.verifyWithPublicKey(jwt.header + \".\" + jwt.payload, jwt.signature, publicSigningKey,\n+                    jwt.version != AccessToken.VERSION.V1 && jwt.version != AccessToken.VERSION.V2)) {\n                 throw new JWTException(\"JWT verification failed\");\n             }\n         } catch (InvalidKeySpecException | SignatureException e) {\n@@ -124,7 +136,8 @@ public static JWTInfo verifyJWTAndGetPayload(JWTPreParseInfo jwt, String publicS\n \n     public static JWTInfo getPayloadWithoutVerifying(String jwt) throws JWTException {\n         JWTPreParseInfo jwtInfo = preParseJWTInfo(jwt);\n-        return new JWTInfo(new JsonParser().parse(Utils.convertFromBase64(jwtInfo.payload)).getAsJsonObject(), jwtInfo.version);\n+        return new JWTInfo(new JsonParser().parse(Utils.convertFromBase64(jwtInfo.payload)).getAsJsonObject(),\n+                jwtInfo.version);\n     }\n \n     public static class JWTException extends Exception {\n@@ -150,7 +163,7 @@ public static class JWTPreParseInfo {\n         @Nullable\n         public final String kid;\n \n-        public JWTPreParseInfo(String[] splittedInput, AccessToken.VERSION version, String kid) throws JWTException{\n+        public JWTPreParseInfo(String[] splittedInput, AccessToken.VERSION version, String kid) throws JWTException {\n             if (splittedInput.length != 3) {\n                 throw new JWTException(\"Invalid JWT\");\n             }",
+      "parent_sha": "b93443ceb35f52ce78259490bc5f24310bc2665a"
+    }
+  },
+  {
+    "oid": "850b0f34c2dbeda4ba67c20fe3555f708d60df15",
+    "message": "Fix typo in comment (#201)",
+    "date": "2021-03-08T05:48:47Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/850b0f34c2dbeda4ba67c20fe3555f708d60df15",
+    "details": {
+      "sha": "2f432d7c181e511c871494e32a2c9869502cbaee",
+      "filename": "src/main/java/io/supertokens/session/Session.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 3,
+      "changes": 6,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/850b0f34c2dbeda4ba67c20fe3555f708d60df15/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fsession%2FSession.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/850b0f34c2dbeda4ba67c20fe3555f708d60df15/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fsession%2FSession.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fsession%2FSession.java?ref=850b0f34c2dbeda4ba67c20fe3555f708d60df15",
+      "patch": "@@ -93,15 +93,15 @@ public static SessionInformationHolder createNewSession(Main main, @Nonnull Stri\n     }\n \n     /*\n-     * Quesiton: If the incoming access token is expired, do we throw try refresh token error and not update the db?\n+     * Question: If the incoming access token is expired, do we throw try refresh token error and not update the db?\n      * We should update in database, in SDK session object and not throw an error, nor set any cookie. This is\n      * because, the user has already verified the session for this API. If it has expired, the refresh API will be\n      * called, and the new JWT info will be set in the token then.\n      *\n-     * Quesiton: If the incoming session has been revoked, do we throw an unauthorised error?\n+     * Question: If the incoming session has been revoked, do we throw an unauthorised error?\n      * Yes. It's important that the user knows that this has happened.\n      *\n-     * Quesiton: If this regenerates session tokens, while another API revokes it, then how will that work?\n+     * Question: If this regenerates session tokens, while another API revokes it, then how will that work?\n      * This is OK since the other API will cause a clearing of idRefreshToken and this will not set that. This means\n      * that next API call, only the access token will go and that will not pass. In fact, it will be removed.\n      *",
+      "parent_sha": "566aa3bf423e140c9e6112bab8aba9d5218a96d1"
+    }
+  },
+  {
+    "oid": "c79e4bd606caca781722b2d6f78ea1973dc563a8",
+    "message": "relaxes test constraint",
+    "date": "2023-05-04T18:43:23Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/c79e4bd606caca781722b2d6f78ea1973dc563a8",
+    "details": {
+      "sha": "5f78afbcd816f75d421731428e6585db35bb3013",
+      "filename": "src/test/java/io/supertokens/test/session/SessionTest4.java",
+      "status": "modified",
+      "additions": 14,
+      "deletions": 21,
+      "changes": 35,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/c79e4bd606caca781722b2d6f78ea1973dc563a8/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fsession%2FSessionTest4.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/c79e4bd606caca781722b2d6f78ea1973dc563a8/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fsession%2FSessionTest4.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fsession%2FSessionTest4.java?ref=c79e4bd606caca781722b2d6f78ea1973dc563a8",
+      "patch": "@@ -17,24 +17,17 @@\n package io.supertokens.test.session;\n \n import com.google.gson.JsonObject;\n-\n import io.supertokens.ProcessState;\n import io.supertokens.exceptions.TryRefreshTokenException;\n import io.supertokens.exceptions.UnauthorisedException;\n-import io.supertokens.pluginInterface.exceptions.StorageQueryException;\n-import io.supertokens.pluginInterface.exceptions.StorageTransactionLogicException;\n import io.supertokens.session.Session;\n-import io.supertokens.signingkeys.AccessTokenSigningKey;\n import io.supertokens.session.info.SessionInformationHolder;\n-import io.supertokens.signingkeys.SigningKeys;\n import io.supertokens.storageLayer.StorageLayer;\n import io.supertokens.test.TestingProcessManager;\n import io.supertokens.test.Utils;\n import org.junit.*;\n import org.junit.rules.TestRule;\n \n-import java.io.IOException;\n-\n import static junit.framework.TestCase.*;\n import static org.junit.Assert.assertNotNull;\n import static org.junit.Assert.fail;\n@@ -57,7 +50,7 @@ public void beforeEach() {\n     @Test\n     public void checkForNumberOfDeletedSessions() throws Exception {\n \n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n@@ -71,7 +64,7 @@ public void checkForNumberOfDeletedSessions() throws Exception {\n                 userDataInDatabase);\n \n         assertEquals(Session.revokeSessionUsingSessionHandles(process.getProcess(),\n-                new String[] { sessionInfo.session.handle })[0], sessionInfo.session.handle);\n+                new String[]{sessionInfo.session.handle})[0], sessionInfo.session.handle);\n \n         SessionInformationHolder sessionInfo2 = Session.createNewSession(process.getProcess(), userId, userDataInJWT,\n                 userDataInDatabase);\n@@ -82,7 +75,7 @@ public void checkForNumberOfDeletedSessions() throws Exception {\n         Session.createNewSession(process.getProcess(), userId, userDataInJWT, userDataInDatabase);\n         Session.createNewSession(process.getProcess(), \"userId2\", userDataInJWT, userDataInDatabase);\n \n-        String[] handles = { sessionInfo2.session.handle, sessionInfo3.session.handle, sessionInfo4.session.handle };\n+        String[] handles = {sessionInfo2.session.handle, sessionInfo3.session.handle, sessionInfo4.session.handle};\n         String[] actuallyRevoked = Session.revokeSessionUsingSessionHandles(process.getProcess(), handles);\n         boolean revokedAll = true;\n         assertEquals(actuallyRevoked.length, 3);\n@@ -112,7 +105,7 @@ public void checkForNumberOfDeletedSessions() throws Exception {\n         assertEquals(Session.revokeSessionUsingSessionHandles(process.getProcess(), handles).length, 0);\n         assertEquals(Session.revokeAllSessionsForUser(process.getProcess(), \"userId2\").length, 0);\n         assertEquals(Session.revokeSessionUsingSessionHandles(process.getProcess(),\n-                new String[] { sessionInfo.session.handle }).length, 0);\n+                new String[]{sessionInfo.session.handle}).length, 0);\n \n         process.kill();\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STOPPED));\n@@ -122,7 +115,7 @@ public void checkForNumberOfDeletedSessions() throws Exception {\n     @Test\n     public void gettingAndUpdatingSessionDataForNonExistantSession() throws Exception {\n \n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n@@ -147,9 +140,9 @@ public void gettingAndUpdatingSessionDataForNonExistantSession() throws Exceptio\n \n     @Test\n     public void createVerifyRefreshVerifyRefresh() throws Exception {\n-        Utils.setValueInConfig(\"access_token_validity\", \"1\");\n+        Utils.setValueInConfig(\"access_token_validity\", \"2\");\n \n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n@@ -183,7 +176,7 @@ public void createVerifyRefreshVerifyRefresh() throws Exception {\n             assertEquals(verifiedSession.session.userId, userId);\n             assertEquals(verifiedSession.session.handle, sessionInfo.session.handle);\n \n-            Thread.sleep(1500);\n+            Thread.sleep(2500);\n \n             try {\n                 Session.getSession(process.getProcess(), sessionInfo.accessToken.token, sessionInfo.antiCsrfToken,\n@@ -207,7 +200,7 @@ public void createVerifyRefreshVerifyRefresh() throws Exception {\n     @Test\n     public void verifyAccessTokenThatIsBelongsToGrandparentRefreshToken() throws Exception {\n \n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n@@ -253,7 +246,7 @@ public void verifyAccessTokenThatIsBelongsToGrandparentRefreshToken() throws Exc\n     @Test\n     public void passInvalidRefreshTokenShouldGiveUnauthorisedError() throws Exception {\n \n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n@@ -289,7 +282,7 @@ public void checkThatExpiredSessionIsNotReturnedForUserNorCanItBeUpdated() throw\n         Utils.setValueInConfig(\"access_token_validity\", \"3\");\n         Utils.setValueInConfig(\"refresh_token_validity\", \"0.08\"); // 5 seconds\n \n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n@@ -335,7 +328,7 @@ public void testCreatingSessionsWithLongAccessAndRefreshTokenLifeTimes() throws\n         Utils.setValueInConfig(\"access_token_validity\", \"63072000\"); // 2 years in seconds\n         Utils.setValueInConfig(\"refresh_token_validity\", \"1051200\"); // 2 years in minutes\n \n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n@@ -356,7 +349,7 @@ public void testCreatingSessionsWithLongAccessAndRefreshTokenLifeTimesAndRefresh\n         Utils.setValueInConfig(\"access_token_validity\", \"63072000\"); // 2 years in seconds\n         Utils.setValueInConfig(\"refresh_token_validity\", \"1051200\"); // 2 years in minutes\n \n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n@@ -386,7 +379,7 @@ public void createNewSessionAndUpdateSession() throws Exception {\n \n         Utils.setValueInConfig(\"access_token_validity\", \"63072000\"); // 2 years in seconds\n         Utils.setValueInConfig(\"refresh_token_validity\", \"1051200\"); // 2 years in minutes\n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n ",
+      "parent_sha": "0cbafa88d2b85ae2fbe25b6130365bf21b53608a"
+    }
+  },
+  {
+    "oid": "55356ce4356e3b083d5d080256189ccb3b5fc223",
+    "message": "fix: test fix (#750)",
+    "date": "2023-07-17T06:23:28Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/55356ce4356e3b083d5d080256189ccb3b5fc223",
+    "details": {
+      "sha": "555007e240c36fa090608531bb01ab4e86ac122a",
+      "filename": "src/test/java/io/supertokens/test/PathRouterTest.java",
+      "status": "modified",
+      "additions": 38,
+      "deletions": 5,
+      "changes": 43,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/55356ce4356e3b083d5d080256189ccb3b5fc223/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FPathRouterTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/55356ce4356e3b083d5d080256189ccb3b5fc223/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FPathRouterTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FPathRouterTest.java?ref=55356ce4356e3b083d5d080256189ccb3b5fc223",
+      "patch": "@@ -2516,29 +2516,28 @@ public void tenantNotFoundWithAppIdTest()\n         );\n         Multitenancy.addNewOrUpdateAppOrTenant(\n                 process.getProcess(),\n-                new TenantConfig(new TenantIdentifier(\"localhost\", \"app1\", \"t1\"), new EmailPasswordConfig(false),\n+                new TenantConfig(new TenantIdentifier(\"localhost\", \"app1\", null), new EmailPasswordConfig(false),\n                         new ThirdPartyConfig(false, new ThirdPartyConfig.Provider[0]),\n                         new PasswordlessConfig(false),\n                         tenantConfig),\n                 false\n         );\n         Multitenancy.addNewOrUpdateAppOrTenant(\n                 process.getProcess(),\n-                new TenantConfig(new TenantIdentifier(\"127.0.0.1\", null, null), new EmailPasswordConfig(false),\n+                new TenantConfig(new TenantIdentifier(\"localhost\", \"app1\", \"t1\"), new EmailPasswordConfig(false),\n                         new ThirdPartyConfig(false, new ThirdPartyConfig.Provider[0]),\n                         new PasswordlessConfig(false),\n-                        tenant2Config),\n+                        tenantConfig),\n                 false\n         );\n         Multitenancy.addNewOrUpdateAppOrTenant(\n                 process.getProcess(),\n-                new TenantConfig(new TenantIdentifier(\"127.0.0.1\", \"app1\", \"t1\"), new EmailPasswordConfig(false),\n+                new TenantConfig(new TenantIdentifier(\"127.0.0.1\", null, null), new EmailPasswordConfig(false),\n                         new ThirdPartyConfig(false, new ThirdPartyConfig.Provider[0]),\n                         new PasswordlessConfig(false),\n                         tenant2Config),\n                 false\n         );\n-\n         Webserver.getInstance(process.getProcess()).addAPI(new WebserverAPI(process.getProcess(), \"\") {\n \n             @Override\n@@ -2580,6 +2579,24 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws I\n                                 \"app1, public)\");\n             }\n         }\n+\n+        Multitenancy.addNewOrUpdateAppOrTenant(\n+                process.getProcess(),\n+                new TenantConfig(new TenantIdentifier(\"127.0.0.1\", \"app1\", null), new EmailPasswordConfig(false),\n+                        new ThirdPartyConfig(false, new ThirdPartyConfig.Provider[0]),\n+                        new PasswordlessConfig(false),\n+                        tenant2Config),\n+                false\n+        );\n+        Multitenancy.addNewOrUpdateAppOrTenant(\n+                process.getProcess(),\n+                new TenantConfig(new TenantIdentifier(\"127.0.0.1\", \"app1\", \"t1\"), new EmailPasswordConfig(false),\n+                        new ThirdPartyConfig(false, new ThirdPartyConfig.Provider[0]),\n+                        new PasswordlessConfig(false),\n+                        tenant2Config),\n+                false\n+        );\n+\n         {\n             String response = HttpRequestForTesting.sendJsonPOSTRequest(process.getProcess(), \"\",\n                     \"http://localhost:3567/appid-app1/t1/test\", new JsonObject(), 1000, 1000, null,\n@@ -2637,6 +2654,14 @@ public void tenantNotFoundWithAppIdTest2()\n                         tenantConfig),\n                 false\n         );\n+        Multitenancy.addNewOrUpdateAppOrTenant(\n+                process.getProcess(),\n+                new TenantConfig(new TenantIdentifier(\"localhost\", \"app1\", null), new EmailPasswordConfig(false),\n+                        new ThirdPartyConfig(false, new ThirdPartyConfig.Provider[0]),\n+                        new PasswordlessConfig(false),\n+                        tenantConfig),\n+                false\n+        );\n         Multitenancy.addNewOrUpdateAppOrTenant(\n                 process.getProcess(),\n                 new TenantConfig(new TenantIdentifier(\"localhost\", \"app1\", \"t1\"), new EmailPasswordConfig(false),\n@@ -2645,6 +2670,14 @@ public void tenantNotFoundWithAppIdTest2()\n                         tenantConfig),\n                 false\n         );\n+        Multitenancy.addNewOrUpdateAppOrTenant(\n+                process.getProcess(),\n+                new TenantConfig(new TenantIdentifier(null, \"app2\", null), new EmailPasswordConfig(false),\n+                        new ThirdPartyConfig(false, new ThirdPartyConfig.Provider[0]),\n+                        new PasswordlessConfig(false),\n+                        new JsonObject()),\n+                false\n+        );\n         Multitenancy.addNewOrUpdateAppOrTenant(\n                 process.getProcess(),\n                 new TenantConfig(new TenantIdentifier(null, \"app2\", \"t2\"), new EmailPasswordConfig(false),",
+      "parent_sha": "98d9400a91de6a1b4374bfa8fee5e7cd0f5313bf"
+    }
+  },
+  {
+    "oid": "6a623b524e6461d346a8640ed2499e13bfa9d6ee",
+    "message": "fix: delete all info on unique storages (#705)",
+    "date": "2023-06-07T12:18:40Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/6a623b524e6461d346a8640ed2499e13bfa9d6ee",
+    "details": {
+      "sha": "45fc6865ac4b5379f0dbfae2389cd7e817891b67",
+      "filename": "src/main/java/io/supertokens/storageLayer/StorageLayer.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 1,
+      "changes": 7,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/6a623b524e6461d346a8640ed2499e13bfa9d6ee/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FstorageLayer%2FStorageLayer.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/6a623b524e6461d346a8640ed2499e13bfa9d6ee/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FstorageLayer%2FStorageLayer.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FstorageLayer%2FStorageLayer.java?ref=6a623b524e6461d346a8640ed2499e13bfa9d6ee",
+      "patch": "@@ -147,8 +147,13 @@ public static void deleteAllInformation(Main main) throws StorageQueryException\n         Map<ResourceDistributor.KeyClass, ResourceDistributor.SingletonResource> resources =\n                 main.getResourceDistributor()\n                         .getAllResourcesWithResourceKey(RESOURCE_KEY);\n+        Set<Storage> uniqueStorages = new HashSet<>();\n         for (ResourceDistributor.SingletonResource resource : resources.values()) {\n-            ((StorageLayer) resource).storage.deleteAllInformation();\n+            uniqueStorages.add(((StorageLayer) resource).storage);\n+        }\n+\n+        for (Storage storage : uniqueStorages) {\n+            storage.deleteAllInformation();\n         }\n     }\n ",
+      "parent_sha": "30c6e9b8e5e22a7d87d437023523796ef0c4906a"
+    }
+  },
+  {
+    "oid": "25bfa6374b24d0d7e90f20f3d861f0573be5bae1",
+    "message": "fix: Tests (#939)\n\n* fix: mau related tests\r\n\r\n* fix: test",
+    "date": "2024-02-27T05:26:15Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/25bfa6374b24d0d7e90f20f3d861f0573be5bae1",
+    "details": {
+      "sha": "7418b24ec7fd7d9b66a587dc3d791ca9e1dfc8ec",
+      "filename": "ee/src/test/java/io/supertokens/ee/test/EETest.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/25bfa6374b24d0d7e90f20f3d861f0573be5bae1/ee%2Fsrc%2Ftest%2Fjava%2Fio%2Fsupertokens%2Fee%2Ftest%2FEETest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/25bfa6374b24d0d7e90f20f3d861f0573be5bae1/ee%2Fsrc%2Ftest%2Fjava%2Fio%2Fsupertokens%2Fee%2Ftest%2FEETest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/ee%2Fsrc%2Ftest%2Fjava%2Fio%2Fsupertokens%2Fee%2Ftest%2FEETest.java?ref=25bfa6374b24d0d7e90f20f3d861f0573be5bae1",
+      "patch": "@@ -1326,7 +1326,7 @@ protected URLConnection openConnection(URL u) {\n             JsonObject paidFeatureUsageStats = j.getAsJsonObject(\"paidFeatureUsageStats\");\n             JsonArray mauArr = paidFeatureUsageStats.get(\"maus\").getAsJsonArray();\n             assertEquals(paidFeatureUsageStats.entrySet().size(), 1);\n-            assertEquals(mauArr.size(), 30);\n+            assertEquals(mauArr.size(), 31);\n             assertEquals(mauArr.get(0).getAsInt(), 0);\n             assertEquals(mauArr.get(29).getAsInt(), 0);\n         }",
+      "parent_sha": "335082f15505b684bc490a257683bd175ac5b6cb"
+    }
+  },
+  {
+    "oid": "cab6326758d939e8ebccbf8853d38d5b33ec2724",
+    "message": "fix: telemetry for non sql (#1012)",
+    "date": "2024-07-10T11:12:50Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/cab6326758d939e8ebccbf8853d38d5b33ec2724",
+    "details": {
+      "sha": "e5cbb1a1cd9d7ed9e9ae45e797535222d25c6e95",
+      "filename": "src/main/java/io/supertokens/cronjobs/telemetry/Telemetry.java",
+      "status": "modified",
+      "additions": 14,
+      "deletions": 13,
+      "changes": 27,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/cab6326758d939e8ebccbf8853d38d5b33ec2724/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fcronjobs%2Ftelemetry%2FTelemetry.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/cab6326758d939e8ebccbf8853d38d5b33ec2724/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fcronjobs%2Ftelemetry%2FTelemetry.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fcronjobs%2Ftelemetry%2FTelemetry.java?ref=cab6326758d939e8ebccbf8853d38d5b33ec2724",
+      "patch": "@@ -99,6 +99,20 @@ protected void doTaskPerApp(AppIdentifier app) throws Exception {\n         json.addProperty(\"appId\", app.getAppId());\n         json.addProperty(\"connectionUriDomain\", app.getConnectionUriDomain());\n \n+        { // website and API domains\n+            String websiteDomain = Multitenancy.getWebsiteDomain(\n+                    StorageLayer.getStorage(app.getAsPublicTenantIdentifier(), main), app);\n+            String apiDomain = Multitenancy.getAPIDomain(\n+                    StorageLayer.getStorage(app.getAsPublicTenantIdentifier(), main), app);\n+\n+            if (websiteDomain != null) {\n+                json.addProperty(\"websiteDomain\", websiteDomain);\n+            }\n+            if (apiDomain != null) {\n+                json.addProperty(\"apiDomain\", apiDomain);\n+            }\n+        }\n+\n         if (StorageLayer.getBaseStorage(main).getType() == STORAGE_TYPE.SQL) {\n             { // Users count across all tenants\n                 Storage[] storages = StorageLayer.getStoragesForApp(main, app);\n@@ -137,19 +151,6 @@ protected void doTaskPerApp(AppIdentifier app) throws Exception {\n                 json.add(\"maus\", mauArr);\n             }\n \n-            { // website and API domains\n-                String websiteDomain = Multitenancy.getWebsiteDomain(\n-                        StorageLayer.getStorage(app.getAsPublicTenantIdentifier(), main), app);\n-                String apiDomain = Multitenancy.getAPIDomain(\n-                        StorageLayer.getStorage(app.getAsPublicTenantIdentifier(), main), app);\n-\n-                if (websiteDomain != null) {\n-                    json.addProperty(\"websiteDomain\", websiteDomain);\n-                }\n-                if (apiDomain != null) {\n-                    json.addProperty(\"apiDomain\", apiDomain);\n-                }\n-            }\n         } else {\n             json.addProperty(\"usersCount\", -1);\n             json.add(\"dashboardUserEmails\", new JsonArray());",
+      "parent_sha": "dfac52bcdb41419f89ee920c76f312aed8d1bbd6"
+    }
+  },
+  {
+    "oid": "9e4ed3dcbe4816692997d66537a5536b04f85a0e",
+    "message": "test: add a larger time margin to make test pass on CI (#631)",
+    "date": "2023-04-06T11:47:41Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/9e4ed3dcbe4816692997d66537a5536b04f85a0e",
+    "details": {
+      "sha": "23388afce2b78fc603a97b0a2dd88a61deef4a0a",
+      "filename": "src/test/java/io/supertokens/test/session/SessionTest5.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 6,
+      "changes": 10,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/9e4ed3dcbe4816692997d66537a5536b04f85a0e/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fsession%2FSessionTest5.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/9e4ed3dcbe4816692997d66537a5536b04f85a0e/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fsession%2FSessionTest5.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fsession%2FSessionTest5.java?ref=9e4ed3dcbe4816692997d66537a5536b04f85a0e",
+      "patch": "@@ -31,10 +31,8 @@\n import org.junit.*;\n import org.junit.rules.TestRule;\n \n-import java.io.IOException;\n import java.time.Instant;\n import java.util.Base64;\n-import java.util.Date;\n \n import static junit.framework.TestCase.*;\n import static org.junit.Assert.assertNotEquals;\n@@ -332,13 +330,13 @@ public void checkRefreshKidChangesAfterDynamicSigningKeyChange() throws Exceptio\n \n     @Test\n     public void checkDynamicKeyOverlap() throws Exception {\n-        Utils.setValueInConfig(\"access_token_dynamic_signing_key_update_interval\", \"0.00027\"); // 1 second\n+        Utils.setValueInConfig(\"access_token_dynamic_signing_key_update_interval\", \"0.00081\"); // 3 seconds\n \n         String[] args = { \"../\" };\n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n-        AccessTokenSigningKey.getInstance(process.getProcess()).setDynamicSigningKeyOverlapMS(500);\n+        AccessTokenSigningKey.getInstance(process.getProcess()).setDynamicSigningKeyOverlapMS(1000);\n         SigningKeys signingKeysInstance = SigningKeys.getInstance(process.getProcess());\n         assertEquals(2, signingKeysInstance.getAllKeys().size());\n         assertEquals(1, signingKeysInstance.getDynamicKeys().size());\n@@ -353,15 +351,15 @@ public void checkDynamicKeyOverlap() throws Exception {\n                 userDataInDatabase, false, true, false);\n         JWT.JWTPreParseInfo preParseInfoCreate = JWT.preParseJWTInfo(createInfo.accessToken.token);\n \n-        Thread.sleep(750);\n+        Thread.sleep(2000);\n         assertEquals(3, signingKeysInstance.getAllKeys().size());\n         assertEquals(2, signingKeysInstance.getDynamicKeys().size());\n \n         SessionInformationHolder createInfoDuringOverlap = Session.createNewSession(process.getProcess(), userId, userDataInJWT,\n                 userDataInDatabase, false, true, false);\n         JWT.JWTPreParseInfo preParseInfoCreateDuringOverlap = JWT.preParseJWTInfo(createInfoDuringOverlap.accessToken.token);\n \n-        Thread.sleep(300);\n+        Thread.sleep(1000);\n         assertEquals(2, signingKeysInstance.getDynamicKeys().size());\n         assertEquals(3, signingKeysInstance.getAllKeys().size());\n ",
+      "parent_sha": "1374e9f41a67f82921c1a66839f34e2ae769750e"
+    }
+  },
+  {
+    "oid": "232ea9030438c1dfce64566609a1ea3c894c25ee",
+    "message": "fixes check of SQL type in test",
+    "date": "2022-01-14T08:23:34Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/232ea9030438c1dfce64566609a1ea3c894c25ee",
+    "details": {
+      "sha": "7272f7aee53a14a59296dbf26ef48223d16a9bf4",
+      "filename": "src/test/java/io/supertokens/test/passwordless/DeleteExpiredPasswordlessDevicesTest.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 7,
+      "changes": 15,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/232ea9030438c1dfce64566609a1ea3c894c25ee/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fpasswordless%2FDeleteExpiredPasswordlessDevicesTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/232ea9030438c1dfce64566609a1ea3c894c25ee/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fpasswordless%2FDeleteExpiredPasswordlessDevicesTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fpasswordless%2FDeleteExpiredPasswordlessDevicesTest.java?ref=232ea9030438c1dfce64566609a1ea3c894c25ee",
+      "patch": "@@ -32,7 +32,6 @@\n import org.junit.Test;\n import org.junit.rules.TestRule;\n \n-import static org.junit.Assert.assertEquals;\n import static org.junit.Assert.assertNotNull;\n import static org.junit.Assert.assertNull;\n \n@@ -61,11 +60,12 @@ public void jobDeletesDevicesWithOnlyExpiredCodesTest() throws Exception {\n \n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n-        PasswordlessStorage passwordlessStorage = StorageLayer.getPasswordlessStorage(process.getProcess());\n-\n-        if (passwordlessStorage.getType() != STORAGE_TYPE.SQL) {\n+        if (StorageLayer.getStorage(process.getProcess()).getType() != STORAGE_TYPE.SQL) {\n             return;\n         }\n+\n+        PasswordlessStorage passwordlessStorage = StorageLayer.getPasswordlessStorage(process.getProcess());\n+\n         long codeLifetime = Config.getConfig(process.getProcess()).getPasswordlessCodeLifetime();\n \n         String codeId = \"deletedCode\";\n@@ -92,11 +92,12 @@ public void jobKeepsDevicesWithActiveCodesTest() throws Exception {\n \n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n \n-        PasswordlessStorage passwordlessStorage = StorageLayer.getPasswordlessStorage(process.getProcess());\n-\n-        if (passwordlessStorage.getType() != STORAGE_TYPE.SQL) {\n+        if (StorageLayer.getStorage(process.getProcess()).getType() != STORAGE_TYPE.SQL) {\n             return;\n         }\n+\n+        PasswordlessStorage passwordlessStorage = StorageLayer.getPasswordlessStorage(process.getProcess());\n+\n         long codeLifetime = Config.getConfig(process.getProcess()).getPasswordlessCodeLifetime();\n \n         String codeId = \"expiredCode\";",
+      "parent_sha": "a652da06766e900ebf1c85e9044ab6af2cd8a405"
+    }
+  },
+  {
+    "oid": "d449e0b87ded29f6aea1293488b05933ccc8f93a",
+    "message": "Use \"union all\" instead of \"union\"",
+    "date": "2025-01-06T19:14:23Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/d449e0b87ded29f6aea1293488b05933ccc8f93a",
+    "details": {
+      "sha": "52967f6b7fb35cbe5c6355358ba9c76787c4f1c9",
+      "filename": "src/main/java/io/supertokens/inmemorydb/queries/UserIdMappingQueries.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 4,
+      "changes": 8,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/d449e0b87ded29f6aea1293488b05933ccc8f93a/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FUserIdMappingQueries.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/d449e0b87ded29f6aea1293488b05933ccc8f93a/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FUserIdMappingQueries.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FUserIdMappingQueries.java?ref=d449e0b87ded29f6aea1293488b05933ccc8f93a",
+      "patch": "@@ -107,8 +107,8 @@ public static UserIdMapping[] getUserIdMappingWithEitherSuperTokensUserIdOrExter\n                                                                                               String userId)\n             throws SQLException, StorageQueryException {\n         String QUERY = \"SELECT * FROM \" + Config.getConfig(start).getUserIdMappingTable()\n-                + \" WHERE app_id = ? AND supertokens_user_id = ? \"\n-                + \"UNION \"\n+                + \" WHERE app_id = ? AND supertokens_user_id = ?\"\n+                + \" UNION ALL \"\n                 + \"SELECT * FROM \" + Config.getConfig(start).getUserIdMappingTable()\n                 + \" WHERE app_id = ? AND external_user_id = ?\";\n \n@@ -133,8 +133,8 @@ public static UserIdMapping[] getUserIdMappingWithEitherSuperTokensUserIdOrExter\n                                                                                                           String userId)\n             throws SQLException, StorageQueryException {\n         String QUERY = \"SELECT * FROM \" + Config.getConfig(start).getUserIdMappingTable()\n-                + \" WHERE app_id = ? AND supertokens_user_id = ? \"\n-                + \"UNION \"\n+                + \" WHERE app_id = ? AND supertokens_user_id = ?\"\n+                + \" UNION ALL \"\n                 + \"SELECT * FROM \" + Config.getConfig(start).getUserIdMappingTable()\n                 + \" WHERE app_id = ? AND external_user_id = ?\";\n ",
+      "parent_sha": "f8885e71acc81596ff11e59ee112e47aa4f47c69"
+    }
+  },
+  {
+    "oid": "64b115ba8d7fd7185a6ddbb304088f83e34b96b6",
+    "message": "fix: test (#780)\n\n* fix: test\r\n\r\n* fix: test",
+    "date": "2023-08-31T11:32:09Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/64b115ba8d7fd7185a6ddbb304088f83e34b96b6",
+    "details": {
+      "sha": "606ea745bdf67efce71afb72f56c8ffce6551705",
+      "filename": "src/test/java/io/supertokens/test/CronjobTest.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/64b115ba8d7fd7185a6ddbb304088f83e34b96b6/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FCronjobTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/64b115ba8d7fd7185a6ddbb304088f83e34b96b6/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FCronjobTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FCronjobTest.java?ref=64b115ba8d7fd7185a6ddbb304088f83e34b96b6",
+      "patch": "@@ -826,7 +826,7 @@ public void testThatThereAreTasksOfAllCronTaskClassesAndHaveCorrectIntervals() t\n \n         // Note that the time is in seconds\n         Map<String, Integer> intervals = new HashMap<>();\n-        intervals.put(\"io.supertokens.ee.cronjobs.EELicenseCheck\", 10);\n+        intervals.put(\"io.supertokens.ee.cronjobs.EELicenseCheck\", 86400);\n         intervals.put(\"io.supertokens.cronjobs.syncCoreConfigWithDb.SyncCoreConfigWithDb\", 60);\n         intervals.put(\"io.supertokens.cronjobs.deleteExpiredSessions.DeleteExpiredSessions\", 43200);\n         intervals.put(\"io.supertokens.cronjobs.deleteExpiredPasswordResetTokens.DeleteExpiredPasswordResetTokens\", 3600);\n@@ -838,7 +838,7 @@ public void testThatThereAreTasksOfAllCronTaskClassesAndHaveCorrectIntervals() t\n         intervals.put(\"io.supertokens.cronjobs.deleteExpiredAccessTokenSigningKeys.DeleteExpiredAccessTokenSigningKeys\", 86400);\n \n         Map<String, Integer> delays = new HashMap<>();\n-        delays.put(\"io.supertokens.ee.cronjobs.EELicenseCheck\", 10);\n+        delays.put(\"io.supertokens.ee.cronjobs.EELicenseCheck\", 86400);\n         delays.put(\"io.supertokens.cronjobs.syncCoreConfigWithDb.SyncCoreConfigWithDb\", 0);\n         delays.put(\"io.supertokens.cronjobs.deleteExpiredSessions.DeleteExpiredSessions\", 0);\n         delays.put(\"io.supertokens.cronjobs.deleteExpiredPasswordResetTokens.DeleteExpiredPasswordResetTokens\", 0);",
+      "parent_sha": "8b749e242499bbaa553ae37ef06b2fdd0c12f4bd"
+    }
+  },
+  {
+    "oid": "7361f5418679a06c87d6217ced2118bcff3e03b6",
+    "message": "fixes compile error",
+    "date": "2023-05-04T12:53:21Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/7361f5418679a06c87d6217ced2118bcff3e03b6",
+    "details": {
+      "sha": "81a0192055e031effbda2d9cadbb48bec4db0426",
+      "filename": "src/test/java/io/supertokens/test/totp/api/VerifyTotpAPITest.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 8,
+      "changes": 14,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/7361f5418679a06c87d6217ced2118bcff3e03b6/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2Fapi%2FVerifyTotpAPITest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/7361f5418679a06c87d6217ced2118bcff3e03b6/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2Fapi%2FVerifyTotpAPITest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2Fapi%2FVerifyTotpAPITest.java?ref=7361f5418679a06c87d6217ced2118bcff3e03b6",
+      "patch": "@@ -1,20 +1,17 @@\n package io.supertokens.test.totp.api;\n \n import com.google.gson.JsonObject;\n-\n import io.supertokens.ProcessState;\n import io.supertokens.featureflag.EE_FEATURES;\n-import io.supertokens.featureflag.FeatureFlag;\n import io.supertokens.featureflag.FeatureFlagTestContent;\n-import io.supertokens.test.httpRequest.HttpResponseException;\n-import io.supertokens.test.totp.TOTPRecipeTest;\n import io.supertokens.pluginInterface.STORAGE_TYPE;\n import io.supertokens.pluginInterface.totp.TOTPDevice;\n import io.supertokens.storageLayer.StorageLayer;\n import io.supertokens.test.TestingProcessManager;\n import io.supertokens.test.Utils;\n import io.supertokens.test.httpRequest.HttpRequestForTesting;\n-import io.supertokens.test.totp.TotpLicenseTest;\n+import io.supertokens.test.httpRequest.HttpResponseException;\n+import io.supertokens.test.totp.TOTPRecipeTest;\n import org.junit.AfterClass;\n import org.junit.Before;\n import org.junit.Rule;\n@@ -70,7 +67,7 @@ private void checkResponseErrorContains(Exception ex, String msg) {\n \n     @Test\n     public void testApi() throws Exception {\n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n \n         // Trigger rate limiting on 1 wrong attempts:\n         Utils.setValueInConfig(\"totp_max_attempts\", \"1\");\n@@ -84,7 +81,8 @@ public void testApi() throws Exception {\n             return;\n         }\n \n-        FeatureFlagTestContent.getInstance(process.main).setKeyValue(FeatureFlagTestContent.ENABLED_FEATURES, new EE_FEATURES[] { EE_FEATURES.TOTP });\n+        FeatureFlagTestContent.getInstance(process.main)\n+                .setKeyValue(FeatureFlagTestContent.ENABLED_FEATURES, new EE_FEATURES[]{EE_FEATURES.TOTP});\n \n         // Setup user and devices:\n         JsonObject createDeviceReq = new JsonObject();\n@@ -216,7 +214,7 @@ public void testApi() throws Exception {\n                     1000,\n                     1000,\n                     null,\n-                    Utils.getCdiVersionLatestForTests(),\n+                    Utils.getCdiVersionStringLatestForTests(),\n                     \"totp\");\n             assert res.get(\"status\").getAsString().equals(\"LIMIT_REACHED_ERROR\");\n ",
+      "parent_sha": "6ac5a803ea5cdf9fd2bd0ef80aa5b1f4661195cc"
+    }
+  },
+  {
+    "oid": "90550020a64d3e02b0992ea3454d9c45ed138f5c",
+    "message": "test: Fix flaky test related to TOTP storage (#606)",
+    "date": "2023-03-29T08:40:45Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/90550020a64d3e02b0992ea3454d9c45ed138f5c",
+    "details": {
+      "sha": "e20af9c85f81b5783056ab500597d4c6cfc0dcb2",
+      "filename": "src/test/java/io/supertokens/test/totp/TOTPStorageTest.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 6,
+      "changes": 13,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/90550020a64d3e02b0992ea3454d9c45ed138f5c/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2FTOTPStorageTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/90550020a64d3e02b0992ea3454d9c45ed138f5c/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2FTOTPStorageTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2FTOTPStorageTest.java?ref=90550020a64d3e02b0992ea3454d9c45ed138f5c",
+      "patch": "@@ -480,13 +480,13 @@ public void removeExpiredCodesTest() throws Exception {\n \n         long now = System.currentTimeMillis();\n         long nextDay = System.currentTimeMillis() + 1000 * 60 * 60 * 24; // 1 day from now\n-        long halfSecond = System.currentTimeMillis() + 500; // 500ms from now\n+        long hundredMs = System.currentTimeMillis() + 100; // 100ms from now\n \n         TOTPDevice device = new TOTPDevice(\"user\", \"device\", \"secretKey\", 30, 1, false);\n         TOTPUsedCode validCodeToLive = new TOTPUsedCode(\"user\", \"valid\", true, nextDay, now);\n         TOTPUsedCode invalidCodeToLive = new TOTPUsedCode(\"user\", \"invalid\", false, nextDay, now + 1);\n-        TOTPUsedCode validCodeToExpire = new TOTPUsedCode(\"user\", \"valid\", true, halfSecond, now + 2);\n-        TOTPUsedCode invalidCodeToExpire = new TOTPUsedCode(\"user\", \"invalid\", false, halfSecond, now + 3);\n+        TOTPUsedCode validCodeToExpire = new TOTPUsedCode(\"user\", \"valid\", true, hundredMs, now + 2);\n+        TOTPUsedCode invalidCodeToExpire = new TOTPUsedCode(\"user\", \"invalid\", false, hundredMs, now + 3);\n \n         storage.createDevice(device);\n         insertUsedCodesUtil(storage, new TOTPUsedCode[]{\n@@ -497,10 +497,11 @@ public void removeExpiredCodesTest() throws Exception {\n         TOTPUsedCode[] usedCodes = getAllUsedCodesUtil(storage, \"user\");\n         assert (usedCodes.length == 4);\n \n-        // After 500ms seconds pass:\n-        Thread.sleep(500);\n+        // After 250ms seconds pass: (Ensure that the codes are expired)\n+        Thread.sleep(250);\n \n-        storage.removeExpiredCodes(System.currentTimeMillis());\n+        now = System.currentTimeMillis();\n+        storage.removeExpiredCodes(now);\n \n         usedCodes = getAllUsedCodesUtil(storage, \"user\");\n         assert (usedCodes.length == 2);",
+      "parent_sha": "ba76bedd3a88430377a75578bc7103dced1e9d6d"
+    }
+  },
+  {
+    "oid": "3be96b9b9063e444c387380e787862e2e520e27f",
+    "message": "fix: update timeout for add license (#752)",
+    "date": "2023-07-17T11:28:35Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/3be96b9b9063e444c387380e787862e2e520e27f",
+    "details": {
+      "sha": "8d5ff811ce1dccfa8273942300f15f7ee42bf164",
+      "filename": "src/test/java/io/supertokens/test/multitenant/api/TestMultitenancyAPIHelper.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/3be96b9b9063e444c387380e787862e2e520e27f/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fapi%2FTestMultitenancyAPIHelper.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/3be96b9b9063e444c387380e787862e2e520e27f/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fapi%2FTestMultitenancyAPIHelper.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fapi%2FTestMultitenancyAPIHelper.java?ref=3be96b9b9063e444c387380e787862e2e520e27f",
+      "patch": "@@ -321,7 +321,7 @@ public static void addLicense(String licenseKey, Main main) throws HttpResponseE\n \n         JsonObject response = HttpRequestForTesting.sendJsonPUTRequest(main, \"\",\n                 \"http://localhost:3567/ee/license\", licenseKeyRequest,\n-                2000, 2000, null,\n+                2000, 5000, null,\n                 SemVer.v3_0.get(), null);\n         assertEquals(\"OK\", response.get(\"status\").getAsString());\n     }",
+      "parent_sha": "323104ca3265cb57818727e23a543cee8e46d10f"
+    }
+  },
+  {
+    "oid": "b6760d5b114c6df156571744f43923ca99817a07",
+    "message": "fix: code cleanup",
+    "date": "2025-01-03T09:20:37Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/b6760d5b114c6df156571744f43923ca99817a07",
+    "details": {
+      "sha": "1f2d9485de8b3cc44c229d080ea0ac8a5a93c513",
+      "filename": "src/main/java/io/supertokens/bulkimport/BulkImport.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 8,
+      "changes": 9,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/b6760d5b114c6df156571744f43923ca99817a07/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fbulkimport%2FBulkImport.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/b6760d5b114c6df156571744f43923ca99817a07/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fbulkimport%2FBulkImport.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fbulkimport%2FBulkImport.java?ref=b6760d5b114c6df156571744f43923ca99817a07",
+      "patch": "@@ -110,18 +110,11 @@ public static void addUsers(AppIdentifier appIdentifier, Storage storage, List<B\n                 StorageUtils.getBulkImportStorage(storage).addBulkImportUsers(appIdentifier, users);\n                 break;\n             } catch (StorageQueryException sqe) {\n-                if(sqe.getCause() instanceof io.supertokens.pluginInterface.bulkimport.exceptions.DuplicateUserIdException) {\n+                if (sqe.getCause() instanceof io.supertokens.pluginInterface.bulkimport.exceptions.DuplicateUserIdException) {\n                     // We re-generate the user id for every user and retry\n                     for (BulkImportUser user : users) {\n                         user.id = Utils.getUUID();\n                     }\n-                    continue;\n-                }\n-                throw sqe;\n-            } catch (io.supertokens.pluginInterface.bulkimport.exceptions.DuplicateUserIdException e) {\n-                // We re-generate the user id for every user and retry\n-                for (BulkImportUser user : users) {\n-                    user.id = Utils.getUUID();\n                 }\n             }\n         }",
+      "parent_sha": "a99388ddcefbfa82747f6920ee419e29d633f13b"
+    }
+  },
+  {
+    "oid": "1a1b9304b2b9da80eff3068089562e2d8c818a32",
+    "message": "fixes a test - maybe",
+    "date": "2023-02-21T11:29:01Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/1a1b9304b2b9da80eff3068089562e2d8c818a32",
+    "details": {
+      "sha": "193a8bc9cd0b9c249e3005fda9f803e98f967b6b",
+      "filename": "src/test/java/io/supertokens/test/dashboard/DashboardStorageTest.java",
+      "status": "modified",
+      "additions": 20,
+      "deletions": 22,
+      "changes": 42,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/1a1b9304b2b9da80eff3068089562e2d8c818a32/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fdashboard%2FDashboardStorageTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/1a1b9304b2b9da80eff3068089562e2d8c818a32/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fdashboard%2FDashboardStorageTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fdashboard%2FDashboardStorageTest.java?ref=1a1b9304b2b9da80eff3068089562e2d8c818a32",
+      "patch": "@@ -16,19 +16,6 @@\n \n package io.supertokens.test.dashboard;\n \n-import static org.junit.Assert.assertEquals;\n-import static org.junit.Assert.assertNotNull;\n-import static org.junit.Assert.assertNull;\n-import static org.junit.Assert.assertTrue;\n-\n-import java.util.ArrayList;\n-\n-import org.junit.AfterClass;\n-import org.junit.Before;\n-import org.junit.Rule;\n-import org.junit.Test;\n-import org.junit.rules.TestRule;\n-\n import io.supertokens.ProcessState.PROCESS_STATE;\n import io.supertokens.dashboard.Dashboard;\n import io.supertokens.pluginInterface.STORAGE_TYPE;\n@@ -42,6 +29,15 @@\n import io.supertokens.storageLayer.StorageLayer;\n import io.supertokens.test.TestingProcessManager;\n import io.supertokens.test.Utils;\n+import org.junit.AfterClass;\n+import org.junit.Before;\n+import org.junit.Rule;\n+import org.junit.Test;\n+import org.junit.rules.TestRule;\n+\n+import java.util.ArrayList;\n+\n+import static org.junit.Assert.*;\n \n public class DashboardStorageTest {\n     @Rule\n@@ -59,7 +55,7 @@ public void beforeEach() {\n \n     @Test\n     public void testCreateNewDashboardUser() throws Exception {\n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n \n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(PROCESS_STATE.STARTED));\n@@ -124,7 +120,7 @@ public void testCreateNewDashboardUser() throws Exception {\n \n     @Test\n     public void testGetDashboardUserFunctions() throws Exception {\n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n \n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(PROCESS_STATE.STARTED));\n@@ -162,7 +158,7 @@ public void testGetDashboardUserFunctions() throws Exception {\n \n     @Test\n     public void testGetAllDashboardUsers() throws Exception {\n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n \n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(PROCESS_STATE.STARTED));\n@@ -178,6 +174,7 @@ public void testGetAllDashboardUsers() throws Exception {\n             DashboardUser user = new DashboardUser(io.supertokens.utils.Utils.getUUID(), \"test\" + i + \"@example.com\",\n                     \"testPasswordHash\", System.currentTimeMillis());\n             StorageLayer.getDashboardStorage(process.getProcess()).createNewDashboardUser(user);\n+            Thread.sleep(2);\n         }\n \n         // retrieve all dashboard users, check that correctly created and returned in\n@@ -197,7 +194,7 @@ public void testGetAllDashboardUsers() throws Exception {\n     // test the deleteDashboardUserWithUserId function\n     @Test\n     public void testTheDeleteDashboardUserWithUserIdFunction() throws Exception {\n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n \n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(PROCESS_STATE.STARTED));\n@@ -230,7 +227,7 @@ public void testTheDeleteDashboardUserWithUserIdFunction() throws Exception {\n \n     @Test\n     public void testTheCreateNewDashboardUserSession() throws Exception {\n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n \n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(PROCESS_STATE.STARTED));\n@@ -269,7 +266,7 @@ public void testTheCreateNewDashboardUserSession() throws Exception {\n \n     @Test\n     public void testCreatingMultipleSessionsForAUser() throws Exception {\n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n \n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(PROCESS_STATE.STARTED));\n@@ -321,7 +318,7 @@ public void testCreatingMultipleSessionsForAUser() throws Exception {\n \n     @Test\n     public void testRevokeExpiredSessionsFunction() throws Exception {\n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n \n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(PROCESS_STATE.STARTED));\n@@ -382,7 +379,7 @@ public void testRevokeExpiredSessionsFunction() throws Exception {\n \n     @Test\n     public void testUpdatingUsersEmail() throws Exception {\n-        String[] args = { \"../\" };\n+        String[] args = {\"../\"};\n \n         TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n         assertNotNull(process.checkOrWaitForEvent(PROCESS_STATE.STARTED));\n@@ -448,7 +445,8 @@ public void testUpdatingUsersEmail() throws Exception {\n         assertEquals(1, dashboardSQLStorage.getAllDashboardUsers().length);\n \n         // create another user \n-        DashboardUser user2 = new DashboardUser(io.supertokens.utils.Utils.getUUID(), \"test2@example.com\", \"testpassword\", System.currentTimeMillis());\n+        DashboardUser user2 = new DashboardUser(io.supertokens.utils.Utils.getUUID(), \"test2@example.com\",\n+                \"testpassword\", System.currentTimeMillis());\n         dashboardSQLStorage.createNewDashboardUser(user2);\n \n         // try updating user2s email with the user1s email",
+      "parent_sha": "e869757742f189ff3a1a6545191c323925bf0aa6"
+    }
+  },
+  {
+    "oid": "ea63eafdf02817fb4c10a4b717e3c5b12398c9ce",
+    "message": "fix: fix collection error messages for bulk migration / import user",
+    "date": "2025-03-13T11:26:30Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/ea63eafdf02817fb4c10a4b717e3c5b12398c9ce",
+    "details": {
+      "sha": "1de7fe4cc7043fd72d0b92ce5a6e75fce953c5af",
+      "filename": "src/main/java/io/supertokens/webserver/api/bulkimport/ImportUserAPI.java",
+      "status": "modified",
+      "additions": 17,
+      "deletions": 7,
+      "changes": 24,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/ea63eafdf02817fb4c10a4b717e3c5b12398c9ce/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Fbulkimport%2FImportUserAPI.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/ea63eafdf02817fb4c10a4b717e3c5b12398c9ce/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Fbulkimport%2FImportUserAPI.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Fbulkimport%2FImportUserAPI.java?ref=ea63eafdf02817fb4c10a4b717e3c5b12398c9ce",
+      "patch": "@@ -90,17 +90,27 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S\n             super.sendJsonResponse(200, result, resp);\n         } catch (BulkImportBatchInsertException e) {\n             JsonArray errors = new JsonArray();\n-            errors.addAll(\n-            e.exceptionByUserId.values().stream().map(exc -> exc.getMessage()).map(JsonPrimitive::new)\n-                    .collect(JsonArray::new, JsonArray::add, JsonArray::addAll)\n-            );\n+            if(e.exceptionByUserId == null || e.exceptionByUserId.isEmpty()) {\n+                errors.add(new JsonPrimitive(e.getMessage()));\n+            } else {\n+                errors.addAll(\n+                        e.exceptionByUserId.values().stream().map(exc -> exc.getMessage()).map(JsonPrimitive::new)\n+                                .collect(JsonArray::new, JsonArray::add, JsonArray::addAll)\n+                );\n+            }\n             JsonObject errorResponseJson = new JsonObject();\n             errorResponseJson.add(\"errors\", errors);\n             throw new ServletException(new WebserverAPI.BadRequestException(errorResponseJson.toString()));\n         } catch (io.supertokens.bulkimport.exceptions.InvalidBulkImportDataException e) {\n-            JsonArray errors = e.errors.stream()\n-                    .map(JsonPrimitive::new)\n-                    .collect(JsonArray::new, JsonArray::add, JsonArray::addAll);\n+            JsonArray errors = new JsonArray();\n+            if(e.errors != null && !e.errors.isEmpty()) {\n+                errors.addAll(e.errors.stream()\n+                        .map(JsonPrimitive::new)\n+                        .collect(JsonArray::new, JsonArray::add, JsonArray::addAll));\n+            } else {\n+                errors.add(new JsonPrimitive(e.getMessage()));\n+            }\n+\n             JsonObject errorResponseJson = new JsonObject();\n             errorResponseJson.add(\"errors\", errors);\n             throw new ServletException(new WebserverAPI.BadRequestException(errorResponseJson.toString()));",
+      "parent_sha": "5693b4b0aa8b0108e536e7a3cd6d67f1ef5d275d"
+    }
+  },
+  {
+    "oid": "796b9deab11b91e810c2995d3a5a9149df4852ee",
+    "message": "fix: cicd tests (#1025)",
+    "date": "2024-08-08T15:17:56Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/796b9deab11b91e810c2995d3a5a9149df4852ee",
+    "details": {
+      "sha": "6483de0131f34a70997e748f2bbe717f2d83ecb6",
+      "filename": "src/test/java/io/supertokens/test/StorageTest.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/796b9deab11b91e810c2995d3a5a9149df4852ee/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FStorageTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/796b9deab11b91e810c2995d3a5a9149df4852ee/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FStorageTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FStorageTest.java?ref=796b9deab11b91e810c2995d3a5a9149df4852ee",
+      "patch": "@@ -740,7 +740,7 @@ public void storageDeadAndAlive() throws InterruptedException, IOException, Http\n             fail();\n         } catch (HttpResponseException ex) {\n             assertEquals(ex.statusCode, 500);\n-            assertEquals(ex.getMessage(), \"Http error. Status Code: 500. Message: java.sql.SQLException: Storage layer disabled\");\n+            assertTrue(ex.getMessage().contains(\"Storage layer disabled\"));\n         }\n \n         storage.setStorageLayerEnabled(true);\n@@ -765,7 +765,7 @@ public void storageDeadAndAlive() throws InterruptedException, IOException, Http\n             fail();\n         } catch (HttpResponseException ex) {\n             assertEquals(ex.statusCode, 500);\n-            assertEquals(ex.getMessage(), \"Http error. Status Code: 500. Message: java.sql.SQLException: Storage layer disabled\");\n+            assertTrue(ex.getMessage().contains(\"Storage layer disabled\"));\n         }\n \n         storage.setStorageLayerEnabled(true);",
+      "parent_sha": "bbc0984a11341acabcfc86b863eabb8859267fc9"
+    }
+  },
+  {
+    "oid": "17d05c86c0a073cc408ddc152b131e9a09ddb0fe",
+    "message": "fix: fix for sqlite (#984)",
+    "date": "2024-04-19T08:11:19Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/17d05c86c0a073cc408ddc152b131e9a09ddb0fe",
+    "details": {
+      "sha": "6ec44b7d813af05133c4443c25d996c727454925",
+      "filename": "src/main/java/io/supertokens/Main.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 6,
+      "changes": 14,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/17d05c86c0a073cc408ddc152b131e9a09ddb0fe/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FMain.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/17d05c86c0a073cc408ddc152b131e9a09ddb0fe/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FMain.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FMain.java?ref=17d05c86c0a073cc408ddc152b131e9a09ddb0fe",
+      "patch": "@@ -209,12 +209,14 @@ private void init() throws IOException, StorageQueryException {\n             // load all configs for each of the tenants.\n             MultitenancyHelper.getInstance(this).loadConfig(new ArrayList<>());\n \n-            // we want to load storage layer once again so that the base storage also contains the right\n-            // tenant identifier set passed to the init. So we close the base storage layer and also clear\n-            // all the resources for storage layer\n-            StorageLayer.getBaseStorage(this).stopLogging();\n-            StorageLayer.getBaseStorage(this).close();\n-            this.getResourceDistributor().clearAllResourcesWithResourceKey(StorageLayer.RESOURCE_KEY);\n+            if (!StorageLayer.isInMemDb(this)) {\n+                // we want to load storage layer once again so that the base storage also contains the right\n+                // tenant identifier set passed to the init. So we close the base storage layer and also clear\n+                // all the resources for storage layer\n+                StorageLayer.getBaseStorage(this).stopLogging();\n+                StorageLayer.getBaseStorage(this).close();\n+                this.getResourceDistributor().clearAllResourcesWithResourceKey(StorageLayer.RESOURCE_KEY);\n+            }\n \n             MultitenancyHelper.getInstance(this).loadStorageLayer();\n         } catch (InvalidConfigException e) {",
+      "parent_sha": "9f26045134bb4d890ce7ab4a0172be4a47dad2da"
+    }
+  },
+  {
+    "oid": "122b5749416021242b2c7260e2babfc9ac8150f9",
+    "message": "fix: add note for account takeover check during bulk migration",
+    "date": "2025-03-20T14:26:36Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/122b5749416021242b2c7260e2babfc9ac8150f9",
+    "details": {
+      "sha": "2762875f6d18f16dcad87446c9a7113bd614be17",
+      "filename": "src/main/java/io/supertokens/authRecipe/AuthRecipe.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 1,
+      "changes": 5,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/122b5749416021242b2c7260e2babfc9ac8150f9/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FauthRecipe%2FAuthRecipe.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/122b5749416021242b2c7260e2babfc9ac8150f9/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FauthRecipe%2FAuthRecipe.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FauthRecipe%2FAuthRecipe.java?ref=122b5749416021242b2c7260e2babfc9ac8150f9",
+      "patch": "@@ -796,7 +796,10 @@ private static CreatePrimaryUsersResultHolder canCreatePrimaryUsersHelperForBulk\n             BulkImportUser.LoginMethod primaryLoginMethod = BulkImportUserUtils.getPrimaryLoginMethod(targetUser);\n \n             for (BulkImportUser.LoginMethod loginMethod : targetUser.loginMethods) {\n-\n+                // note here: account takeover risk checks are done in the sdk. The situation in which someone registers\n+                // for example with a thirparty which also verifies email address and later someone else tries to register\n+                // with the same email address but with emailpassword is not handled here. This is because the sdk\n+                // will handle this. In the bulk import we have no means to check this.\n                 boolean errorFound = false;\n                 for (String tenantId : loginMethod.tenantIds) {\n                     if (loginMethod.email != null) {",
+      "parent_sha": "95614247778e3139bdd4c8a15a9dca86a03d5a20"
+    }
+  },
+  {
+    "oid": "7f20e786af1d0bd4da970112e52210c2d3e98e1b",
+    "message": "fix: storage test",
+    "date": "2024-10-14T06:02:28Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/7f20e786af1d0bd4da970112e52210c2d3e98e1b",
+    "details": {
+      "sha": "725b91e5e21c174ccd9e4edcf7886d99e4afed16",
+      "filename": "src/test/java/io/supertokens/test/oauth/OAuthStorageTest.java",
+      "status": "modified",
+      "additions": 19,
+      "deletions": 4,
+      "changes": 23,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/7f20e786af1d0bd4da970112e52210c2d3e98e1b/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Foauth%2FOAuthStorageTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/7f20e786af1d0bd4da970112e52210c2d3e98e1b/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Foauth%2FOAuthStorageTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Foauth%2FOAuthStorageTest.java?ref=7f20e786af1d0bd4da970112e52210c2d3e98e1b",
+      "patch": "@@ -20,6 +20,7 @@\n import io.supertokens.pluginInterface.STORAGE_TYPE;\n import io.supertokens.pluginInterface.multitenancy.AppIdentifier;\n import io.supertokens.pluginInterface.multitenancy.exceptions.TenantOrAppNotFoundException;\n+import io.supertokens.pluginInterface.oauth.OAuthClient;\n import io.supertokens.pluginInterface.oauth.OAuthLogoutChallenge;\n import io.supertokens.pluginInterface.oauth.OAuthRevokeTargetType;\n import io.supertokens.pluginInterface.oauth.OAuthStorage;\n@@ -72,7 +73,12 @@ public void testClientCRUD() throws Exception {\n         storage.addOrUpdateOauthClient(appIdentifier, \"clientid1\", \"secret123\", false, false);\n         storage.addOrUpdateOauthClient(appIdentifier, \"clientid2\", \"secret123\", true, false);\n \n-        assertNotNull(storage.getOAuthClientById(appIdentifier, \"clientid1\"));\n+        OAuthClient client = storage.getOAuthClientById(appIdentifier, \"clientid1\");\n+        assertNotNull(client);\n+        assertEquals(\"secret123\", client.clientSecret);\n+        assertFalse(client.isClientCredentialsOnly);\n+        assertFalse(client.enableRefreshTokenRotation);\n+\n         try {\n             storage.getOAuthClientById(appIdentifier, \"clientid3\");\n             fail();\n@@ -83,15 +89,24 @@ public void testClientCRUD() throws Exception {\n         assertEquals(2, storage.countTotalNumberOfOAuthClients(appIdentifier));\n         assertEquals(1, storage.countTotalNumberOfClientCredentialsOnlyOAuthClients(appIdentifier));\n \n-        assertEquals(List.of(\"clientid1\", \"clientid2\"), storage.getOAuthClients(appIdentifier, new ArrayList<>())); // TODO FIX ME\n+        List<OAuthClient> clients = storage.getOAuthClients(appIdentifier, List.of(\"clientid1\", \"clientid2\"));\n+        assertEquals(2, clients.size());\n \n         storage.deleteOAuthClient(appIdentifier, \"clientid1\");\n-        assertEquals(List.of(\"clientid2\"), storage.getOAuthClients(appIdentifier, new ArrayList<>())); // TODO FIX ME\n+        clients = storage.getOAuthClients(appIdentifier, List.of(\"clientid1\", \"clientid2\"));\n+        assertEquals(1, clients.size());\n \n         assertEquals(1, storage.countTotalNumberOfClientCredentialsOnlyOAuthClients(appIdentifier));\n         storage.addOrUpdateOauthClient(appIdentifier, \"clientid2\", \"secret123\", false, false);\n         assertEquals(0, storage.countTotalNumberOfClientCredentialsOnlyOAuthClients(appIdentifier));\n \n+        // Test all field updates\n+        storage.addOrUpdateOauthClient(appIdentifier, \"clientid2\", \"newsecret\", true, true);\n+        client = storage.getOAuthClientById(appIdentifier, \"clientid2\");\n+        assertEquals(\"newsecret\", client.clientSecret);\n+        assertTrue(client.isClientCredentialsOnly);\n+        assertTrue(client.enableRefreshTokenRotation);\n+\n         process.kill();\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STOPPED));\n     }\n@@ -187,7 +202,7 @@ public void testRevoke() throws Exception {\n \n         // test cleanup\n         Thread.sleep(3000);\n-        storage.deleteExpiredRevokedOAuthTokens(0); // TODO fixme\n+        storage.deleteExpiredRevokedOAuthTokens(System.currentTimeMillis() / 1000 - 3);\n \n         assertFalse(storage.isOAuthTokenRevokedBasedOnTargetFields(\n                 appIdentifier,",
+      "parent_sha": "93ceade945288ad6948367192a496a32ef9f6912"
+    }
+  },
+  {
+    "oid": "21c8d158fc07d43a23b02f12faecdba781e06d33",
+    "message": "fix: cron (#1055)",
+    "date": "2024-10-04T06:15:55Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/21c8d158fc07d43a23b02f12faecdba781e06d33",
+    "details": {
+      "sha": "89f0f8c67dd18cc6baab3d1d0bba22640b2b3d00",
+      "filename": "src/main/java/io/supertokens/cronjobs/cleanupOAuthRevokeListAndChallenges/CleanupOAuthRevokeListAndChallenges.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 2,
+      "changes": 7,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/21c8d158fc07d43a23b02f12faecdba781e06d33/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fcronjobs%2FcleanupOAuthRevokeListAndChallenges%2FCleanupOAuthRevokeListAndChallenges.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/21c8d158fc07d43a23b02f12faecdba781e06d33/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fcronjobs%2FcleanupOAuthRevokeListAndChallenges%2FCleanupOAuthRevokeListAndChallenges.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fcronjobs%2FcleanupOAuthRevokeListAndChallenges%2FCleanupOAuthRevokeListAndChallenges.java?ref=21c8d158fc07d43a23b02f12faecdba781e06d33",
+      "patch": "@@ -5,12 +5,11 @@\n import io.supertokens.Main;\n import io.supertokens.cronjobs.CronTask;\n import io.supertokens.cronjobs.CronTaskTest;\n+import io.supertokens.pluginInterface.STORAGE_TYPE;\n import io.supertokens.pluginInterface.Storage;\n import io.supertokens.pluginInterface.StorageUtils;\n-import io.supertokens.pluginInterface.multitenancy.AppIdentifier;\n import io.supertokens.pluginInterface.multitenancy.TenantIdentifier;\n import io.supertokens.pluginInterface.oauth.OAuthStorage;\n-import io.supertokens.storageLayer.StorageLayer;\n \n public class CleanupOAuthRevokeListAndChallenges extends CronTask {\n \n@@ -29,6 +28,10 @@ public static CleanupOAuthRevokeListAndChallenges init(Main main, List<List<Tena\n \n     @Override\n     protected void doTaskPerStorage(Storage storage) throws Exception {\n+        if (storage.getType() != STORAGE_TYPE.SQL) {\n+            return;\n+        }\n+\n         OAuthStorage oauthStorage = StorageUtils.getOAuthStorage(storage);\n         oauthStorage.cleanUpExpiredAndRevokedOAuthTokensList();\n         oauthStorage.deleteOAuthLogoutChallengesBefore(System.currentTimeMillis() - 1000 * 60 * 60 * 48);",
+      "parent_sha": "df6d395a8506af6701305978bd364035726aa1de"
+    }
+  },
+  {
+    "oid": "cf44b0fbc6aa398a80e9c115b613705c9c3fff17",
+    "message": "fix: saas test fix (#740)\n\n* fix: test fixes\r\n\r\n* fix: annotations in config yaml\r\n\r\n* fix: saas test failure for mongo\r\n\r\n* fix: saas test fix",
+    "date": "2023-07-06T07:39:28Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/cf44b0fbc6aa398a80e9c115b613705c9c3fff17",
+    "details": {
+      "sha": "25b06fd6a0b0a7795f88b40d3ddb4e74e719b6e8",
+      "filename": "src/test/java/io/supertokens/test/SuperTokensSaaSSecretTest.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/cf44b0fbc6aa398a80e9c115b613705c9c3fff17/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FSuperTokensSaaSSecretTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/cf44b0fbc6aa398a80e9c115b613705c9c3fff17/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FSuperTokensSaaSSecretTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FSuperTokensSaaSSecretTest.java?ref=cf44b0fbc6aa398a80e9c115b613705c9c3fff17",
+      "patch": "@@ -485,7 +485,7 @@ public void testThatTenantCannotSetProtectedConfigIfSuperTokensSaaSSecretIsSet()\n         }\n \n         JsonObject coreConfig = new JsonObject();\n-        coreConfig.addProperty(\"postgresql_database_name\", \"st1\");\n+        StorageLayer.getBaseStorage(process.getProcess()).modifyConfigToAddANewUserPoolForTesting(coreConfig, 1);\n \n         JsonObject requestBody = new JsonObject();\n         requestBody.addProperty(\"appId\", \"a1\");",
+      "parent_sha": "df841ab53844591dfcd2b0d522b6d760bdba98a0"
+    }
+  },
+  {
+    "oid": "107a283394c7302912bd4959f189d7a5b02d8202",
+    "message": "fix: cicd tests (#985)\n\n* fix: test\r\n\r\n* fix: test\r\n\r\n* fix: comment\r\n\r\n* fix: pr comments",
+    "date": "2024-04-19T10:24:25Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/107a283394c7302912bd4959f189d7a5b02d8202",
+    "details": {
+      "sha": "f23078440d0be0d31022643439a6b68d2dbc62ca",
+      "filename": "src/main/java/io/supertokens/Main.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 10,
+      "changes": 12,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/107a283394c7302912bd4959f189d7a5b02d8202/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FMain.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/107a283394c7302912bd4959f189d7a5b02d8202/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FMain.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FMain.java?ref=107a283394c7302912bd4959f189d7a5b02d8202",
+      "patch": "@@ -38,12 +38,7 @@\n import io.supertokens.pluginInterface.exceptions.DbInitException;\n import io.supertokens.pluginInterface.exceptions.InvalidConfigException;\n import io.supertokens.pluginInterface.exceptions.StorageQueryException;\n-import io.supertokens.pluginInterface.multitenancy.TenantConfig;\n import io.supertokens.pluginInterface.multitenancy.TenantIdentifier;\n-import io.supertokens.session.refreshToken.RefreshTokenKey;\n-import io.supertokens.signingkeys.AccessTokenSigningKey;\n-import io.supertokens.signingkeys.JWTSigningKey;\n-import io.supertokens.signingkeys.SigningKeys;\n import io.supertokens.storageLayer.StorageLayer;\n import io.supertokens.version.Version;\n import io.supertokens.webserver.Webserver;\n@@ -210,12 +205,9 @@ private void init() throws IOException, StorageQueryException {\n             MultitenancyHelper.getInstance(this).loadConfig(new ArrayList<>());\n \n             if (!StorageLayer.isInMemDb(this)) {\n-                // we want to load storage layer once again so that the base storage also contains the right\n-                // tenant identifier set passed to the init. So we close the base storage layer and also clear\n-                // all the resources for storage layer\n-                StorageLayer.getBaseStorage(this).stopLogging();\n+                // we want to init storage connection once again so that the base storage also contains the right\n+                // tenant identifier set passed to the init. So we call the resetPostConnectCallbackForBaseTenantStorage.\n                 StorageLayer.getBaseStorage(this).close();\n-                this.getResourceDistributor().clearAllResourcesWithResourceKey(StorageLayer.RESOURCE_KEY);\n             }\n \n             MultitenancyHelper.getInstance(this).loadStorageLayer();",
+      "parent_sha": "9cc802c943f30c08ffcf4b8715df4ca9cf49f4d9"
+    }
+  },
+  {
+    "oid": "a6a3d48068b142bea4dc306a3c1cef28499e4c29",
+    "message": "fix: inmemory test fix (#822)",
+    "date": "2023-09-21T05:17:03Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/a6a3d48068b142bea4dc306a3c1cef28499e4c29",
+    "details": {
+      "sha": "721bcae06588d7c1dd42a6152beed108dcdb53f7",
+      "filename": "src/main/java/io/supertokens/inmemorydb/queries/UserRolesQueries.java",
+      "status": "modified",
+      "additions": 23,
+      "deletions": 8,
+      "changes": 31,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/a6a3d48068b142bea4dc306a3c1cef28499e4c29/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FUserRolesQueries.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/a6a3d48068b142bea4dc306a3c1cef28499e4c29/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FUserRolesQueries.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FUserRolesQueries.java?ref=a6a3d48068b142bea4dc306a3c1cef28499e4c29",
+      "patch": "@@ -113,14 +113,29 @@ public static void addPermissionToRoleOrDoNothingIfExists_Transaction(Start star\n         });\n     }\n \n-    public static boolean deleteRole(Start start, AppIdentifier appIdentifier, String role)\n-            throws SQLException, StorageQueryException {\n-        String QUERY = \"DELETE FROM \" + getConfig(start).getRolesTable()\n-                + \" WHERE app_id = ? AND role = ? ;\";\n-        return update(start, QUERY, pst -> {\n-                pst.setString(1, appIdentifier.getAppId());\n-                pst.setString(2, role);\n-            }) == 1;\n+    public static boolean deleteRole(Start start, AppIdentifier appIdentifier, String role) throws SQLException, StorageQueryException {\n+        \n+        try {\n+            return start.startTransaction(con -> {\n+                // Row lock must be taken to delete the role, otherwise the table may be locked for delete\n+                Connection sqlCon = (Connection) con.getConnection();\n+                ((ConnectionWithLocks) sqlCon).lock(appIdentifier.getAppId() + \"~\" + role + Config.getConfig(start).getRolesTable());\n+\n+                String QUERY = \"DELETE FROM \" + getConfig(start).getRolesTable()\n+                        + \" WHERE app_id = ? AND role = ? ;\";\n+\n+                try {\n+                    return update(sqlCon, QUERY, pst -> {\n+                        pst.setString(1, appIdentifier.getAppId());\n+                        pst.setString(2, role);\n+                    }) == 1;\n+                } catch (SQLException e) {\n+                    throw new StorageTransactionLogicException(e);\n+                }\n+            });\n+        } catch (StorageTransactionLogicException e) {\n+            throw new StorageQueryException(e.actualException);\n+        }\n     }\n \n     public static boolean doesRoleExist(Start start, AppIdentifier appIdentifier, String role)",
+      "parent_sha": "07e2ca672e83b15135a80437e2b90c7fe8f104b2"
+    }
+  },
+  {
+    "oid": "ff95845f752aa82b84d0af4e21525e9a5267782e",
+    "message": "fix: add space to description",
+    "date": "2025-03-13T14:43:53Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/ff95845f752aa82b84d0af4e21525e9a5267782e",
+    "details": {
+      "sha": "da3956d1d0fc696ad0c446da0b9edbd74e2ee528",
+      "filename": "src/main/java/io/supertokens/config/CoreConfig.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/ff95845f752aa82b84d0af4e21525e9a5267782e/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fconfig%2FCoreConfig.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/ff95845f752aa82b84d0af4e21525e9a5267782e/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fconfig%2FCoreConfig.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fconfig%2FCoreConfig.java?ref=ff95845f752aa82b84d0af4e21525e9a5267782e",
+      "patch": "@@ -352,8 +352,8 @@ public class CoreConfig {\n \n     @NotConflictingInApp\n     @JsonProperty\n-    @ConfigDescription(\"If specified, the supertokens core will load the specified number of users for migrating in one\" +\n-            \"single batch. (Default: 8000).\")\n+    @ConfigDescription(\"If specified, the supertokens core will load the specified number of users for migrating in \" +\n+            \"one single batch. (Default: 8000)\")\n     private int bulk_migration_batch_size =  8000;\n \n     @NotConflictingInApp",
+      "parent_sha": "27aae9f2056c894bafd5eb40c90bba8936ed6cf9"
+    }
+  },
+  {
+    "oid": "37de0a8e3a0a30c72764216efe7665ec172cd71c",
+    "message": "fix: add user_roles index to the right place (#1132)",
+    "date": "2025-03-26T13:05:02Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/37de0a8e3a0a30c72764216efe7665ec172cd71c",
+    "details": {
+      "sha": "b02641cfc2d9102454ee556c6f75a84a937f9a6a",
+      "filename": "src/main/java/io/supertokens/inmemorydb/queries/GeneralQueries.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/37de0a8e3a0a30c72764216efe7665ec172cd71c/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FGeneralQueries.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/37de0a8e3a0a30c72764216efe7665ec172cd71c/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FGeneralQueries.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Finmemorydb%2Fqueries%2FGeneralQueries.java?ref=37de0a8e3a0a30c72764216efe7665ec172cd71c",
+      "patch": "@@ -402,7 +402,6 @@ public static void createTablesIfNotExists(Start start, Main main) throws SQLExc\n             update(start, UserRolesQueries.getQueryToCreateRolePermissionsTable(start), NO_OP_SETTER);\n             // index\n             update(start, UserRolesQueries.getQueryToCreateRolePermissionsPermissionIndex(start), NO_OP_SETTER);\n-            update(start, UserRolesQueries.getQueryToCreateUserRolesUserIdAppIdIndex(start), NO_OP_SETTER);\n         }\n \n         if (!doesTableExists(start, Config.getConfig(start).getUserRolesTable())) {\n@@ -411,6 +410,7 @@ public static void createTablesIfNotExists(Start start, Main main) throws SQLExc\n \n             // index\n             update(start, UserRolesQueries.getQueryToCreateUserRolesRoleIndex(start), NO_OP_SETTER);\n+            update(start, UserRolesQueries.getQueryToCreateUserRolesUserIdAppIdIndex(start), NO_OP_SETTER);\n         }\n \n         if (!doesTableExists(start, Config.getConfig(start).getUserIdMappingTable())) {",
+      "parent_sha": "f0c7e5f8fd7b251d825c81e3c5f2087564d86dd3"
+    }
+  },
+  {
+    "oid": "518216231cae99dd9240ab8d50171530a0aa1048",
+    "message": "fix: test (#722)",
+    "date": "2023-06-16T11:33:39Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/518216231cae99dd9240ab8d50171530a0aa1048",
+    "details": {
+      "sha": "bea8011ea5f225f75da4ccf9f5a0e780210764e8",
+      "filename": "src/test/java/io/supertokens/test/CDIVersionTest.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/518216231cae99dd9240ab8d50171530a0aa1048/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FCDIVersionTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/518216231cae99dd9240ab8d50171530a0aa1048/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FCDIVersionTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2FCDIVersionTest.java?ref=518216231cae99dd9240ab8d50171530a0aa1048",
+      "patch": "@@ -236,12 +236,12 @@ public void testCDIVersionWorksPerApp() throws Exception {\n                 .setKeyValue(FeatureFlagTestContent.ENABLED_FEATURES, new EE_FEATURES[]{EE_FEATURES.MULTI_TENANCY});\n         process.startProcess();\n \n+        assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n+\n         if (StorageLayer.getStorage(process.getProcess()).getType() != STORAGE_TYPE.SQL) {\n             return;\n         }\n \n-        assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n-\n         Webserver.getInstance(process.getProcess()).addAPI(new WebserverAPI(process.getProcess(), \"\") {\n \n             private static final long serialVersionUID = 1L;",
+      "parent_sha": "e9c9ebdc1ce5479bfc5380cec539bcd22b9bb35b"
+    }
+  },
+  {
+    "oid": "dd4b21ae7bf93ebc4f35b39a45addb2bdaca8665",
+    "message": "fix: flaky tests (#1035)\n\n* fix: flaky tests\r\n\r\n* fix: flaky test\r\n\r\n* fix: flaky test",
+    "date": "2024-09-05T07:43:34Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/dd4b21ae7bf93ebc4f35b39a45addb2bdaca8665",
+    "details": {
+      "sha": "d7d0539dd0bc10ba9ba71d560e2b0b648e0f4bd0",
+      "filename": "src/test/java/io/supertokens/test/totp/TOTPRecipeTest.java",
+      "status": "modified",
+      "additions": 177,
+      "deletions": 138,
+      "changes": 315,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/dd4b21ae7bf93ebc4f35b39a45addb2bdaca8665/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2FTOTPRecipeTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/dd4b21ae7bf93ebc4f35b39a45addb2bdaca8665/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2FTOTPRecipeTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2FTOTPRecipeTest.java?ref=dd4b21ae7bf93ebc4f35b39a45addb2bdaca8665",
+      "patch": "@@ -318,71 +318,90 @@ public int triggerAndCheckRateLimit(Main main, TOTPDevice device) throws Excepti\n     }\n \n     @Test\n-    public void rateLimitCooldownTest() throws Exception {\n-        String[] args = {\"../\"};\n-\n-        // set rate limiting cooldown time to 1s\n-        Utils.setValueInConfig(\"totp_rate_limit_cooldown_sec\", \"1\");\n-        // set max attempts to 3\n-        Utils.setValueInConfig(\"totp_max_attempts\", \"3\");\n-\n-        TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n-        assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n-\n-        if (StorageLayer.getStorage(process.getProcess()).getType() != STORAGE_TYPE.SQL) {\n-            return;\n+    public void rateLimitCooldownTest() throws Throwable {\n+        // Flaky test.\n+        Throwable lastException = null;\n+\n+        for (int i = 0; i < 5; i++) {\n+            String[] args = {\"../\"};\n+\n+            // set rate limiting cooldown time to 1s\n+            Utils.setValueInConfig(\"totp_rate_limit_cooldown_sec\", \"1\");\n+            // set max attempts to 3\n+            Utils.setValueInConfig(\"totp_max_attempts\", \"3\");\n+\n+            TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n+            assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n+\n+            if (StorageLayer.getStorage(process.getProcess()).getType() != STORAGE_TYPE.SQL) {\n+                return;\n+            }\n+\n+            try {\n+                FeatureFlagTestContent.getInstance(process.main)\n+                        .setKeyValue(FeatureFlagTestContent.ENABLED_FEATURES, new EE_FEATURES[]{EE_FEATURES.MFA});\n+\n+                Main main = process.getProcess();\n+\n+                // Create device\n+                TOTPDevice device = Totp.registerDevice(main, \"user\", \"deviceName\", 1, 1);\n+                Totp.verifyDevice(main, \"user\", device.deviceName, generateTotpCode(main, device, -1));\n+\n+                // Trigger rate limiting and fix it with a correct code after some time:\n+                int attemptsRequired = triggerAndCheckRateLimit(main, device);\n+                assert attemptsRequired == 3;\n+                // Wait for 1 second (Should cool down rate limiting):\n+                Thread.sleep(1000);\n+                // But again try with invalid code:\n+                InvalidTotpException invalidTotpException;\n+                for (int tries = 0; tries < 10; tries++) {\n+                    invalidTotpException = assertThrows(InvalidTotpException.class,\n+                            () -> Totp.verifyCode(main, \"user\", \"invalid0\"));\n+                    if (invalidTotpException.currentAttempts == 3) {\n+                        break;\n+                    }\n+                }\n+\n+                // This triggered rate limiting again. So even valid codes will fail for\n+                // another cooldown period:\n+                LimitReachedException limitReachedException = assertThrows(LimitReachedException.class,\n+                        () -> Totp.verifyCode(main, \"user\", generateTotpCode(main, device)));\n+                assertEquals(3, limitReachedException.currentAttempts);\n+                // Wait for 1 second (Should cool down rate limiting):\n+                Thread.sleep(1000);\n+\n+                // test that after cool down, we can retry invalid codes N times again\n+                for (int tries = 0; tries < 10; tries++) {\n+                    invalidTotpException = assertThrows(InvalidTotpException.class,\n+                            () -> Totp.verifyCode(main, \"user\", \"invalid0\"));\n+                    if (invalidTotpException.currentAttempts == 3) {\n+                        break;\n+                    }\n+                }\n+\n+                Thread.sleep(1100);\n+\n+                // Now try with valid code:\n+                Totp.verifyCode(main, \"user\", generateTotpCode(main, device));\n+                // Now invalid code shouldn't trigger rate limiting. Unless you do it N times:\n+                assertThrows(InvalidTotpException.class, () -> Totp.verifyCode(main, \"user\", \"invaldd\"));\n+\n+                process.kill();\n+                assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STOPPED));\n+\n+                return; // successful\n+            } catch (Exception | AssertionError e) {\n+                process.kill();\n+                assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STOPPED));\n+\n+                Thread.sleep(250);\n+\n+                lastException = e;\n+            }\n+        }\n+        if (lastException != null) {\n+            throw lastException;\n         }\n-\n-        FeatureFlagTestContent.getInstance(process.main)\n-                .setKeyValue(FeatureFlagTestContent.ENABLED_FEATURES, new EE_FEATURES[]{EE_FEATURES.MFA});\n-\n-        Main main = process.getProcess();\n-\n-        // Create device\n-        TOTPDevice device = Totp.registerDevice(main, \"user\", \"deviceName\", 1, 1);\n-        Totp.verifyDevice(main, \"user\", device.deviceName, generateTotpCode(main, device, -1));\n-\n-        // Trigger rate limiting and fix it with a correct code after some time:\n-        int attemptsRequired = triggerAndCheckRateLimit(main, device);\n-        assert attemptsRequired == 3;\n-        // Wait for 1 second (Should cool down rate limiting):\n-        Thread.sleep(1000);\n-        // But again try with invalid code:\n-        InvalidTotpException invalidTotpException = assertThrows(InvalidTotpException.class,\n-                () -> Totp.verifyCode(main, \"user\", \"invalid0\"));\n-        assertEquals(1, invalidTotpException.currentAttempts);\n-        invalidTotpException = assertThrows(InvalidTotpException.class,\n-                () -> Totp.verifyCode(main, \"user\", \"invalid0\"));\n-        assertEquals(2, invalidTotpException.currentAttempts);\n-        invalidTotpException = assertThrows(InvalidTotpException.class,\n-                () -> Totp.verifyCode(main, \"user\", \"invalid0\"));\n-        assertEquals(3, invalidTotpException.currentAttempts);\n-\n-        // This triggered rate limiting again. So even valid codes will fail for\n-        // another cooldown period:\n-        LimitReachedException limitReachedException = assertThrows(LimitReachedException.class,\n-                () -> Totp.verifyCode(main, \"user\", generateTotpCode(main, device)));\n-        assertEquals(3, limitReachedException.currentAttempts);\n-        // Wait for 1 second (Should cool down rate limiting):\n-        Thread.sleep(1000);\n-\n-        // test that after cool down, we can retry invalid codes N times again\n-        invalidTotpException = assertThrows(InvalidTotpException.class,\n-                () -> Totp.verifyCode(main, \"user\", \"invalid0\"));\n-        assertEquals(1, invalidTotpException.currentAttempts);\n-        invalidTotpException = assertThrows(InvalidTotpException.class,\n-                () -> Totp.verifyCode(main, \"user\", \"invalid0\"));\n-        assertEquals(2, invalidTotpException.currentAttempts);\n-        invalidTotpException = assertThrows(InvalidTotpException.class,\n-                () -> Totp.verifyCode(main, \"user\", \"invalid0\"));\n-        assertEquals(3, invalidTotpException.currentAttempts);\n-\n-        Thread.sleep(1100);\n-\n-        // Now try with valid code:\n-        Totp.verifyCode(main, \"user\", generateTotpCode(main, device));\n-        // Now invalid code shouldn't trigger rate limiting. Unless you do it N times:\n-        assertThrows(InvalidTotpException.class, () -> Totp.verifyCode(main, \"user\", \"invaldd\"));\n     }\n \n     @Test\n@@ -460,82 +479,102 @@ public void createAndVerifyDeviceTest() throws Exception {\n     }\n \n     @Test\n-    public void removeDeviceTest() throws Exception {\n+    public void removeDeviceTest() throws Throwable {\n         // Flaky test.\n-        TestSetupResult result = defaultInit();\n-        if (result == null) {\n-            return;\n+        Throwable lastException = null;\n+\n+        for (int i = 0; i < 5; i++) {\n+            TestSetupResult result = defaultInit();\n+            if (result == null) {\n+                return;\n+            }\n+\n+            try {\n+                Main main = result.process.getProcess();\n+                TOTPStorage storage = result.storage;\n+        \n+                // Create devices\n+                TOTPDevice device1 = Totp.registerDevice(main, \"user\", \"device1\", 1, 30);\n+                TOTPDevice device2 = Totp.registerDevice(main, \"user\", \"device2\", 1, 30);\n+        \n+                Thread.sleep(1);\n+                Totp.verifyDevice(main, \"user\", \"device1\", generateTotpCode(main, device1, -1));\n+                Thread.sleep(1);\n+                Totp.verifyDevice(main, \"user\", \"device2\", generateTotpCode(main, device2, -1));\n+        \n+                TOTPDevice[] devices = Totp.getDevices(main, \"user\");\n+                assert (devices.length == 2);\n+        \n+                // Try to delete device for non-existent user:\n+                assertThrows(UnknownDeviceException.class, () -> Totp.removeDevice(main, \"non-existent-user\", \"device1\"));\n+        \n+                // Try to delete non-existent device:\n+                assertThrows(UnknownDeviceException.class, () -> Totp.removeDevice(main, \"user\", \"non-existent-device\"));\n+        \n+                // Delete one of the devices\n+                {\n+                    assertThrows(InvalidTotpException.class, () -> Totp.verifyCode(main, \"user\", \"ic0\"));\n+        \n+                    Thread.sleep(1000 - System.currentTimeMillis() % 1000 + 10);\n+        \n+                    Thread.sleep(1);\n+                    Totp.verifyCode(main, \"user\", generateTotpCode(main, device1));\n+                    Thread.sleep(1);\n+                    Totp.verifyCode(main, \"user\", generateTotpCode(main, device2));\n+        \n+                    // Delete device1\n+                    Totp.removeDevice(main, \"user\", \"device1\");\n+\n+                    // 1 device still remain so all codes should still be there:\n+                    TOTPUsedCode[] usedCodes = getAllUsedCodesUtil(storage, \"user\");\n+                    assert (usedCodes.length == 5); // 2 for device verification and 3 for code verification\n+\n+                    devices = Totp.getDevices(main, \"user\");\n+                    assert (devices.length == 1);\n+                }\n+        \n+                // Deleting the last device of a user should delete all related codes:\n+                // Delete the 2nd (and the last) device\n+                {\n+        \n+                    // Create another user to test that other users aren't affected:\n+                    TOTPDevice otherUserDevice = Totp.registerDevice(main, \"other-user\", \"device\", 1, 30);\n+                    Totp.verifyDevice(main, \"other-user\", \"device\", generateTotpCode(main, otherUserDevice, -1));\n+                    Thread.sleep(1);\n+                    Totp.verifyCode(main, \"other-user\", generateTotpCode(main, otherUserDevice));\n+                    assertThrows(InvalidTotpException.class, () -> Totp.verifyCode(main, \"other-user\", \"ic1\"));\n+        \n+                    // Delete device2\n+                    Totp.removeDevice(main, \"user\", \"device2\");\n+        \n+                    // No more devices are left for the user:\n+                    assert (Totp.getDevices(main, \"user\").length == 0);\n+        \n+                    // No device left so all codes of the user should be deleted:\n+                    TOTPUsedCode[] usedCodes = getAllUsedCodesUtil(storage, \"user\");\n+                    assert (usedCodes.length == 0);\n+\n+                    usedCodes = getAllUsedCodesUtil(storage, \"other-user\");\n+                    System.out.println(\"Point2 \" + usedCodes.length);\n+                    assert (usedCodes.length == 3); // 1 for device verification and 2 for code verification\n+\n+                    // But for other users things should still be there:\n+                    TOTPDevice[] otherUserDevices = Totp.getDevices(main, \"other-user\");\n+                    assert (otherUserDevices.length == 1);\n+                }\n+\n+                result.process.kill();\n+                assertNotNull(result.process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STOPPED));\n+\n+                return; // successful\n+            } catch (Exception | AssertionError e) {\n+                lastException = e;\n+                result.process.kill();\n+                assertNotNull(result.process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STOPPED));\n+            }\n         }\n-        Main main = result.process.getProcess();\n-        TOTPStorage storage = result.storage;\n-\n-        // Create devices\n-        TOTPDevice device1 = Totp.registerDevice(main, \"user\", \"device1\", 1, 30);\n-        TOTPDevice device2 = Totp.registerDevice(main, \"user\", \"device2\", 1, 30);\n-\n-        Thread.sleep(1);\n-        Totp.verifyDevice(main, \"user\", \"device1\", generateTotpCode(main, device1, -1));\n-        Thread.sleep(1);\n-        Totp.verifyDevice(main, \"user\", \"device2\", generateTotpCode(main, device2, -1));\n-\n-        TOTPDevice[] devices = Totp.getDevices(main, \"user\");\n-        assert (devices.length == 2);\n-\n-        // Try to delete device for non-existent user:\n-        assertThrows(UnknownDeviceException.class, () -> Totp.removeDevice(main, \"non-existent-user\", \"device1\"));\n-\n-        // Try to delete non-existent device:\n-        assertThrows(UnknownDeviceException.class, () -> Totp.removeDevice(main, \"user\", \"non-existent-device\"));\n-\n-        // Delete one of the devices\n-        {\n-            assertThrows(InvalidTotpException.class, () -> Totp.verifyCode(main, \"user\", \"ic0\"));\n-\n-            Thread.sleep(1000 - System.currentTimeMillis() % 1000 + 10);\n-\n-            Thread.sleep(1);\n-            Totp.verifyCode(main, \"user\", generateTotpCode(main, device1));\n-            Thread.sleep(1);\n-            Totp.verifyCode(main, \"user\", generateTotpCode(main, device2));\n-\n-            // Delete device1\n-            Totp.removeDevice(main, \"user\", \"device1\");\n-\n-            devices = Totp.getDevices(main, \"user\");\n-            assert (devices.length == 1);\n-\n-            // 1 device still remain so all codes should still be still there:\n-            TOTPUsedCode[] usedCodes = getAllUsedCodesUtil(storage, \"user\");\n-            assert (usedCodes.length == 5); // 2 for device verification and 3 for code verification\n-        }\n-\n-        // Deleting the last device of a user should delete all related codes:\n-        // Delete the 2nd (and the last) device\n-        {\n-\n-            // Create another user to test that other users aren't affected:\n-            TOTPDevice otherUserDevice = Totp.registerDevice(main, \"other-user\", \"device\", 1, 30);\n-            Totp.verifyDevice(main, \"other-user\", \"device\", generateTotpCode(main, otherUserDevice, -1));\n-            Thread.sleep(1);\n-            Totp.verifyCode(main, \"other-user\", generateTotpCode(main, otherUserDevice));\n-            assertThrows(InvalidTotpException.class, () -> Totp.verifyCode(main, \"other-user\", \"ic1\"));\n-\n-            // Delete device2\n-            Totp.removeDevice(main, \"user\", \"device2\");\n-\n-            // No more devices are left for the user:\n-            assert (Totp.getDevices(main, \"user\").length == 0);\n-\n-            // No device left so all codes of the user should be deleted:\n-            TOTPUsedCode[] usedCodes = getAllUsedCodesUtil(storage, \"user\");\n-            assert (usedCodes.length == 0);\n-\n-            // But for other users things should still be there:\n-            TOTPDevice[] otherUserDevices = Totp.getDevices(main, \"other-user\");\n-            assert (otherUserDevices.length == 1);\n-\n-            usedCodes = getAllUsedCodesUtil(storage, \"other-user\");\n-            assert (usedCodes.length == 3); // 1 for device verification and 2 for code verification\n+        if (lastException != null) {\n+            throw lastException;\n         }\n     }\n ",
+      "parent_sha": "635254ace2a3dab41d9aae288d006ee0910b61cb"
+    }
+  },
+  {
+    "oid": "4f648e751ea4c40965626f2db75134bb220da836",
+    "message": "fix: fixing tests for CI (#1085)",
+    "date": "2024-12-26T06:53:08Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/4f648e751ea4c40965626f2db75134bb220da836",
+    "details": {
+      "sha": "ed4ddeb1a49e1e3e5da2101fdea3386b53a62ba3",
+      "filename": "src/test/java/io/supertokens/test/multitenant/TestAppData.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 1,
+      "changes": 4,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/4f648e751ea4c40965626f2db75134bb220da836/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2FTestAppData.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/4f648e751ea4c40965626f2db75134bb220da836/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2FTestAppData.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2FTestAppData.java?ref=4f648e751ea4c40965626f2db75134bb220da836",
+      "patch": "@@ -179,7 +179,9 @@ null, null, new JsonObject()\n         UserIdMapping.createUserIdMapping(process.getProcess(), app.toAppIdentifier(), appStorage,\n                 plUser.user.getSupertokensUserId(), \"externalid\", null, false);\n \n-        BulkImport.addUsers(app.toAppIdentifier(), appStorage, BulkImportTestUtils.generateBulkImportUser(1));\n+        if(!StorageLayer.isInMemDb(process.getProcess())) {\n+            BulkImport.addUsers(app.toAppIdentifier(), appStorage, BulkImportTestUtils.generateBulkImportUser(1));\n+        }\n \n         OAuth.addOrUpdateClient(process.getProcess(), app.toAppIdentifier(), appStorage, \"test\", \"secret123\", false, false);\n         OAuth.createLogoutRequestAndReturnRedirectUri(process.getProcess(), app.toAppIdentifier(), appStorage, \"test\", \"http://localhost\", \"sessionHandle\", \"state\");",
+      "parent_sha": "078d0d07149e097266eaf04dff52b25111f9d1f6"
+    }
+  },
+  {
+    "oid": "f63cee9f70253a62e306921117d3888c9f9d609c",
+    "message": "fix: cicd test (#986)",
+    "date": "2024-04-19T12:02:52Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/f63cee9f70253a62e306921117d3888c9f9d609c",
+    "details": {
+      "sha": "073848b244906092250387d9d5c2439a4102c97b",
+      "filename": "src/test/java/io/supertokens/test/multitenant/LogTest.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/f63cee9f70253a62e306921117d3888c9f9d609c/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2FLogTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/f63cee9f70253a62e306921117d3888c9f9d609c/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2FLogTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2FLogTest.java?ref=f63cee9f70253a62e306921117d3888c9f9d609c",
+      "patch": "@@ -146,7 +146,7 @@ public void testLogThatEachLineIsUniqueOnStartup() throws Exception {\n             uniqueLines.add(line);\n         }\n \n-        assertEquals(uniqueLines.size(), lines.length);\n+        assertEquals(uniqueLines.size(), lines.length - 1); // we have 1 repeating line which initialises connection pool\n \n         assertEquals(7, Multitenancy.getAllTenants(process.getProcess()).length);\n ",
+      "parent_sha": "9d520516e1ed2b3f14c18b38f7c0f41b654ed536"
+    }
+  },
+  {
+    "oid": "386dc4b0a98169635fc81f76186bfa3952d09b39",
+    "message": "fix: build fix (#1090)",
+    "date": "2025-01-03T06:20:05Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/386dc4b0a98169635fc81f76186bfa3952d09b39",
+    "details": {
+      "sha": "d70ea1cdb6ae6d2e3c103b338e9aa48391c3fbfb",
+      "filename": "src/main/java/io/supertokens/bulkimport/BulkImport.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 1,
+      "changes": 9,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/386dc4b0a98169635fc81f76186bfa3952d09b39/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fbulkimport%2FBulkImport.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/386dc4b0a98169635fc81f76186bfa3952d09b39/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fbulkimport%2FBulkImport.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fbulkimport%2FBulkImport.java?ref=386dc4b0a98169635fc81f76186bfa3952d09b39",
+      "patch": "@@ -110,11 +110,18 @@ public static void addUsers(AppIdentifier appIdentifier, Storage storage, List<B\n                 StorageUtils.getBulkImportStorage(storage).addBulkImportUsers(appIdentifier, users);\n                 break;\n             } catch (StorageQueryException sqe) {\n-                if(sqe.getCause() instanceof io.supertokens.pluginInterface.bulkimport.exceptions.DuplicateUserIdException ) {\n+                if(sqe.getCause() instanceof io.supertokens.pluginInterface.bulkimport.exceptions.DuplicateUserIdException) {\n                     // We re-generate the user id for every user and retry\n                     for (BulkImportUser user : users) {\n                         user.id = Utils.getUUID();\n                     }\n+                    continue;\n+                }\n+                throw sqe;\n+            } catch (io.supertokens.pluginInterface.bulkimport.exceptions.DuplicateUserIdException e) {\n+                // We re-generate the user id for every user and retry\n+                for (BulkImportUser user : users) {\n+                    user.id = Utils.getUUID();\n                 }\n             }\n         }",
+      "parent_sha": "5ec8c9f185316abe90c440accb326d54d272362e"
+    }
+  },
+  {
+    "oid": "53a861b1919607ed5f99b1902589043990fd461f",
+    "message": "fix: let create client accept client id in the body",
+    "date": "2024-10-08T11:32:35Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/53a861b1919607ed5f99b1902589043990fd461f",
+    "details": {
+      "sha": "8635806418df9a7cfdffe3a5462f2b2fbfd4935c",
+      "filename": "src/main/java/io/supertokens/webserver/api/oauth/CreateUpdateOrGetOAuthClientAPI.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 1,
+      "changes": 5,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/53a861b1919607ed5f99b1902589043990fd461f/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Foauth%2FCreateUpdateOrGetOAuthClientAPI.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/53a861b1919607ed5f99b1902589043990fd461f/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Foauth%2FCreateUpdateOrGetOAuthClientAPI.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Foauth%2FCreateUpdateOrGetOAuthClientAPI.java?ref=53a861b1919607ed5f99b1902589043990fd461f",
+      "patch": "@@ -89,7 +89,10 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws I\n         input.addProperty(\"accessTokenStrategy\", \"jwt\");\n         input.addProperty(\"skipConsent\", true);\n         input.addProperty(\"subjectType\", \"public\");\n-        input.addProperty(\"clientId\", \"stcl_\" + UUID.randomUUID());\n+\n+        if (!input.has(\"clientId\")) {\n+            input.addProperty(\"clientId\", \"stcl_\" + UUID.randomUUID());\n+        }\n \n         boolean isClientCredentialsOnly = input.has(\"grantTypes\") &&\n             input.get(\"grantTypes\").isJsonArray() &&",
+      "parent_sha": "e1f462cf22e3e96d8dec9373908e9e4cd5b7831f"
+    }
+  },
+  {
+    "oid": "3de36ad1eda690a9a679cb1d9d5170e3098db217",
+    "message": "fix: Fix testUpdateNumber test (#886)",
+    "date": "2023-11-20T12:55:38Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/3de36ad1eda690a9a679cb1d9d5170e3098db217",
+    "details": {
+      "sha": "7b13a499072b376269bf764a08d26daebf4a4e45",
+      "filename": "src/test/java/io/supertokens/test/passwordless/api/MultitenantAPITest.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "changes": 3,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/3de36ad1eda690a9a679cb1d9d5170e3098db217/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fpasswordless%2Fapi%2FMultitenantAPITest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/3de36ad1eda690a9a679cb1d9d5170e3098db217/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fpasswordless%2Fapi%2FMultitenantAPITest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fpasswordless%2Fapi%2FMultitenantAPITest.java?ref=3de36ad1eda690a9a679cb1d9d5170e3098db217",
+      "patch": "@@ -571,7 +571,8 @@ public void testUpdateNumber() throws Exception {\n                 String newPhoneNumber = generateRandomNumber(8);\n                 updatePhoneNumber(tenant, user.getAsJsonPrimitive(\"id\").getAsString(), newPhoneNumber);\n                 user.remove(\"phoneNumber\");\n-                user.addProperty(\"phoneNumber\", newPhoneNumber);\n+                // We need to normalize the phone number before adding it to the user object, as the update API performs normalization.\n+                user.addProperty(\"phoneNumber\", io.supertokens.utils.Utils.normalizeIfPhoneNumber(newPhoneNumber));\n \n                 assertEquals(user, signInUpNumberUsingUserInputCode(userTenant, newPhoneNumber));\n             }",
+      "parent_sha": "42e40a25eed8f273b9271883246a8d10c2e88e1c"
+    }
+  },
+  {
+    "oid": "0eeed159f137e1f709e190bb99237120f72992c0",
+    "message": "fixes tests",
+    "date": "2022-01-31T09:00:14Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/0eeed159f137e1f709e190bb99237120f72992c0",
+    "details": {
+      "sha": "7eb39ba085cc95714699c10db5fdd690d9911a70",
+      "filename": "src/test/java/io/supertokens/test/emailpassword/api/ResetPasswordAPITest2_12.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 5,
+      "changes": 11,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/0eeed159f137e1f709e190bb99237120f72992c0/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Femailpassword%2Fapi%2FResetPasswordAPITest2_12.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/0eeed159f137e1f709e190bb99237120f72992c0/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Femailpassword%2Fapi%2FResetPasswordAPITest2_12.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Femailpassword%2Fapi%2FResetPasswordAPITest2_12.java?ref=0eeed159f137e1f709e190bb99237120f72992c0",
+      "patch": "@@ -29,7 +29,8 @@\n import org.junit.Test;\n import org.junit.rules.TestRule;\n \n-import static org.junit.Assert.*;\n+import static org.junit.Assert.assertEquals;\n+import static org.junit.Assert.assertNotNull;\n \n /*\n  * TODO:\n@@ -78,7 +79,7 @@ public void testGoodInput() throws Exception {\n \n         JsonObject response = HttpRequestForTesting.sendJsonPOSTRequest(process.getProcess(), \"\",\n                 \"http://localhost:3567/recipe/user/password/reset/token\", requestBody, 1000, 1000, null,\n-                Utils.getCdiVersion2_11ForTests(), \"emailpassword\");\n+                Utils.getCdiVersion2_12ForTests(), \"emailpassword\");\n \n         assertEquals(response.get(\"status\").getAsString(), \"OK\");\n         assertEquals(response.entrySet().size(), 2);\n@@ -92,7 +93,7 @@ public void testGoodInput() throws Exception {\n \n         JsonObject passwordResetResponse = HttpRequestForTesting.sendJsonPOSTRequest(process.getProcess(), \"\",\n                 \"http://localhost:3567/recipe/user/password/reset\", resetPasswordBody, 1000, 1000, null,\n-                Utils.getCdiVersion2_11ForTests(), \"emailpassword\");\n+                Utils.getCdiVersion2_12ForTests(), \"emailpassword\");\n         assertEquals(passwordResetResponse.get(\"status\").getAsString(), \"OK\");\n         assertEquals(passwordResetResponse.get(\"userId\").getAsString(), userId);\n         assertEquals(passwordResetResponse.entrySet().size(), 2);\n@@ -103,7 +104,7 @@ public void testGoodInput() throws Exception {\n \n         response = HttpRequestForTesting.sendJsonPOSTRequest(process.getProcess(), \"\",\n                 \"http://localhost:3567/recipe/signin\", signInRequestBody, 1000, 1000, null,\n-                Utils.getCdiVersion2_11ForTests(), \"emailpassword\");\n+                Utils.getCdiVersion2_12ForTests(), \"emailpassword\");\n \n         assertEquals(response.get(\"status\").getAsString(), \"WRONG_CREDENTIALS_ERROR\");\n         assertEquals(response.entrySet().size(), 1);\n@@ -114,7 +115,7 @@ public void testGoodInput() throws Exception {\n \n         response = HttpRequestForTesting.sendJsonPOSTRequest(process.getProcess(), \"\",\n                 \"http://localhost:3567/recipe/signin\", signInRequestBody, 1000, 1000, null,\n-                Utils.getCdiVersion2_11ForTests(), \"emailpassword\");\n+                Utils.getCdiVersion2_12ForTests(), \"emailpassword\");\n \n         assertEquals(response.get(\"status\").getAsString(), \"OK\");\n         assertEquals(response.entrySet().size(), 2);",
+      "parent_sha": "60cc5acb0eb86cde7c0599aef313f6ea09a8df44"
+    }
+  },
+  {
+    "oid": "541e2e4a0cf3e42dcd45c0f492dae48413634dcc",
+    "message": "fix: typo",
+    "date": "2024-10-10T10:54:35Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/541e2e4a0cf3e42dcd45c0f492dae48413634dcc",
+    "details": {
+      "sha": "0a3e603893338c22f2dabc1f68c4b71a126b5083",
+      "filename": "src/main/java/io/supertokens/webserver/api/oauth/OAuthTokenIntrospectAPI.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/541e2e4a0cf3e42dcd45c0f492dae48413634dcc/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Foauth%2FOAuthTokenIntrospectAPI.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/541e2e4a0cf3e42dcd45c0f492dae48413634dcc/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Foauth%2FOAuthTokenIntrospectAPI.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Foauth%2FOAuthTokenIntrospectAPI.java?ref=541e2e4a0cf3e42dcd45c0f492dae48413634dcc",
+      "patch": "@@ -66,7 +66,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws I\n                 AppIdentifier appIdentifier = getAppIdentifier(req);\n                 Storage storage = enforcePublicTenantAndGetPublicTenantStorage(req);\n \n-                token = OAuth.getOAuthProviderRefreshToken(main, null, null, token)\n+                token = OAuth.getOAuthProviderRefreshToken(main, null, null, token);\n                 formFields.put(\"token\", token);\n \n                 HttpRequestForOry.Response response = OAuthProxyHelper.proxyFormPOST(\n@@ -94,7 +94,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws I\n                     finalResponse.addProperty(\"status\", \"OK\");\n                     super.sendJsonResponse(200, finalResponse, resp);\n                 }\n-            } catch (IOException | TenantOrAppNotFoundException | BadPermissionException e) {\n+            } catch (IOException | StorageQueryException | TenantOrAppNotFoundException | BadPermissionException e) {\n                 throw new ServletException(e);\n             }\n         } else {",
+      "parent_sha": "7ed8c3e1dad6589bdb212c30e8c7137fa457d09e"
+    }
+  },
+  {
+    "oid": "b7d1c3c88724993fbf1df408c479a516ffaa03e6",
+    "message": "fix: test (#762)\n\n* fix: cud validation\r\n\r\n* fix: test",
+    "date": "2023-08-01T13:42:09Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/b7d1c3c88724993fbf1df408c479a516ffaa03e6",
+    "details": {
+      "sha": "8ca0855f14511cf862a09ce45ae0bc6a884a08a0",
+      "filename": "src/test/java/io/supertokens/test/multitenant/api/TestConnectionUriDomain.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/b7d1c3c88724993fbf1df408c479a516ffaa03e6/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fapi%2FTestConnectionUriDomain.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/b7d1c3c88724993fbf1df408c479a516ffaa03e6/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fapi%2FTestConnectionUriDomain.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fapi%2FTestConnectionUriDomain.java?ref=b7d1c3c88724993fbf1df408c479a516ffaa03e6",
+      "patch": "@@ -442,7 +442,7 @@ public void testDifferentValuesForCUDThatShouldNotWork() throws Exception {\n             return;\n         }\n \n-        String[] valueForCreate = new String[]{\"http://localhost_com\", \"localhost:\", \"abc.example.1com\", \"domain.com:abcd\"};\n+        String[] valueForCreate = new String[]{\"http://localhost_com\", \"localhost:\", \"domain.com:abcd\"};\n         for (int i = 0; i < valueForCreate.length; i++) {\n             try {\n                 JsonObject config = new JsonObject();",
+      "parent_sha": "40f676e89992cf350f141ef1b54c33403db3c23a"
+    }
+  },
+  {
+    "oid": "179ae237ff65b332dd9cb5fe830273a3072e4ae3",
+    "message": "fixes issue with checking CDI version in reset password API",
+    "date": "2022-01-31T10:11:34Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/179ae237ff65b332dd9cb5fe830273a3072e4ae3",
+    "details": {
+      "sha": "d5ea35e7872048f8a78af953de45a675dccfd030",
+      "filename": "src/main/java/io/supertokens/webserver/api/emailpassword/ResetPasswordAPI.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 1,
+      "changes": 5,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/179ae237ff65b332dd9cb5fe830273a3072e4ae3/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Femailpassword%2FResetPasswordAPI.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/179ae237ff65b332dd9cb5fe830273a3072e4ae3/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Femailpassword%2FResetPasswordAPI.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Fwebserver%2Fapi%2Femailpassword%2FResetPasswordAPI.java?ref=179ae237ff65b332dd9cb5fe830273a3072e4ae3",
+      "patch": "@@ -72,7 +72,10 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws I\n             JsonObject result = new JsonObject();\n             result.addProperty(\"status\", \"OK\");\n \n-            if (super.getVersionFromRequest(req).equals(\"2.12\")) {\n+            if (!(super.getVersionFromRequest(req).equals(\"2.7\") || super.getVersionFromRequest(req).equals(\"2.8\")\n+                    || super.getVersionFromRequest(req).equals(\"2.9\") || super.getVersionFromRequest(req).equals(\"2.10\")\n+                    || super.getVersionFromRequest(req).equals(\"2.11\"))) {\n+                // >= 2.12\n                 result.addProperty(\"userId\", userId);\n             }\n ",
+      "parent_sha": "613b4c5ea1eeabf146dbb1d5e912f11da03c2dea"
+    }
+  },
+  {
+    "oid": "4ba0a2308ded20105d547c7d5b51f0edbf508e45",
+    "message": "fix: tests",
+    "date": "2024-05-24T13:21:59Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/4ba0a2308ded20105d547c7d5b51f0edbf508e45",
+    "details": {
+      "sha": "86de35f5d0cacce5b5bedff93692199065f171e6",
+      "filename": "src/test/java/io/supertokens/test/multitenant/generator/GenerateThirdPartyConfig_ProviderClient.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 12,
+      "changes": 14,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/4ba0a2308ded20105d547c7d5b51f0edbf508e45/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fgenerator%2FGenerateThirdPartyConfig_ProviderClient.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/4ba0a2308ded20105d547c7d5b51f0edbf508e45/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fgenerator%2FGenerateThirdPartyConfig_ProviderClient.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fgenerator%2FGenerateThirdPartyConfig_ProviderClient.java?ref=4ba0a2308ded20105d547c7d5b51f0edbf508e45",
+      "patch": "@@ -192,26 +192,16 @@ private static ConfigGenerator.GeneratedValueAndExpectation generateForBoxy(bool\n                 );\n             } else {\n                 String EXPECTED_ERROR = \"a non empty string value must be specified for boxyURL in the additionalConfig for Boxy SAML provider\";\n-                int option = new Random().nextInt(5);\n+                int option = new Random().nextInt(3);\n                 switch (option) {\n                     case 0:\n-                        return new ConfigGenerator.GeneratedValueAndExpectation(\n-                                null,\n-                                new ConfigGenerator.Expectation(\"exception\", EXPECTED_ERROR)\n-                        );\n-                    case 1:\n-                        return new ConfigGenerator.GeneratedValueAndExpectation(\n-                                new JsonObject(),\n-                                new ConfigGenerator.Expectation(\"exception\", EXPECTED_ERROR)\n-                        );\n-                    case 2:\n                         JsonObject result = new JsonObject();\n                         result.add(\"boxyURL\", null);\n                         return new ConfigGenerator.GeneratedValueAndExpectation(\n                                 result,\n                                 new ConfigGenerator.Expectation(\"exception\", EXPECTED_ERROR)\n                         );\n-                    case 3:\n+                    case 1:\n                         result = new JsonObject();\n                         result.add(\"boxyURL\", new JsonPrimitive(\"\"));\n                         return new ConfigGenerator.GeneratedValueAndExpectation(",
+      "parent_sha": "c4ab7e7ee5c431d9e510e39bdcc4cdaf5a300756"
+    }
+  },
+  {
+    "oid": "12ff85bc73801901e15d52e4011fc8dbc0f70fb7",
+    "message": "fix: increased timeout for tenant creation (#707)",
+    "date": "2023-06-07T14:39:03Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/12ff85bc73801901e15d52e4011fc8dbc0f70fb7",
+    "details": {
+      "sha": "be2ae56a6460118a9e0800a3df9b9973ca9e4b62",
+      "filename": "src/test/java/io/supertokens/test/multitenant/api/TestMultitenancyAPIHelper.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 8,
+      "changes": 16,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/12ff85bc73801901e15d52e4011fc8dbc0f70fb7/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fapi%2FTestMultitenancyAPIHelper.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/12ff85bc73801901e15d52e4011fc8dbc0f70fb7/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fapi%2FTestMultitenancyAPIHelper.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Fmultitenant%2Fapi%2FTestMultitenancyAPIHelper.java?ref=12ff85bc73801901e15d52e4011fc8dbc0f70fb7",
+      "patch": "@@ -46,7 +46,7 @@ public static void createConnectionUriDomain(Main main, TenantIdentifier sourceT\n \n         JsonObject response = HttpRequestForTesting.sendJsonPUTRequest(main, \"\",\n                 HttpRequestForTesting.getMultitenantUrl(sourceTenant, \"/recipe/multitenancy/connectionuridomain\"),\n-                requestBody, 1000, 1000, null,\n+                requestBody, 1000, 2500, null,\n                 SemVer.v3_0.get(), \"multitenancy\");\n \n         assertEquals(\"OK\", response.getAsJsonPrimitive(\"status\").getAsString());\n@@ -71,7 +71,7 @@ public static JsonObject deleteConnectionUriDomain(TenantIdentifier sourceTenant\n \n         JsonObject response = HttpRequestForTesting.sendJsonPOSTRequest(main, \"\",\n                 HttpRequestForTesting.getMultitenantUrl(sourceTenant, \"/recipe/multitenancy/connectionuridomain/remove\"),\n-                requestBody, 1000, 1000, null,\n+                requestBody, 1000, 2500, null,\n                 SemVer.v3_0.get(), \"multitenancy\");\n \n         assertEquals(\"OK\", response.getAsJsonPrimitive(\"status\").getAsString());\n@@ -90,7 +90,7 @@ public static void createApp(Main main, TenantIdentifier sourceTenant, String ap\n \n         JsonObject response = HttpRequestForTesting.sendJsonPUTRequest(main, \"\",\n                 HttpRequestForTesting.getMultitenantUrl(sourceTenant, \"/recipe/multitenancy/app\"),\n-                requestBody, 1000, 1000, null,\n+                requestBody, 1000, 2500, null,\n                 SemVer.v3_0.get(), \"multitenancy\");\n \n         assertEquals(\"OK\", response.getAsJsonPrimitive(\"status\").getAsString());\n@@ -114,7 +114,7 @@ public static JsonObject deleteApp(TenantIdentifier sourceTenant, String appId,\n \n         JsonObject response = HttpRequestForTesting.sendJsonPOSTRequest(main, \"\",\n                 HttpRequestForTesting.getMultitenantUrl(sourceTenant, \"/recipe/multitenancy/app/remove\"),\n-                requestBody, 1000, 1000, null,\n+                requestBody, 1000, 2500, null,\n                 SemVer.v3_0.get(), \"multitenancy\");\n \n         assertEquals(\"OK\", response.getAsJsonPrimitive(\"status\").getAsString());\n@@ -133,7 +133,7 @@ public static void createTenant(Main main, TenantIdentifier sourceTenant, String\n \n         JsonObject response = HttpRequestForTesting.sendJsonPUTRequest(main, \"\",\n                 HttpRequestForTesting.getMultitenantUrl(sourceTenant, \"/recipe/multitenancy/tenant\"),\n-                requestBody, 1000, 1000, null,\n+                requestBody, 1000, 2500, null,\n                 SemVer.v3_0.get(), \"multitenancy\");\n \n         assertEquals(\"OK\", response.getAsJsonPrimitive(\"status\").getAsString());\n@@ -157,7 +157,7 @@ public static JsonObject deleteTenant(TenantIdentifier sourceTenant, String tena\n \n         JsonObject response = HttpRequestForTesting.sendJsonPOSTRequest(main, \"\",\n                 HttpRequestForTesting.getMultitenantUrl(sourceTenant, \"/recipe/multitenancy/tenant/remove\"),\n-                requestBody, 1000, 1000, null,\n+                requestBody, 1000, 2500, null,\n                 SemVer.v3_0.get(), \"multitenancy\");\n \n         assertEquals(\"OK\", response.getAsJsonPrimitive(\"status\").getAsString());\n@@ -210,7 +210,7 @@ public static JsonObject addOrUpdateThirdPartyProviderConfig(TenantIdentifier te\n \n         JsonObject response = HttpRequestForTesting.sendJsonPUTRequest(main, \"\",\n                 HttpRequestForTesting.getMultitenantUrl(tenantIdentifier, \"/recipe/multitenancy/config/thirdparty\"),\n-                requestBody, 1000, 1000, null,\n+                requestBody, 1000, 2500, null,\n                 SemVer.v3_0.get(), \"multitenancy\");\n \n         assertEquals(\"OK\", response.getAsJsonPrimitive(\"status\").getAsString());\n@@ -224,7 +224,7 @@ public static JsonObject deleteThirdPartyProvider(TenantIdentifier tenantIdentif\n \n         JsonObject response = HttpRequestForTesting.sendJsonPOSTRequest(main, \"\",\n                 HttpRequestForTesting.getMultitenantUrl(tenantIdentifier, \"/recipe/multitenancy/config/thirdparty/remove\"),\n-                requestBody, 1000, 1000, null,\n+                requestBody, 1000, 2500, null,\n                 SemVer.v3_0.get(), \"multitenancy\");\n \n         assertEquals(\"OK\", response.getAsJsonPrimitive(\"status\").getAsString());",
+      "parent_sha": "71fcdb7fa76a3264388df4cc73389cede9148b5c"
+    }
+  },
+  {
+    "oid": "4b955265b0c4cd63785f4f652efcb3504417bc8f",
+    "message": "adds a test for changibng pool size of firebase hashing",
+    "date": "2022-09-19T15:21:41Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/4b955265b0c4cd63785f4f652efcb3504417bc8f",
+    "details": {
+      "sha": "564736df866960aec2280f22f24dc610927cb67d",
+      "filename": "src/test/java/io/supertokens/test/emailpassword/PasswordHashingTest.java",
+      "status": "modified",
+      "additions": 86,
+      "deletions": 2,
+      "changes": 88,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/4b955265b0c4cd63785f4f652efcb3504417bc8f/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Femailpassword%2FPasswordHashingTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/4b955265b0c4cd63785f4f652efcb3504417bc8f/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Femailpassword%2FPasswordHashingTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Femailpassword%2FPasswordHashingTest.java?ref=4b955265b0c4cd63785f4f652efcb3504417bc8f",
+      "patch": "@@ -79,7 +79,8 @@ public void importUserWithFireBaseSCrypt() throws Exception {\n         String email = \"test@example.com\";\n         String password = \"testPass123\";\n         String salt = \"/cj0jC1br5o4+w==\";\n-        String passwordHash = \"qZM035es5AXYqavsKD6/rhtxg7t5PhcyRgv5blc3doYbChX8keMfQLq1ra96O2Pf2TP/eZrR5xtPCYN6mX3ESA==\";\n+        String passwordHash = \"qZM035es5AXYqavsKD6/rhtxg7t5PhcyRgv5blc3doYbChX8keMfQLq1ra96O2Pf2TP/eZrR5xtPCYN6mX3ESA\"\n+                + \"==\";\n         String combinedPasswordHash = \"$\" + ParsedFirebaseSCryptResponse.FIREBASE_SCRYPT_PREFIX + \"$\" + passwordHash\n                 + \"$\" + salt + \"$m=\" + firebaseMemCost + \"$r=\" + firebaseRounds + \"$s=\" + firebaseSaltSeparator;\n \n@@ -694,7 +695,8 @@ public void parallelImportUserSignInFirebaseScrypt() throws Exception {\n \n         String password = \"testPass123\";\n         String salt = \"/cj0jC1br5o4+w==\";\n-        String passwordHash = \"qZM035es5AXYqavsKD6/rhtxg7t5PhcyRgv5blc3doYbChX8keMfQLq1ra96O2Pf2TP/eZrR5xtPCYN6mX3ESA==\";\n+        String passwordHash = \"qZM035es5AXYqavsKD6/rhtxg7t5PhcyRgv5blc3doYbChX8keMfQLq1ra96O2Pf2TP/eZrR5xtPCYN6mX3ESA\"\n+                + \"==\";\n         String combinedPasswordHash = \"$\" + ParsedFirebaseSCryptResponse.FIREBASE_SCRYPT_PREFIX + \"$\" + passwordHash\n                 + \"$\" + salt + \"$m=\" + firebaseMemCost + \"$r=\" + firebaseRounds + \"$s=\" + firebaseSaltSeparator;\n \n@@ -751,6 +753,88 @@ public void parallelImportUserSignInFirebaseScrypt() throws Exception {\n         assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STOPPED));\n     }\n \n+    @Test\n+    public void parallelImportUserSignInFirebaseScryptWithPoolSize4() throws Exception {\n+        String[] args = { \"../\" };\n+\n+        Utils.setValueInConfig(\"firebase_password_hashing_signer_key\",\n+                \"gRhC3eDeQOdyEn4bMd9c6kxguWVmcIVq/SKa0JDPFeM6TcEevkaW56sIWfx88OHbJKnCXdWscZx0l2WbCJ1wbg==\");\n+        Utils.setValueInConfig(\"firebase_password_hashing_pool_size\", \"4\");\n+\n+        TestingProcessManager.TestingProcess process = TestingProcessManager.start(args);\n+        assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STARTED));\n+\n+        if (StorageLayer.getStorage(process.getProcess()).getType() != STORAGE_TYPE.SQL\n+                || StorageLayer.getStorage(process.getProcess()) instanceof Start) {\n+            // if this is in mem, we do not want to run this test as sqlite locks the entire table and throws\n+            // error in the threads below.\n+            return;\n+        }\n+\n+        int firebaseMemCost = 14;\n+        int firebaseRounds = 8;\n+        String firebaseSaltSeparator = \"Bw==\";\n+\n+        String password = \"testPass123\";\n+        String salt = \"/cj0jC1br5o4+w==\";\n+        String passwordHash = \"qZM035es5AXYqavsKD6/rhtxg7t5PhcyRgv5blc3doYbChX8keMfQLq1ra96O2Pf2TP/eZrR5xtPCYN6mX3ESA\"\n+                + \"==\";\n+        String combinedPasswordHash = \"$\" + ParsedFirebaseSCryptResponse.FIREBASE_SCRYPT_PREFIX + \"$\" + passwordHash\n+                + \"$\" + salt + \"$m=\" + firebaseMemCost + \"$r=\" + firebaseRounds + \"$s=\" + firebaseSaltSeparator;\n+\n+        AtomicInteger counter = new AtomicInteger(0);\n+        assert (Config.getConfig(process.getProcess()).getFirebaseSCryptPasswordHashingPoolSize() == 4);\n+        assert (PasswordHashing.getInstance(process.getProcess()).getFirebaseSCryptBlockedQueueSize() == 0);\n+        AtomicBoolean reachedQueueMaxSize = new AtomicBoolean(false);\n+\n+        ExecutorService ex = Executors.newFixedThreadPool(1000);\n+        int numberOfThreads = 500;\n+        for (int i = 0; i < numberOfThreads; i++) {\n+            int finalI = i;\n+            ex.execute(() -> {\n+                int localCounter = 0;\n+                while (true) {\n+                    String uniqueEmail = \"test@example.com\" + finalI + \"\" + localCounter;\n+                    localCounter++;\n+                    try {\n+\n+                        EmailPassword.importUserWithPasswordHash(process.main, uniqueEmail, combinedPasswordHash,\n+                                CoreConfig.PASSWORD_HASHING_ALG.FIREBASE_SCRYPT);\n+                        // try signing in\n+                        UserInfo user = EmailPassword.signIn(process.main, uniqueEmail, password);\n+                        assertEquals(user.passwordHash, combinedPasswordHash);\n+                        assertNotNull(process\n+                                .checkOrWaitForEvent(ProcessState.PROCESS_STATE.PASSWORD_VERIFY_FIREBASE_SCRYPT));\n+                        int queueSize = PasswordHashing.getInstance(process.getProcess())\n+                                .getFirebaseSCryptBlockedQueueSize();\n+                        int maxQueueSize = Config.getConfig(process.getProcess())\n+                                .getFirebaseSCryptPasswordHashingPoolSize();\n+                        assert (queueSize <= maxQueueSize);\n+                        if (queueSize == maxQueueSize || queueSize + 1 == maxQueueSize) {\n+                            reachedQueueMaxSize.set(true);\n+                        }\n+                        counter.incrementAndGet();\n+                        break;\n+                    } catch (StorageQueryException e) {\n+                        // we try again as this may happen cause of connection timeout in db layer.\n+                    } catch (Exception ignored) {\n+                        break;\n+                    }\n+                }\n+            });\n+        }\n+\n+        ex.shutdown();\n+\n+        ex.awaitTermination(2, TimeUnit.MINUTES);\n+\n+        assert (counter.get() == numberOfThreads);\n+        assert (reachedQueueMaxSize.get());\n+\n+        process.kill();\n+        assertNotNull(process.checkOrWaitForEvent(ProcessState.PROCESS_STATE.STOPPED));\n+    }\n+\n     @Test\n     public void parallelSignUpSignIn() throws Exception {\n         String[] args = { \"../\" };",
+      "parent_sha": "aff18f5e4627ca61a79819a9b7c1c831d89bd691"
+    }
+  },
+  {
+    "oid": "95614247778e3139bdd4c8a15a9dca86a03d5a20",
+    "message": "fix: resolving leftover TODO",
+    "date": "2025-03-20T13:11:53Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/95614247778e3139bdd4c8a15a9dca86a03d5a20",
+    "details": {
+      "sha": "7afb13668fbaa9fd6d429e278c7a611e0d8d3594",
+      "filename": "src/main/java/io/supertokens/authRecipe/AuthRecipe.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 7,
+      "changes": 14,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/95614247778e3139bdd4c8a15a9dca86a03d5a20/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FauthRecipe%2FAuthRecipe.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/95614247778e3139bdd4c8a15a9dca86a03d5a20/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FauthRecipe%2FAuthRecipe.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2FauthRecipe%2FAuthRecipe.java?ref=95614247778e3139bdd4c8a15a9dca86a03d5a20",
+      "patch": "@@ -185,16 +185,16 @@ public static class CanLinkAccountsBulkResult {\n         public String recipeUserId;\n         public String primaryUserId;\n         public Exception error;\n-        public BulkImportUser authRecipeUserInfo;\n+        public BulkImportUser bulkImportUser;\n         public boolean alreadyLinked;\n \n         public CanLinkAccountsBulkResult(String recipeUserId, String primaryUserId, boolean alreadyLinked, Exception error,\n-                                         BulkImportUser authRecipeUserInfo) {\n+                                         BulkImportUser bulkImportUser) {\n             this.recipeUserId = recipeUserId;\n             this.primaryUserId = primaryUserId;\n             this.alreadyLinked = alreadyLinked;\n             this.error = error;\n-            this.authRecipeUserInfo = authRecipeUserInfo;\n+            this.bulkImportUser = bulkImportUser;\n         }\n     }\n \n@@ -337,7 +337,7 @@ private static List<CanLinkAccountsBulkResult> canLinkMultipleAccountsHelperForB\n                                     currLoginMethod, primaryUserId, allUsersWithExtraData);\n                         }\n \n-                        results.add(new CanLinkAccountsBulkResult(recipeUserId, primaryUserId, false, null, null)); //TODO: last one should not be null\n+                        results.add(new CanLinkAccountsBulkResult(recipeUserId, primaryUserId, false, null, currentPrimaryUser));\n \n                     } catch (AccountInfoAlreadyAssociatedWithAnotherPrimaryUserIdException exception) {\n                         results.add(new CanLinkAccountsBulkResult(recipeUserId, primaryUserId, false, exception, null));\n@@ -594,7 +594,7 @@ public static void linkMultipleAccountsForBulkImport(Main main, AppIdentifier ap\n         Map<String, Exception> errorByUserId = new HashMap<>();\n         try {\n \n-            List<LinkAccountsBulkResult> linkAccountsResults = authRecipeStorage.startTransaction(con -> {\n+            authRecipeStorage.startTransaction(con -> {\n                 List<CanLinkAccountsBulkResult> canLinkAccounts = canLinkMultipleAccountsHelperForBulkImport(con, appIdentifier,\n                         authRecipeStorage, users, usersWithSameExtraData);\n                 List<LinkAccountsBulkResult> results = new ArrayList<>();\n@@ -603,10 +603,10 @@ public static void linkMultipleAccountsForBulkImport(Main main, AppIdentifier ap\n                     for(CanLinkAccountsBulkResult canLinkAccountsBulkResult : canLinkAccounts) {\n                         if (canLinkAccountsBulkResult.alreadyLinked) {\n                             results.add(new LinkAccountsBulkResult(\n-                                    canLinkAccountsBulkResult.authRecipeUserInfo, true, null));\n+                                    canLinkAccountsBulkResult.bulkImportUser, true, null));\n                         } else if(canLinkAccountsBulkResult.error != null) {\n                             results.add(new LinkAccountsBulkResult(\n-                                    canLinkAccountsBulkResult.authRecipeUserInfo, false, canLinkAccountsBulkResult.error)); // preparing to return the error\n+                                    canLinkAccountsBulkResult.bulkImportUser, false, canLinkAccountsBulkResult.error)); // preparing to return the error\n                             errorByUserId.put(canLinkAccountsBulkResult.recipeUserId, canLinkAccountsBulkResult.error);\n                         } else {\n                             recipeUserByPrimaryUserNeedsLinking.put(canLinkAccountsBulkResult.recipeUserId, canLinkAccountsBulkResult.primaryUserId);",
+      "parent_sha": "89f38fd7ff37b6a0d26807ebffdb13738b339dd4"
+    }
+  },
+  {
+    "oid": "d7fab0cd9283382eb311f463971013b30c3eb187",
+    "message": "feat: make deep-links work",
+    "date": "2024-10-29T01:48:11Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/d7fab0cd9283382eb311f463971013b30c3eb187",
+    "details": {
+      "sha": "0ffa38a7e09ca9d8799b6333296968be3a71d76d",
+      "filename": "src/main/java/io/supertokens/oauth/Transformations.java",
+      "status": "modified",
+      "additions": 36,
+      "deletions": 45,
+      "changes": 81,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/d7fab0cd9283382eb311f463971013b30c3eb187/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Foauth%2FTransformations.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/d7fab0cd9283382eb311f463971013b30c3eb187/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Foauth%2FTransformations.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Fmain%2Fjava%2Fio%2Fsupertokens%2Foauth%2FTransformations.java?ref=d7fab0cd9283382eb311f463971013b30c3eb187",
+      "patch": "@@ -68,24 +68,23 @@ public static Map<String, String> transformRequestHeadersForHydra(Map<String, St\n     }\n \n     private static String transformQueryParamsInURLFromHydra(String redirectTo) {\n-        try {\n-            URL url = new URL(redirectTo);\n-            String query = url.getQuery();\n-            if (query != null) {\n-                String[] queryParams = query.split(\"&\");\n-                StringBuilder updatedQuery = new StringBuilder();\n-                for (String param : queryParams) {\n-                    String[] keyValue = param.split(\"=\");\n-                    if (keyValue.length > 1 && keyValue[1].startsWith(\"ory_\")) {\n-                        updatedQuery.append(keyValue[0]).append(\"=\").append(keyValue[1].replaceFirst(\"ory_\", \"st_\")).append(\"&\");\n-                    } else {\n-                        updatedQuery.append(param).append(\"&\");\n-                    }\n+        if (!redirectTo.contains(\"?\")) {\n+            return redirectTo;\n+        }\n+\n+        String query = redirectTo.split(\"\\\\?\")[1];\n+        if (query != null) {\n+            String[] queryParams = query.split(\"&\");\n+            StringBuilder updatedQuery = new StringBuilder();\n+            for (String param : queryParams) {\n+                String[] keyValue = param.split(\"=\");\n+                if (keyValue.length > 1 && keyValue[1].startsWith(\"ory_\")) {\n+                    updatedQuery.append(keyValue[0]).append(\"=\").append(keyValue[1].replaceFirst(\"ory_\", \"st_\")).append(\"&\");\n+                } else {\n+                    updatedQuery.append(param).append(\"&\");\n                 }\n-                redirectTo = redirectTo.replace(\"?\" + query, \"?\" + updatedQuery.toString().trim());\n             }\n-        } catch (MalformedURLException e) {\n-            throw new IllegalStateException(e);\n+            redirectTo = redirectTo.replace(\"?\" + query, \"?\" + updatedQuery.toString().trim());\n         }\n \n         return redirectTo;\n@@ -153,37 +152,29 @@ private static String transformRedirectUrlFromHydra(Main main, AppIdentifier app\n         if (!redirectTo.startsWith(\"/\")) {\n             redirectTo = transformQueryParamsInURLFromHydra(redirectTo);\n \n-            try {\n-                if (Utils.containsUrl(redirectTo, hydraInternalAddress, true)) {\n-                    try {\n-                        URL url = new URL(redirectTo);\n-                        String query = url.getQuery();\n-                        Map<String, String> urlQueryParams = new HashMap<>();\n-                        if (query != null) {\n-                            String[] pairs = query.split(\"&\");\n-                            for (String pair : pairs) {\n-                                int idx = pair.indexOf(\"=\");\n-                                urlQueryParams.put(pair.substring(0, idx), URLDecoder.decode(pair.substring(idx + 1), StandardCharsets.UTF_8));\n-                            }\n-                        }\n-                        String error = urlQueryParams.getOrDefault(\"error\", null);\n-                        String errorDescription = urlQueryParams.getOrDefault(\"error_description\", null);\n-                        if (error != null) {\n-                            throw new OAuthAPIException(error, errorDescription, 400);\n-                        }\n-                        redirectTo = redirectTo.replace(hydraInternalAddress, \"{apiDomain}\");\n-\n-                        // path to hydra starts with /oauth2 while on the SDK it would be /oauth\n-                        redirectTo = redirectTo.replace(\"oauth2/\", \"oauth/\");\n-\n-                    } catch (MalformedURLException e) {\n-                        throw new IllegalStateException(e);\n+            // We do not use the containsURL util to compare these because redirectTo can be a deep link\n+            // Also, we do not mind comparison to internal addresses being strict comparisons\n+            if (redirectTo.startsWith(hydraInternalAddress)) {\n+                String query = redirectTo.contains(\"?\") ? redirectTo.split(\"\\\\?\")[1] : null;\n+                Map<String, String> urlQueryParams = new HashMap<>();\n+                if (query != null) {\n+                    String[] pairs = query.split(\"&\");\n+                    for (String pair : pairs) {\n+                        int idx = pair.indexOf(\"=\");\n+                        urlQueryParams.put(pair.substring(0, idx), URLDecoder.decode(pair.substring(idx + 1), StandardCharsets.UTF_8));\n                     }\n-                } else if (Utils.containsUrl(redirectTo, hydraBaseUrlForConsentAndLogin, true)) {\n-                    redirectTo = redirectTo.replace(hydraBaseUrlForConsentAndLogin, \"{apiDomain}\");\n                 }\n-            } catch (MalformedURLException e) {\n-                throw new IllegalStateException(e);\n+                String error = urlQueryParams.getOrDefault(\"error\", null);\n+                String errorDescription = urlQueryParams.getOrDefault(\"error_description\", null);\n+                if (error != null) {\n+                    throw new OAuthAPIException(error, errorDescription, 400);\n+                }\n+                redirectTo = redirectTo.replace(hydraInternalAddress, \"{apiDomain}\");\n+\n+                // path to hydra starts with /oauth2 while on the SDK it would be /oauth\n+                redirectTo = redirectTo.replace(\"oauth2/\", \"oauth/\");\n+            } else if (redirectTo.startsWith(hydraBaseUrlForConsentAndLogin)) {\n+                redirectTo = redirectTo.replace(hydraBaseUrlForConsentAndLogin, \"{apiDomain}\");\n             }\n         }\n ",
+      "parent_sha": "4fa696827c9231c46a0ba2d2954788e4470d5cb1"
+    }
+  },
+  {
+    "oid": "6c91bad81d1a8edcc6b2fae91446d8a7734d13c4",
+    "message": "fixes tests",
+    "date": "2023-05-04T14:50:13Z",
+    "url": "https://github.com/supertokens/supertokens-core/commit/6c91bad81d1a8edcc6b2fae91446d8a7734d13c4",
+    "details": {
+      "sha": "aed071703368305b7f9bd06e1d05923b1dca5693",
+      "filename": "src/test/java/io/supertokens/test/totp/TOTPRecipeTest.java",
+      "status": "modified",
+      "additions": 14,
+      "deletions": 4,
+      "changes": 18,
+      "blob_url": "https://github.com/supertokens/supertokens-core/blob/6c91bad81d1a8edcc6b2fae91446d8a7734d13c4/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2FTOTPRecipeTest.java",
+      "raw_url": "https://github.com/supertokens/supertokens-core/raw/6c91bad81d1a8edcc6b2fae91446d8a7734d13c4/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2FTOTPRecipeTest.java",
+      "contents_url": "https://api.github.com/repos/supertokens/supertokens-core/contents/src%2Ftest%2Fjava%2Fio%2Fsupertokens%2Ftest%2Ftotp%2FTOTPRecipeTest.java?ref=6c91bad81d1a8edcc6b2fae91446d8a7734d13c4",
+      "patch": "@@ -54,6 +54,7 @@\n import java.security.Key;\n import java.time.Duration;\n import java.time.Instant;\n+import java.util.Objects;\n \n import static org.junit.Assert.assertNotNull;\n import static org.junit.Assert.assertThrows;\n@@ -145,7 +146,7 @@ public void createDeviceTest() throws Exception {\n \n         // Create device\n         TOTPDevice device = Totp.registerDevice(main, \"user\", \"device1\", 1, 30);\n-        assert device.secretKey != \"\";\n+        assert !Objects.equals(device.secretKey, \"\");\n \n         // Create same device again (should fail)\n         assertThrows(DeviceAlreadyExistsException.class,\n@@ -213,7 +214,7 @@ public void createDeviceAndVerifyCodeTest() throws Exception {\n \n         // Create device with skew = 0, check that it only works with the current code\n         TOTPDevice device2 = Totp.registerDevice(main, \"user\", \"device2\", 0, 1);\n-        assert device2.secretKey != device.secretKey;\n+        assert !Objects.equals(device2.secretKey, device.secretKey);\n \n         String nextValidCode2 = generateTotpCode(main, device2, 1);\n         assertThrows(InvalidTotpException.class,\n@@ -233,8 +234,12 @@ public void createDeviceAndVerifyCodeTest() throws Exception {\n \n         TOTPUsedCode[] usedCodes = getAllUsedCodesUtil(result.storage, \"user\");\n         TOTPUsedCode latestCode = usedCodes[0];\n-        assert latestCode.isValid == false;\n-        assert latestCode.expiryTime - latestCode.createdTime == 3000; // it should be 3s because of device1 (i.e. max(device1Exp, device2Exp))\n+        assert !latestCode.isValid;\n+        assert latestCode.expiryTime - latestCode.createdTime ==\n+                3000; // it should be 3s because of device1 (i.e. max(device1Exp, device2Exp))\n+\n+        // Sleep for 1s so that code changes.\n+        Thread.sleep(1000);\n \n         // Now verify device2:\n         Totp.verifyDevice(main, \"user\", device2.deviceName, generateTotpCode(main, device2));\n@@ -244,10 +249,15 @@ public void createDeviceAndVerifyCodeTest() throws Exception {\n         assertThrows(\n                 InvalidTotpException.class,\n                 () -> Totp.verifyCode(main, \"user\", generateTotpCode(main, device), false));\n+\n+        Thread.sleep(1000);\n+\n         Totp.verifyCode(main, \"user\", generateTotpCode(main, device2), false);\n \n         // Valid code & allowUnverifiedDevice = true:\n+        Thread.sleep(1000);\n         Totp.verifyCode(main, \"user\", generateTotpCode(main, device), true);\n+        Thread.sleep(1000);\n         Totp.verifyCode(main, \"user\", generateTotpCode(main, device2), true);\n     }\n ",
+      "parent_sha": "26ae9b6ad7872c99681aa046cc6c1cde52fbcd25"
+    }
+  }
+]

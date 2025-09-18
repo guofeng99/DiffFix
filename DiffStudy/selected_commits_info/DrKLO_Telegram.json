@@ -1,0 +1,287 @@
+[
+  {
+    "oid": "5ddd8a094071f9288f338913c67a1c443f6061a9",
+    "message": "Bug fixes",
+    "date": "2014-10-28T21:27:44Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/5ddd8a094071f9288f338913c67a1c443f6061a9",
+    "details": {
+      "sha": "dff83aff0b11995707a86394701b952a7641ec7f",
+      "filename": "TMessagesProj/src/main/java/org/telegram/android/MessagesController.java",
+      "status": "modified",
+      "additions": 30,
+      "deletions": 31,
+      "changes": 61,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/5ddd8a094071f9288f338913c67a1c443f6061a9/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2FMessagesController.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/5ddd8a094071f9288f338913c67a1c443f6061a9/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2FMessagesController.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2FMessagesController.java?ref=5ddd8a094071f9288f338913c67a1c443f6061a9",
+      "patch": "@@ -2513,9 +2513,11 @@ public void run() {\n                                     if (!res.new_messages.isEmpty() || !res.new_encrypted_messages.isEmpty()) {\n                                         final HashMap<Long, ArrayList<MessageObject>> messages = new HashMap<Long, ArrayList<MessageObject>>();\n                                         for (TLRPC.EncryptedMessage encryptedMessage : res.new_encrypted_messages) {\n-                                            TLRPC.Message message = decryptMessage(encryptedMessage);\n-                                            if (message != null) {\n-                                                res.new_messages.add(message);\n+                                            ArrayList<TLRPC.Message> decryptedMessages = decryptMessage(encryptedMessage);\n+                                            if (decryptedMessages != null && !decryptedMessages.isEmpty()) {\n+                                                for (TLRPC.Message message : decryptedMessages) {\n+                                                    res.new_messages.add(message);\n+                                                }\n                                             }\n                                         }\n \n@@ -3063,19 +3065,21 @@ public void run() {\n                 //DEPRECATED\n             } else if (update instanceof TLRPC.TL_updateNewEncryptedMessage) {\n                 MessagesStorage.lastQtsValue = update.qts;\n-                TLRPC.Message message = decryptMessage(((TLRPC.TL_updateNewEncryptedMessage)update).message);\n-                if (message != null) {\n+                ArrayList<TLRPC.Message> decryptedMessages = decryptMessage(((TLRPC.TL_updateNewEncryptedMessage)update).message);\n+                if (decryptedMessages != null && !decryptedMessages.isEmpty()) {\n                     int cid = ((TLRPC.TL_updateNewEncryptedMessage)update).message.chat_id;\n-                    messagesArr.add(message);\n-                    MessageObject obj = new MessageObject(message, usersDict, 2);\n-                    long uid = ((long)cid) << 32;\n+                    long uid = ((long) cid) << 32;\n                     ArrayList<MessageObject> arr = messages.get(uid);\n                     if (arr == null) {\n                         arr = new ArrayList<MessageObject>();\n                         messages.put(uid, arr);\n                     }\n-                    arr.add(obj);\n-                    pushMessages.add(obj);\n+                    for (TLRPC.Message message : decryptedMessages) {\n+                        messagesArr.add(message);\n+                        MessageObject obj = new MessageObject(message, usersDict, 2);\n+                        arr.add(obj);\n+                        pushMessages.add(obj);\n+                    }\n                 }\n             } else if (update instanceof TLRPC.TL_updateEncryptedChatTyping) {\n                 TLRPC.EncryptedChat encryptedChat = getEncryptedChatDB(update.chat_id);\n@@ -3809,60 +3813,49 @@ public void run() {\n         return null;\n     }\n \n-    public ArrayList<TLRPC.Message> checkSecretHoles(int enc_id) {\n-        ArrayList<TLRPC.TL_decryptedMessageHolder> holes = secretHolesQueue.get(enc_id);\n+    public void checkSecretHoles(TLRPC.EncryptedChat chat, ArrayList<TLRPC.Message> messages) {\n+        ArrayList<TLRPC.TL_decryptedMessageHolder> holes = secretHolesQueue.get(chat.id);\n         if (holes == null) {\n-            return null;\n-        }\n-        TLRPC.EncryptedChat chat = getEncryptedChatDB(enc_id);\n-        if (chat == null) {\n-            return null;\n+            return;\n         }\n         Collections.sort(holes, new Comparator<TLRPC.TL_decryptedMessageHolder>() {\n             @Override\n             public int compare(TLRPC.TL_decryptedMessageHolder lhs, TLRPC.TL_decryptedMessageHolder rhs) {\n-                if (lhs.layer.out_seq_no < rhs.layer.out_seq_no) {\n+                if (lhs.layer.out_seq_no > rhs.layer.out_seq_no) {\n                     return 1;\n-                } else if (lhs.layer.out_seq_no > rhs.layer.out_seq_no) {\n+                } else if (lhs.layer.out_seq_no < rhs.layer.out_seq_no) {\n                     return -1;\n                 }\n                 return 0;\n             }\n         });\n \n-        final ArrayList<TLRPC.Message> messagesArr = new ArrayList<TLRPC.Message>();\n-\n         boolean update = false;\n         for (int a = 0; a < holes.size(); a++) {\n             TLRPC.TL_decryptedMessageHolder holder = holes.get(a);\n-            if (holder.layer.out_seq_no == chat.seq_in || chat.seq_in != holder.layer.out_seq_no - 2) {\n+            if (holder.layer.out_seq_no == chat.seq_in || chat.seq_in == holder.layer.out_seq_no - 2) {\n                 chat.seq_in = holder.layer.out_seq_no;\n                 holes.remove(a);\n                 a--;\n                 update = true;\n \n                 TLRPC.Message message = processDecryptedObject(chat, holder.file, holder.date, holder.random_id, holder.layer.message);\n                 if (message != null) {\n-                    messagesArr.add(message);\n+                    messages.add(message);\n                 }\n             } else {\n                 break;\n             }\n         }\n-        if (!messagesArr.isEmpty()) {\n-            MessagesStorage.getInstance().putMessages(messagesArr, true, true, false, MediaController.getInstance().getAutodownloadMask());\n-        }\n         if (holes.isEmpty()) {\n-            secretHolesQueue.remove(enc_id);\n+            secretHolesQueue.remove(chat.id);\n         }\n         if (update) {\n             MessagesStorage.getInstance().updateEncryptedChatSeq(chat);\n-            return messagesArr;\n         }\n-        return null;\n     }\n \n-    public TLRPC.Message decryptMessage(TLRPC.EncryptedMessage message) {\n+    public ArrayList<TLRPC.Message> decryptMessage(TLRPC.EncryptedMessage message) {\n         final TLRPC.EncryptedChat chat = getEncryptedChatDB(message.chat_id);\n         if (chat == null || chat instanceof TLRPC.TL_encryptedChatDiscarded) {\n             return null;\n@@ -3928,7 +3921,13 @@ public void run() {\n                 MessagesStorage.getInstance().updateEncryptedChatSeq(chat);\n                 object = layer.message;\n             }\n-            return processDecryptedObject(chat, message.file, message.date, message.random_id, object);\n+            ArrayList<TLRPC.Message> messages = new ArrayList<TLRPC.Message>();\n+            TLRPC.Message decryptedMessage = processDecryptedObject(chat, message.file, message.date, message.random_id, object);\n+            if (decryptedMessage != null) {\n+                messages.add(decryptedMessage);\n+            }\n+            checkSecretHoles(chat, messages);\n+            return messages;\n         } else {\n             BuffersStorage.getInstance().reuseFreeBuffer(is);\n             FileLog.e(\"tmessages\", \"fingerprint mismatch\");",
+      "parent_sha": "a4af1fb2f7fb7eef97881cdee0573d71bde41cae"
+    }
+  },
+  {
+    "oid": "c1896e97c3c61128665c44cfbd73bc9ed6c9df51",
+    "message": "removed one more ActionBarActivity",
+    "date": "2014-06-04T00:24:06Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/c1896e97c3c61128665c44cfbd73bc9ed6c9df51",
+    "details": {
+      "sha": "33fb8927f2289e045af32007e7c25dce565922a5",
+      "filename": "TMessagesProj/src/main/java/org/telegram/ui/IntroActivity.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 4,
+      "changes": 7,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/c1896e97c3c61128665c44cfbd73bc9ed6c9df51/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FIntroActivity.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/c1896e97c3c61128665c44cfbd73bc9ed6c9df51/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FIntroActivity.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FIntroActivity.java?ref=c1896e97c3c61128665c44cfbd73bc9ed6c9df51",
+      "patch": "@@ -8,12 +8,12 @@\n \n package org.telegram.ui;\n \n+import android.app.Activity;\n import android.content.Intent;\n import android.os.Bundle;\n import android.os.Parcelable;\n import android.support.v4.view.PagerAdapter;\n import android.support.v4.view.ViewPager;\n-import android.support.v7.app.ActionBarActivity;\n import android.text.Html;\n import android.view.View;\n import android.view.ViewGroup;\n@@ -26,7 +26,7 @@\n import org.telegram.messenger.R;\n import org.telegram.messenger.Utilities;\n \n-public class IntroActivity extends ActionBarActivity {\n+public class IntroActivity extends Activity {\n     private ViewPager viewPager;\n     private ImageView topImage1;\n     private ImageView topImage2;\n@@ -40,6 +40,7 @@ public class IntroActivity extends ActionBarActivity {\n \n     @Override\n     protected void onCreate(Bundle savedInstanceState) {\n+        setTheme(R.style.Theme_TMessages);\n         super.onCreate(savedInstanceState);\n \n         setContentView(R.layout.intro_layout);\n@@ -202,8 +203,6 @@ public void onClick(View view) {\n         });\n \n         justCreated = true;\n-\n-        getSupportActionBar().hide();\n     }\n \n     @Override",
+      "parent_sha": "e657c4f01066790192a471002466190278bc91f2"
+    }
+  },
+  {
+    "oid": "2391a60adaec140031fb692f626f19b98829fa09",
+    "message": "Increase limit to linkify phone numbers from 100 to 200\n\n100 symbols is too few to make sending phone cards (not telegram users' cards, but any phone cards).",
+    "date": "2016-01-04T12:33:40Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/2391a60adaec140031fb692f626f19b98829fa09",
+    "details": {
+      "sha": "e43992a39a48c8ad6d4b3132b22025e30290256e",
+      "filename": "TMessagesProj/src/main/java/org/telegram/messenger/MessageObject.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/2391a60adaec140031fb692f626f19b98829fa09/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FMessageObject.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/2391a60adaec140031fb692f626f19b98829fa09/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FMessageObject.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FMessageObject.java?ref=2391a60adaec140031fb692f626f19b98829fa09",
+      "patch": "@@ -782,7 +782,7 @@ public static void addLinks(CharSequence messageText) {\n \n     public static void addLinks(CharSequence messageText, boolean botCommands) {\n         if (messageText instanceof Spannable && containsUrls(messageText)) {\n-            if (messageText.length() < 100) {\n+            if (messageText.length() < 200) {\n                 try {\n                     Linkify.addLinks((Spannable) messageText, Linkify.WEB_URLS | Linkify.PHONE_NUMBERS);\n                 } catch (Exception e) {",
+      "parent_sha": "6033ee2f5c48bb00879eab6d6d67ae5b516ff4a2"
+    }
+  },
+  {
+    "oid": "b8f17ead8fa8940718ecfa54dba50fbe530fc1dc",
+    "message": "Notification shortcut update\n\nRemove notification shortcuts after notification is sent as per 3rd item under https://github.com/android/user-interface-samples/tree/master/People#shortcuts, to allow shortcuts to be cached.\r\n\r\nQ: Will my shortcuts appear in the long press app launcher context menu?\r\nA: They can depending on their rank, but if you prefer not having shortcuts appear on launcher you can remove the shortcut with ShortcutManager#removeDynamicShortcuts() or #removeAllDynamicShortcuts() after sending the notification. You can also rank other app shortcuts with higher ranking, so only those dynamic shortcuts appear on launcher.\r\n\r\nThanks for all your great work on this. I will push for making the API better for this. Thanks again and note that this pull request can be a throwaway and I just wanted to show at what point the shortcuts can be removed. I checked out the codebase, made these changes and was able to get this working on a flashed Android 11 device. Thanks again.",
+    "date": "2020-08-09T09:06:56Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/b8f17ead8fa8940718ecfa54dba50fbe530fc1dc",
+    "details": {
+      "sha": "6095998cbfc9509cbe74628ce984147fd9802899",
+      "filename": "TMessagesProj/src/main/java/org/telegram/messenger/NotificationsController.java",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 5,
+      "changes": 17,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/b8f17ead8fa8940718ecfa54dba50fbe530fc1dc/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FNotificationsController.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/b8f17ead8fa8940718ecfa54dba50fbe530fc1dc/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FNotificationsController.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FNotificationsController.java?ref=b8f17ead8fa8940718ecfa54dba50fbe530fc1dc",
+      "patch": "@@ -2373,10 +2373,14 @@ public void deleteAllNotificationChannels() {\n             }\n         });\n     }\n+    \n+    private boolean unsupportedNotificationShortcut() {\n+        return Build.VERSION.SDK_INT < 29 || !SharedConfig.chatBubbles;\n+    }\n \n     @SuppressLint(\"RestrictedApi\")\n     private void createNotificationShortcut(NotificationCompat.Builder builder, int did, String name, TLRPC.User user, TLRPC.Chat chat, Person person) {\n-        if (Build.VERSION.SDK_INT < 29 || ChatObject.isChannel(chat) && !chat.megagroup || !SharedConfig.chatBubbles) {\n+        if (unsupportedNotificationShortcut() || ChatObject.isChannel(chat) && !chat.megagroup) {\n             return;\n         }\n         try {\n@@ -2397,10 +2401,7 @@ private void createNotificationShortcut(NotificationCompat.Builder builder, int\n             }\n             ArrayList<ShortcutInfoCompat> arrayList = new ArrayList<>(1);\n             arrayList.add(shortcutBuilder.build());\n-            ArrayList<String> ids = new ArrayList<>(1);\n-            ids.add(id);\n             ShortcutManagerCompat.addDynamicShortcuts(ApplicationLoader.applicationContext, arrayList);\n-            ShortcutManagerCompat.removeDynamicShortcuts(ApplicationLoader.applicationContext, ids);\n             builder.setShortcutId(id);\n             NotificationCompat.BubbleMetadata.Builder bubbleBuilder = new NotificationCompat.BubbleMetadata.Builder();\n             Intent intent = new Intent(ApplicationLoader.applicationContext, BubbleActivity.class);\n@@ -3737,8 +3738,14 @@ void call() {\n                 notificationManager.cancel(notificationId);\n             }\n         }\n+        ArrayList<String> ids = new ArrayList<>(holders.size());\n         for (int a = 0, size = holders.size(); a < size; a++) {\n-            holders.get(a).call();\n+            NotificationHolder holder = holders.get(a);\n+            holder.call();\n+            ids.add(holder.notification.getShortcutId());\n+        }\n+        if (!unsupportedNotificationShortcut()) {\n+            ShortcutManagerCompat.removeDynamicShortcuts(ApplicationLoader.applicationContext, ids);\n         }\n \n         for (int a = 0; a < oldIdsWear.size(); a++) {",
+      "parent_sha": "320710366d89feb7d639b56afd4780ca6c10c508"
+    }
+  },
+  {
+    "oid": "9c2ac64d14f45fe828fd0f3453e7021c51ca7f5e",
+    "message": "Update BuildVars.java",
+    "date": "2015-01-02T22:22:17Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/9c2ac64d14f45fe828fd0f3453e7021c51ca7f5e",
+    "details": {
+      "sha": "d2b91b67adcc99e733ac59889df9be8c0a6ff3bd",
+      "filename": "TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 2,
+      "changes": 5,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/9c2ac64d14f45fe828fd0f3453e7021c51ca7f5e/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FBuildVars.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/9c2ac64d14f45fe828fd0f3453e7021c51ca7f5e/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FBuildVars.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FBuildVars.java?ref=9c2ac64d14f45fe828fd0f3453e7021c51ca7f5e",
+      "patch": "@@ -10,9 +10,10 @@\n \n public class BuildVars {\n     public static boolean DEBUG_VERSION = false;\n-    public static int APP_ID = 0; //obtaion your own APP_ID at https://core.telegram.org/api/obtaining_api_id\n-    public static String APP_HASH = \"\"; //obtaion your own APP_HASH at https://core.telegram.org/api/obtaining_api_id\n+    public static int APP_ID = 0; //obtain your own APP_ID at https://core.telegram.org/api/obtaining_api_id\n+    public static String APP_HASH = \"\"; //obtain your own APP_HASH at https://core.telegram.org/api/obtaining_api_id\n     public static String HOCKEY_APP_HASH = \"your-hockeyapp-api-key-here\";\n     public static String GCM_SENDER_ID = \"760348033672\";\n     public static String SEND_LOGS_EMAIL = \"email@gmail.com\";\n+    public static String BING_SEARCH_KEY = \"\"; //obtain your own KEY at https://www.bing.com/dev/en-us/dev-center\n }",
+      "parent_sha": "2073ead37e554bdca42215129978ce46d36c45c8"
+    }
+  },
+  {
+    "oid": "4f9384afee0cf8e3e6c981f3242534f8d3e932e8",
+    "message": "download map preview via https",
+    "date": "2013-12-24T20:38:40Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/4f9384afee0cf8e3e6c981f3242534f8d3e932e8",
+    "details": {
+      "sha": "09964bc38eb96b390ba6ff4918e58fc42e05950b",
+      "filename": "TMessagesProj/src/main/java/org/telegram/ui/ChatActivity.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/4f9384afee0cf8e3e6c981f3242534f8d3e932e8/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FChatActivity.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/4f9384afee0cf8e3e6c981f3242534f8d3e932e8/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FChatActivity.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FChatActivity.java?ref=4f9384afee0cf8e3e6c981f3242534f8d3e932e8",
+      "patch": "@@ -3075,7 +3075,7 @@ public void update() {\n             } else if (type == 4 || type == 5) {\n                 double lat = message.messageOwner.media.geo.lat;\n                 double lon = message.messageOwner.media.geo._long;\n-                String url = String.format(Locale.US, \"http://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=13&size=100x100&maptype=roadmap&scale=%d&markers=color:red|size:big|%f,%f&sensor=false\", lat, lon, Math.min(2, (int)Math.ceil(displayDensity)), lat, lon);\n+                String url = String.format(Locale.US, \"https://maps.googleapis.com/maps/api/staticmap?center=%f,%f&zoom=13&size=100x100&maptype=roadmap&scale=%d&markers=color:red|size:big|%f,%f&sensor=false\", lat, lon, Math.min(2, (int)Math.ceil(displayDensity)), lat, lon);\n                 photoImage.setImage(url, null, message.messageOwner.out ? R.drawable.photo_placeholder_out : R.drawable.photo_placeholder_in);\n             } else if (type == 11 || type == 10) {\n                 int width = (int)(displaySize.x - (30 * displayDensity));",
+      "parent_sha": "d2a6fa4d6d02cc1acff27d3284845bf8a18b72dd"
+    }
+  },
+  {
+    "oid": "668fea41f6c30a5038b4a8766236e451b6f9cb45",
+    "message": "Make phone numbers in media captions clickable",
+    "date": "2016-01-04T10:55:21Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/668fea41f6c30a5038b4a8766236e451b6f9cb45",
+    "details": {
+      "sha": "557b4f06381c822ac3164f9159b699c8626d229c",
+      "filename": "TMessagesProj/src/main/java/org/telegram/messenger/MessageObject.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/668fea41f6c30a5038b4a8766236e451b6f9cb45/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FMessageObject.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/668fea41f6c30a5038b4a8766236e451b6f9cb45/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FMessageObject.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FMessageObject.java?ref=668fea41f6c30a5038b4a8766236e451b6f9cb45",
+      "patch": "@@ -737,7 +737,7 @@ public void generateCaption() {\n             caption = Emoji.replaceEmoji(messageOwner.media.caption, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);\n             if (containsUrls(caption)) {\n                 try {\n-                    Linkify.addLinks((Spannable) caption, Linkify.WEB_URLS);\n+                    Linkify.addLinks((Spannable) caption, Linkify.WEB_URLS | Linkify.PHONE_NUMBERS);\n                 } catch (Exception e) {\n                     FileLog.e(\"tmessages\", e);\n                 }",
+      "parent_sha": "6033ee2f5c48bb00879eab6d6d67ae5b516ff4a2"
+    }
+  },
+  {
+    "oid": "ff85d74b85bf33aa661e34b6a9e2bf037924fe0f",
+    "message": "Fixed datacenter port switch condition",
+    "date": "2014-02-11T14:44:02Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/ff85d74b85bf33aa661e34b6a9e2bf037924fe0f",
+    "details": {
+      "sha": "f111120c6d14f2d24e0f339ade2ce0e38edc6f58",
+      "filename": "TMessagesProj/src/main/java/org/telegram/messenger/TcpConnection.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/ff85d74b85bf33aa661e34b6a9e2bf037924fe0f/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FTcpConnection.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/ff85d74b85bf33aa661e34b6a9e2bf037924fe0f/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FTcpConnection.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FTcpConnection.java?ref=ff85d74b85bf33aa661e34b6a9e2bf037924fe0f",
+      "patch": "@@ -423,7 +423,7 @@ public void handleDisconnect(PyroClient client, Exception e, boolean timedout) {\n         } else {\n             FileLog.d(\"tmessages\", \"Disconnected \" + TcpConnection.this);\n         }\n-        boolean swirchToNextPort = wasConnected && hasSomeDataSinceLastConnect;\n+        boolean switchToNextPort = wasConnected && !hasSomeDataSinceLastConnect && timedout;\n         firstPacket = true;\n         restOfTheData = null;\n         channelToken = 0;\n@@ -452,7 +452,7 @@ public void run() {\n             }\n             if (ConnectionsManager.isNetworkOnline()) {\n                 isNextPort = true;\n-                if (failedConnectionCount > willRetryConnectCount || swirchToNextPort) {\n+                if (failedConnectionCount > willRetryConnectCount || switchToNextPort) {\n                     Datacenter datacenter = ConnectionsManager.Instance.datacenterWithId(datacenterId);\n                     datacenter.nextAddressOrPort();\n                     failedConnectionCount = 0;",
+      "parent_sha": "507d05aaf1855320bc09863264f457756593d476"
+    }
+  },
+  {
+    "oid": "d24578fe6bc2c585a0b1a5b40b3ca80a719f7ef9",
+    "message": "Bug fixes",
+    "date": "2014-07-16T09:36:07Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/d24578fe6bc2c585a0b1a5b40b3ca80a719f7ef9",
+    "details": {
+      "sha": "ce85bd5a23c47fe205ccf0cbe6a390bd0f456506",
+      "filename": "TMessagesProj/src/main/java/org/telegram/messenger/ConnectionsManager.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 1,
+      "changes": 9,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/d24578fe6bc2c585a0b1a5b40b3ca80a719f7ef9/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FConnectionsManager.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/d24578fe6bc2c585a0b1a5b40b3ca80a719f7ef9/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FConnectionsManager.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FConnectionsManager.java?ref=d24578fe6bc2c585a0b1a5b40b3ca80a719f7ef9",
+      "patch": "@@ -1185,6 +1185,8 @@ private void processRequestQueue(int requestClass, int _datacenterId) {\n                     requestStartTime = updatingDcStartTime;\n                     updatingDcStartTime = currentTime;\n                     timeout = 60;\n+                } else {\n+                    request.runningStartTime = 0;\n                 }\n                 if (requestStartTime != 0 && requestStartTime < currentTime - timeout) {\n                     ArrayList<Datacenter> allDc = new ArrayList<Datacenter>(datacenters.values());\n@@ -1196,7 +1198,12 @@ private void processRequestQueue(int requestClass, int _datacenterId) {\n                         }\n                     }\n                     Datacenter newDc = allDc.get(Math.abs(Utilities.random.nextInt() % allDc.size()));\n-                    datacenterId = request.runningDatacenterId = newDc.datacenterId;\n+                    datacenterId = newDc.datacenterId;\n+                    if (!(request.rawRequest instanceof TLRPC.TL_help_getConfig)) {\n+                        currentDatacenterId = datacenterId;\n+                    } else {\n+                        request.runningDatacenterId = datacenterId;\n+                    }\n                 }\n             }\n ",
+      "parent_sha": "5bed3fb6cd3366f0d810b8c4532d368671d525b4"
+    }
+  },
+  {
+    "oid": "58a645b6ed39d11fd8a5bf986a40c8f58c5a67f0",
+    "message": "Fix clearItemsMethod: now it clears all items",
+    "date": "2016-04-14T04:56:23Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/58a645b6ed39d11fd8a5bf986a40c8f58c5a67f0",
+    "details": {
+      "sha": "382d0a1c615a581d82c63e0030f85e2060893439",
+      "filename": "TMessagesProj/src/main/java/org/telegram/ui/ActionBar/ActionBarMenu.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/58a645b6ed39d11fd8a5bf986a40c8f58c5a67f0/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FActionBar%2FActionBarMenu.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/58a645b6ed39d11fd8a5bf986a40c8f58c5a67f0/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FActionBar%2FActionBarMenu.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FActionBar%2FActionBarMenu.java?ref=58a645b6ed39d11fd8a5bf986a40c8f58c5a67f0",
+      "patch": "@@ -112,8 +112,8 @@ public void onItemClick(int id) {\n     }\n \n     public void clearItems() {\n-        for (int a = 0; a < getChildCount(); a++) {\n-            View view = getChildAt(a);\n+        while(getChildCount() > 0) {\n+            View view = getChildAt(0);\n             removeView(view);\n         }\n     }",
+      "parent_sha": "a7513b3ba1923113840e78799c4c4132cc7f3116"
+    }
+  },
+  {
+    "oid": "feaf6c32d82a438f19b79103e90a2ceb3cab9c69",
+    "message": "Bug fixes",
+    "date": "2014-07-15T21:27:28Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/feaf6c32d82a438f19b79103e90a2ceb3cab9c69",
+    "details": {
+      "sha": "0505dd7aa1d9b196f87c359a71441b6398301d64",
+      "filename": "TMessagesProj/src/main/java/org/telegram/android/MessagesController.java",
+      "status": "modified",
+      "additions": 11,
+      "deletions": 4,
+      "changes": 15,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/feaf6c32d82a438f19b79103e90a2ceb3cab9c69/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2FMessagesController.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/feaf6c32d82a438f19b79103e90a2ceb3cab9c69/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2FMessagesController.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2FMessagesController.java?ref=feaf6c32d82a438f19b79103e90a2ceb3cab9c69",
+      "patch": "@@ -2271,6 +2271,8 @@ private void processSentMessage(TLRPC.Message newMsg, TLRPC.Message sentMessage,\n                 }\n                 sentMessage.message = newMsg.message;\n                 sentMessage.attachPath = newMsg.attachPath;\n+                newMsg.media.photo.id = sentMessage.media.photo.id;\n+                newMsg.media.photo.access_hash = sentMessage.media.photo.access_hash;\n             } else if (sentMessage.media instanceof TLRPC.TL_messageMediaVideo && sentMessage.media.video != null && newMsg.media instanceof TLRPC.TL_messageMediaVideo && newMsg.media.video != null) {\n                 MessagesStorage.getInstance().putSentFile(originalPath, sentMessage.media.video, 2);\n \n@@ -2289,6 +2291,9 @@ private void processSentMessage(TLRPC.Message newMsg, TLRPC.Message sentMessage,\n                 }\n                 sentMessage.message = newMsg.message;\n                 sentMessage.attachPath = newMsg.attachPath;\n+                newMsg.media.video.dc_id = sentMessage.media.video.dc_id;\n+                newMsg.media.video.id = sentMessage.media.video.id;\n+                newMsg.media.video.access_hash = sentMessage.media.video.access_hash;\n             } else if (sentMessage.media instanceof TLRPC.TL_messageMediaDocument && sentMessage.media.document != null && newMsg.media instanceof TLRPC.TL_messageMediaDocument && newMsg.media.document != null) {\n                 MessagesStorage.getInstance().putSentFile(originalPath, sentMessage.media.document, 1);\n \n@@ -2311,8 +2316,6 @@ private void processSentMessage(TLRPC.Message newMsg, TLRPC.Message sentMessage,\n                     boolean result = cacheFile.renameTo(cacheFile2);\n                     if (result) {\n                         newMsg.attachPath = null;\n-                        newMsg.media.document.dc_id = sentMessage.media.document.dc_id;\n-                        newMsg.media.document.id = sentMessage.media.document.id;\n                     } else {\n                         sentMessage.attachPath = newMsg.attachPath;\n                         sentMessage.message = newMsg.message;\n@@ -2321,6 +2324,9 @@ private void processSentMessage(TLRPC.Message newMsg, TLRPC.Message sentMessage,\n                     sentMessage.attachPath = newMsg.attachPath;\n                     sentMessage.message = newMsg.message;\n                 }\n+                newMsg.media.document.dc_id = sentMessage.media.document.dc_id;\n+                newMsg.media.document.id = sentMessage.media.document.id;\n+                newMsg.media.document.access_hash = sentMessage.media.document.access_hash;\n             } else if (sentMessage.media instanceof TLRPC.TL_messageMediaAudio && sentMessage.media.audio != null && newMsg.media instanceof TLRPC.TL_messageMediaAudio && newMsg.media.audio != null) {\n                 sentMessage.message = newMsg.message;\n                 sentMessage.attachPath = newMsg.attachPath;\n@@ -2331,9 +2337,10 @@ private void processSentMessage(TLRPC.Message newMsg, TLRPC.Message sentMessage,\n                     File cacheFile = new File(AndroidUtilities.getCacheDir(), fileName);\n                     File cacheFile2 = new File(AndroidUtilities.getCacheDir(), fileName2);\n                     cacheFile.renameTo(cacheFile2);\n-                    newMsg.media.audio.dc_id = sentMessage.media.audio.dc_id;\n-                    newMsg.media.audio.id = sentMessage.media.audio.id;\n                 }\n+                newMsg.media.audio.dc_id = sentMessage.media.audio.dc_id;\n+                newMsg.media.audio.id = sentMessage.media.audio.id;\n+                newMsg.media.audio.access_hash = sentMessage.media.audio.access_hash;\n             }\n         } else if (file != null) {\n             if (newMsg.media instanceof TLRPC.TL_messageMediaPhoto && newMsg.media.photo != null) {",
+      "parent_sha": "ff7e6ab3c910cc0c7c6d106557c3912f23d0547d"
+    }
+  },
+  {
+    "oid": "8a8940871f745278d65bda51b4eb02d043f4d5da",
+    "message": "Added sdk version check for executeOnExecutor",
+    "date": "2014-05-17T08:51:36Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/8a8940871f745278d65bda51b4eb02d043f4d5da",
+    "details": {
+      "sha": "3c392a69896b7b5c299427c382330ace0cdcfa09",
+      "filename": "TMessagesProj/src/main/java/org/telegram/ui/ApplicationLoader.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 1,
+      "changes": 8,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/8a8940871f745278d65bda51b4eb02d043f4d5da/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FApplicationLoader.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/8a8940871f745278d65bda51b4eb02d043f4d5da/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FApplicationLoader.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fui%2FApplicationLoader.java?ref=8a8940871f745278d65bda51b4eb02d043f4d5da",
+      "patch": "@@ -258,7 +258,13 @@ protected Boolean doInBackground(String... objects) {\n                 }\n                 return false;\n             }\n-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null, null);\n+        };\n+\n+        if (android.os.Build.VERSION.SDK_INT >= 11) {\n+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null, null);\n+        } else {\n+            task.execute(null, null, null);\n+        }\n     }\n \n     private void sendRegistrationIdToBackend(final boolean isNew) {",
+      "parent_sha": "0065ca64f5b020ac4644f0a5b3854c5c60ed3ea5"
+    }
+  },
+  {
+    "oid": "231999ed1073cd9e53fc4d7b8f6c0d1da0882487",
+    "message": "One more crash fix",
+    "date": "2014-06-04T16:02:46Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/231999ed1073cd9e53fc4d7b8f6c0d1da0882487",
+    "details": {
+      "sha": "b84a6bc385c5ca10ee1223aca6182321f0f2461b",
+      "filename": "TMessagesProj/src/main/java/org/telegram/messenger/MessagesController.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 5,
+      "changes": 9,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/231999ed1073cd9e53fc4d7b8f6c0d1da0882487/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FMessagesController.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/231999ed1073cd9e53fc4d7b8f6c0d1da0882487/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FMessagesController.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fmessenger%2FMessagesController.java?ref=231999ed1073cd9e53fc4d7b8f6c0d1da0882487",
+      "patch": "@@ -29,7 +29,6 @@\n import android.os.Vibrator;\n import android.provider.Settings;\n import android.support.v4.app.NotificationCompat;\n-import android.support.v7.app.ActionBarActivity;\n import android.text.Html;\n import android.util.SparseArray;\n \n@@ -5072,7 +5071,7 @@ public void run(TLObject response, TLRPC.TL_error error) {\n                                 @Override\n                                 public void run() {\n                                     try {\n-                                        if (!((ActionBarActivity) context).isFinishing()) {\n+                                        if (!((Activity) context).isFinishing()) {\n                                             progressDialog.dismiss();\n                                         }\n                                     } catch (Exception e) {\n@@ -5113,7 +5112,7 @@ public void run(final TLObject response, TLRPC.TL_error error) {\n                                     @Override\n                                     public void run() {\n                                         startingSecretChat = false;\n-                                        if (!((ActionBarActivity) context).isFinishing()) {\n+                                        if (!((Activity) context).isFinishing()) {\n                                             try {\n                                                 progressDialog.dismiss();\n                                             } catch (Exception e) {\n@@ -5168,7 +5167,7 @@ public void run() {\n                                 Utilities.RunOnUIThread(new Runnable() {\n                                     @Override\n                                     public void run() {\n-                                        if (!((ActionBarActivity) context).isFinishing()) {\n+                                        if (!((Activity) context).isFinishing()) {\n                                             startingSecretChat = false;\n                                             try {\n                                                 progressDialog.dismiss();\n@@ -5192,7 +5191,7 @@ public void run() {\n                         @Override\n                         public void run() {\n                             startingSecretChat = false;\n-                            if (!((ActionBarActivity) context).isFinishing()) {\n+                            if (!((Activity) context).isFinishing()) {\n                                 try {\n                                     progressDialog.dismiss();\n                                 } catch (Exception e) {",
+      "parent_sha": "2c61da0001b57fe7a39229021123a1fe82e3e4b4"
+    }
+  },
+  {
+    "oid": "3cd9b847e15a8d12927c7ecad57aa7e256c548b0",
+    "message": "Fixed build with last mp4parser",
+    "date": "2014-10-25T07:16:21Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/3cd9b847e15a8d12927c7ecad57aa7e256c548b0",
+    "details": {
+      "sha": "cc34745ea5d63f824bde3b8fdd0539c187375841",
+      "filename": "TMessagesProj/src/main/java/org/telegram/android/video/Track.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/3cd9b847e15a8d12927c7ecad57aa7e256c548b0/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2Fvideo%2FTrack.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/3cd9b847e15a8d12927c7ecad57aa7e256c548b0/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2Fvideo%2FTrack.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2Fvideo%2FTrack.java?ref=3cd9b847e15a8d12927c7ecad57aa7e256c548b0",
+      "patch": "@@ -16,7 +16,7 @@\n import com.coremedia.iso.boxes.SampleDescriptionBox;\n import com.coremedia.iso.boxes.SoundMediaHeaderBox;\n import com.coremedia.iso.boxes.VideoMediaHeaderBox;\n-import com.coremedia.iso.boxes.h264.AvcConfigurationBox;\n+import com.mp4parser.iso14496.part15.AvcConfigurationBox;\n import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;\n import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;\n import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;",
+      "parent_sha": "6e386c58841f6b10d6db22e7192dfe800cb7b9e4"
+    }
+  },
+  {
+    "oid": "a0eb876c7bd5ebf4592cbc4f776362c6fa5dd715",
+    "message": "Bug fixes",
+    "date": "2014-07-12T14:50:12Z",
+    "url": "https://github.com/DrKLO/Telegram/commit/a0eb876c7bd5ebf4592cbc4f776362c6fa5dd715",
+    "details": {
+      "sha": "0d55c4738851a9e38d349febef5f0be6ab271580",
+      "filename": "TMessagesProj/src/main/java/org/telegram/android/MessagesController.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 8,
+      "changes": 15,
+      "blob_url": "https://github.com/DrKLO/Telegram/blob/a0eb876c7bd5ebf4592cbc4f776362c6fa5dd715/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2FMessagesController.java",
+      "raw_url": "https://github.com/DrKLO/Telegram/raw/a0eb876c7bd5ebf4592cbc4f776362c6fa5dd715/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2FMessagesController.java",
+      "contents_url": "https://api.github.com/repos/DrKLO/Telegram/contents/TMessagesProj%2Fsrc%2Fmain%2Fjava%2Forg%2Ftelegram%2Fandroid%2FMessagesController.java?ref=a0eb876c7bd5ebf4592cbc4f776362c6fa5dd715",
+      "patch": "@@ -1535,10 +1535,6 @@ public void markDialogAsRead(final long dialog_id, final int max_id, final int m\n             req.max_id = max_positive_id;\n             req.offset = offset;\n             if (offset == 0) {\n-                HashMap<Long, Integer> dialogsToUpdate = new HashMap<Long, Integer>();\n-                dialogsToUpdate.put(dialog_id, 0);\n-                NotificationsController.getInstance().processDialogsUpdateRead(dialogsToUpdate, true);\n-\n                 NotificationsController.getInstance().processReadMessages(null, dialog_id, 0, max_id);\n                 MessagesStorage.getInstance().processPendingRead(dialog_id, max_positive_id, max_date, false);\n                 MessagesStorage.getInstance().storageQueue.postRunnable(new Runnable() {\n@@ -1556,6 +1552,9 @@ public void run() {\n                         });\n                     }\n                 });\n+                HashMap<Long, Integer> dialogsToUpdate = new HashMap<Long, Integer>();\n+                dialogsToUpdate.put(dialog_id, 0);\n+                NotificationsController.getInstance().processDialogsUpdateRead(dialogsToUpdate, true);\n             }\n             if (req.max_id != Integer.MAX_VALUE) {\n                 ConnectionsManager.getInstance().performRpc(req, new RPCRequest.RPCRequestDelegate() {\n@@ -1624,10 +1623,6 @@ public void run(TLObject response, TLRPC.TL_error error) {\n             }\n             MessagesStorage.getInstance().processPendingRead(dialog_id, max_id, max_date, false);\n \n-            HashMap<Long, Integer> dialogsToUpdate = new HashMap<Long, Integer>();\n-            dialogsToUpdate.put(dialog_id, 0);\n-            NotificationsController.getInstance().processDialogsUpdateRead(dialogsToUpdate, true);\n-\n             MessagesStorage.getInstance().storageQueue.postRunnable(new Runnable() {\n                 @Override\n                 public void run() {\n@@ -1644,6 +1639,10 @@ public void run() {\n                 }\n             });\n \n+            HashMap<Long, Integer> dialogsToUpdate = new HashMap<Long, Integer>();\n+            dialogsToUpdate.put(dialog_id, 0);\n+            NotificationsController.getInstance().processDialogsUpdateRead(dialogsToUpdate, true);\n+\n             if (chat.ttl > 0 && was) {\n                 int serverTime = Math.max(ConnectionsManager.getInstance().getCurrentTime(), max_date);\n                 MessagesStorage.getInstance().createTaskForDate(chat.id, serverTime, serverTime, 0);",
+      "parent_sha": "9667a246b3c2da917a033b565716fabad025c256"
+    }
+  }
+]

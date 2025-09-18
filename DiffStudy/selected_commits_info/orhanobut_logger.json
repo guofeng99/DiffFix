@@ -1,0 +1,154 @@
+[
+  {
+    "oid": "7ed355908b8668db5c5fa4a2927e5ef85d5d02bb",
+    "message": "Shows more info about throwable\n\nShows more Android specific info about throwable",
+    "date": "2016-02-15T10:09:57Z",
+    "url": "https://github.com/orhanobut/logger/commit/7ed355908b8668db5c5fa4a2927e5ef85d5d02bb",
+    "details": {
+      "sha": "75de5b375d8b5b15353c22876632e7e2eb3a3940",
+      "filename": "logger/src/main/java/com/orhanobut/logger/LoggerPrinter.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "changes": 3,
+      "blob_url": "https://github.com/orhanobut/logger/blob/7ed355908b8668db5c5fa4a2927e5ef85d5d02bb/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLoggerPrinter.java",
+      "raw_url": "https://github.com/orhanobut/logger/raw/7ed355908b8668db5c5fa4a2927e5ef85d5d02bb/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLoggerPrinter.java",
+      "contents_url": "https://api.github.com/repos/orhanobut/logger/contents/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLoggerPrinter.java?ref=7ed355908b8668db5c5fa4a2927e5ef85d5d02bb",
+      "patch": "@@ -1,6 +1,7 @@\n package com.orhanobut.logger;\n \n import android.text.TextUtils;\n+import android.util.Log;\n \n import org.json.JSONArray;\n import org.json.JSONException;\n@@ -116,7 +117,7 @@ final class LoggerPrinter implements Printer {\n \n   @Override public void e(Throwable throwable, String message, Object... args) {\n     if (throwable != null && message != null) {\n-      message += \" : \" + throwable.toString();\n+      message += \" : \" + Log.getStackTraceString(throwable);\n     }\n     if (throwable != null && message == null) {\n       message = throwable.toString();",
+      "parent_sha": "b41c0714a45da0a98074410f11961e6a05f2268a"
+    }
+  },
+  {
+    "oid": "d539d2e6019f97baa40412aeea69af9430eebead",
+    "message": "Fix checkstyle issues",
+    "date": "2018-02-26T14:01:36Z",
+    "url": "https://github.com/orhanobut/logger/commit/d539d2e6019f97baa40412aeea69af9430eebead",
+    "details": {
+      "sha": "0cc159ad8ff14e16ebe1aa107889a9dee27790f4",
+      "filename": "logger/src/main/java/com/orhanobut/logger/LoggerPrinter.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 2,
+      "changes": 10,
+      "blob_url": "https://github.com/orhanobut/logger/blob/d539d2e6019f97baa40412aeea69af9430eebead/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLoggerPrinter.java",
+      "raw_url": "https://github.com/orhanobut/logger/raw/d539d2e6019f97baa40412aeea69af9430eebead/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLoggerPrinter.java",
+      "contents_url": "https://api.github.com/repos/orhanobut/logger/contents/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLoggerPrinter.java?ref=d539d2e6019f97baa40412aeea69af9430eebead",
+      "patch": "@@ -124,7 +124,10 @@ class LoggerPrinter implements Printer {\n     }\n   }\n \n-  @Override public synchronized void log(int priority, @Nullable String tag, @Nullable String message, @Nullable Throwable throwable) {\n+  @Override public synchronized void log(int priority,\n+                                         @Nullable String tag,\n+                                         @Nullable String message,\n+                                         @Nullable Throwable throwable) {\n     if (throwable != null && message != null) {\n       message += \" : \" + Utils.getStackTraceString(throwable);\n     }\n@@ -153,7 +156,10 @@ class LoggerPrinter implements Printer {\n   /**\n    * This method is synchronized in order to avoid messy of logs' order.\n    */\n-  private synchronized void log(int priority, @Nullable Throwable throwable, @NonNull String msg, @Nullable Object... args) {\n+  private synchronized void log(int priority,\n+                                @Nullable Throwable throwable,\n+                                @NonNull String msg,\n+                                @Nullable Object... args) {\n     checkNotNull(msg);\n \n     String tag = getTag();",
+      "parent_sha": "bddf89443a3ac3df9111d1f2cc3b6f920d42de8d"
+    }
+  },
+  {
+    "oid": "ced1530dc3bbffcbbcb72277db84781ff6bf9e66",
+    "message": "Increase the length of dividers",
+    "date": "2017-05-26T13:25:51Z",
+    "url": "https://github.com/orhanobut/logger/commit/ced1530dc3bbffcbbcb72277db84781ff6bf9e66",
+    "details": {
+      "sha": "a9734ab77245b7a791265bb9129c9575e8e8512f",
+      "filename": "logger/src/main/java/com/orhanobut/logger/PrettyFormatStrategy.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/orhanobut/logger/blob/ced1530dc3bbffcbbcb72277db84781ff6bf9e66/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FPrettyFormatStrategy.java",
+      "raw_url": "https://github.com/orhanobut/logger/raw/ced1530dc3bbffcbbcb72277db84781ff6bf9e66/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FPrettyFormatStrategy.java",
+      "contents_url": "https://api.github.com/repos/orhanobut/logger/contents/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FPrettyFormatStrategy.java?ref=ced1530dc3bbffcbbcb72277db84781ff6bf9e66",
+      "patch": "@@ -21,8 +21,8 @@ public class PrettyFormatStrategy implements FormatStrategy {\n   private static final char BOTTOM_LEFT_CORNER = '\u255a';\n   private static final char MIDDLE_CORNER = '\u255f';\n   private static final char HORIZONTAL_DOUBLE_LINE = '\u2551';\n-  private static final String DOUBLE_DIVIDER = \"\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\";\n-  private static final String SINGLE_DIVIDER = \"\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\";\n+  private static final String DOUBLE_DIVIDER = \"\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\";\n+  private static final String SINGLE_DIVIDER = \"\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\";\n   private static final String TOP_BORDER = TOP_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;\n   private static final String BOTTOM_BORDER = BOTTOM_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;\n   private static final String MIDDLE_BORDER = MIDDLE_CORNER + SINGLE_DIVIDER + SINGLE_DIVIDER;",
+      "parent_sha": "bc0516be6c049bd2949653ddd5fb77b6c440c468"
+    }
+  },
+  {
+    "oid": "3822fb64e22d91542313a4213857de47bd5970b8",
+    "message": "Add more sample codes",
+    "date": "2017-05-26T15:28:20Z",
+    "url": "https://github.com/orhanobut/logger/commit/3822fb64e22d91542313a4213857de47bd5970b8",
+    "details": {
+      "sha": "64b1927873836a51369a633f7469016d2dcad655",
+      "filename": "sample/src/main/java/com/orhanobut/sample/MainActivity.java",
+      "status": "modified",
+      "additions": 29,
+      "deletions": 6,
+      "changes": 35,
+      "blob_url": "https://github.com/orhanobut/logger/blob/3822fb64e22d91542313a4213857de47bd5970b8/sample%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Fsample%2FMainActivity.java",
+      "raw_url": "https://github.com/orhanobut/logger/raw/3822fb64e22d91542313a4213857de47bd5970b8/sample%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Fsample%2FMainActivity.java",
+      "contents_url": "https://api.github.com/repos/orhanobut/logger/contents/sample%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Fsample%2FMainActivity.java?ref=3822fb64e22d91542313a4213857de47bd5970b8",
+      "patch": "@@ -2,8 +2,11 @@\n \n import android.app.Activity;\n import android.os.Bundle;\n+import android.util.Log;\n \n import com.orhanobut.logger.AndroidLogAdapter;\n+import com.orhanobut.logger.DiskLogAdapter;\n+import com.orhanobut.logger.FormatStrategy;\n import com.orhanobut.logger.Logger;\n import com.orhanobut.logger.PrettyFormatStrategy;\n \n@@ -18,15 +21,35 @@ protected void onCreate(Bundle savedInstanceState) {\n     super.onCreate(savedInstanceState);\n     setContentView(R.layout.activity_main);\n \n-    Logger.addAdapter(new AndroidLogAdapter());\n+    Log.d(\"Tag\", \"I'm a log which you don't see easily, hehe\");\n+    Log.d(\"json content\", \"{ \\\"key\\\": 3, \\n \\\"value\\\": something}\");\n+    Log.d(\"error\", \"There is a crash somewhere or any warning\");\n+\n+    Logger.addLogAdapter(new AndroidLogAdapter());\n     Logger.d(\"message\");\n \n     Logger.clearLogAdapters();\n-    PrettyFormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()\n-        .showThreadInfo(false)\n+\n+\n+    FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()\n+        .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true\n+        .methodCount(0)         // (Optional) How many method line to show. Default 2\n+        .methodOffset(3)        // (Optional) Skips some method invokes in stack trace. Default 5\n+//        .logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat\n+        .tag(\"My custom tag\")   // (Optional) Custom tag for each log. Default PRETTY_LOGGER\n         .build();\n \n-    Logger.addAdapter(new AndroidLogAdapter(formatStrategy));\n+    Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));\n+\n+    Logger.addLogAdapter(new AndroidLogAdapter(){\n+      @Override public boolean isLoggable(int priority, String tag) {\n+        return BuildConfig.DEBUG;\n+      }\n+    });\n+\n+    Logger.addLogAdapter(new DiskLogAdapter());\n+\n+\n     Logger.w(\"no thread info and only 1 method\");\n \n     Logger.clearLogAdapters();\n@@ -35,7 +58,7 @@ protected void onCreate(Bundle savedInstanceState) {\n         .methodCount(0)\n         .build();\n \n-    Logger.addAdapter(new AndroidLogAdapter(formatStrategy));\n+    Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));\n     Logger.i(\"no thread info and method info\");\n \n     Logger.t(\"tag\").e(\"Custom tag for only one use\");\n@@ -56,7 +79,7 @@ protected void onCreate(Bundle savedInstanceState) {\n         .methodCount(0)\n         .tag(\"MyTag\")\n         .build();\n-    Logger.addAdapter(new AndroidLogAdapter(formatStrategy));\n+    Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));\n \n     Logger.w(\"my log message with my tag\");\n   }",
+      "parent_sha": "9177acf7c74fa275f2083e79d1d65621df5b0bbc"
+    }
+  },
+  {
+    "oid": "42fe4c823c4f1fe7670ef044b87ecd70bb2fe254",
+    "message": "Modify javadoc more readable.",
+    "date": "2015-03-26T09:35:27Z",
+    "url": "https://github.com/orhanobut/logger/commit/42fe4c823c4f1fe7670ef044b87ecd70bb2fe254",
+    "details": {
+      "sha": "664db23819dfbc5d1f2f213a90d776e9da4e0e7e",
+      "filename": "logger/src/main/java/com/orhanobut/logger/Logger.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/orhanobut/logger/blob/42fe4c823c4f1fe7670ef044b87ecd70bb2fe254/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java",
+      "raw_url": "https://github.com/orhanobut/logger/raw/42fe4c823c4f1fe7670ef044b87ecd70bb2fe254/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java",
+      "contents_url": "https://api.github.com/repos/orhanobut/logger/contents/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java?ref=42fe4c823c4f1fe7670ef044b87ecd70bb2fe254",
+      "patch": "@@ -261,7 +261,7 @@ public static void json(String tag, String json, int methodCount) {\n     }\n \n     /**\n-     * This method should synchronized to avoid messy of logs' order.\n+     * This method is synchronized in order to avoid messy of logs' order.\n      */\n     private synchronized static void log(int logType, String tag, String message, int methodCount) {\n         if (settings.logLevel == LogLevel.NONE) {",
+      "parent_sha": "fa9dc6820da70aca47da6bd3e4731f93a04aaced"
+    }
+  },
+  {
+    "oid": "fa9dc6820da70aca47da6bd3e4731f93a04aaced",
+    "message": "Use synchronize to avoid log messy when have multiple threads.",
+    "date": "2015-03-26T07:08:14Z",
+    "url": "https://github.com/orhanobut/logger/commit/fa9dc6820da70aca47da6bd3e4731f93a04aaced",
+    "details": {
+      "sha": "33f5ba014654f6ed9e5597bd1f4648662dbd7627",
+      "filename": "logger/src/main/java/com/orhanobut/logger/Logger.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 1,
+      "changes": 5,
+      "blob_url": "https://github.com/orhanobut/logger/blob/fa9dc6820da70aca47da6bd3e4731f93a04aaced/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java",
+      "raw_url": "https://github.com/orhanobut/logger/raw/fa9dc6820da70aca47da6bd3e4731f93a04aaced/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java",
+      "contents_url": "https://api.github.com/repos/orhanobut/logger/contents/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java?ref=fa9dc6820da70aca47da6bd3e4731f93a04aaced",
+      "patch": "@@ -260,7 +260,10 @@ public static void json(String tag, String json, int methodCount) {\n         }\n     }\n \n-    private static void log(int logType, String tag, String message, int methodCount) {\n+    /**\n+     * This method should synchronized to avoid messy of logs' order.\n+     */\n+    private synchronized static void log(int logType, String tag, String message, int methodCount) {\n         if (settings.logLevel == LogLevel.NONE) {\n             return;\n         }",
+      "parent_sha": "d01e32311b96b4c056b210ef1aa8b8d3d95d1a87"
+    }
+  },
+  {
+    "oid": "31f459155c50bd4f461ba766f6300cd1641f15de",
+    "message": "port finding stack offset to method call",
+    "date": "2015-03-28T14:30:57Z",
+    "url": "https://github.com/orhanobut/logger/commit/31f459155c50bd4f461ba766f6300cd1641f15de",
+    "details": {
+      "sha": "f166a4bc4a12d8b9079deb45c4c1e529e12a0af4",
+      "filename": "logger/src/main/java/com/orhanobut/logger/Logger.java",
+      "status": "modified",
+      "additions": 21,
+      "deletions": 11,
+      "changes": 32,
+      "blob_url": "https://github.com/orhanobut/logger/blob/31f459155c50bd4f461ba766f6300cd1641f15de/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java",
+      "raw_url": "https://github.com/orhanobut/logger/raw/31f459155c50bd4f461ba766f6300cd1641f15de/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java",
+      "contents_url": "https://api.github.com/repos/orhanobut/logger/contents/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java?ref=31f459155c50bd4f461ba766f6300cd1641f15de",
+      "patch": "@@ -32,6 +32,11 @@ public final class Logger {\n      */\n     private static final int MAX_METHOD_COUNT = 5;\n \n+    /**\n+     * The minimum stack trace index, starts at this class after two native calls.\n+     */\n+    private static final int MIN_STACK_OFFSET = 3;\n+\n     /**\n      * It is used to determine log settings such as method count, thread info visibility\n      */\n@@ -304,17 +309,7 @@ private static void logHeaderContent(int logType, String tag, int methodCount) {\n         }\n         String level = \"\";\n \n-        int stackOffset = -1;\n-        boolean foundThisClass = false;\n-        for (StackTraceElement e : trace) {\n-            //ignore this class in log output\n-            if(!foundThisClass && e.getClassName().equals(Logger.class.getName())) {\n-                foundThisClass = true;\n-            } else if (foundThisClass && !e.getClassName().equals(Logger.class.getName())){\n-                break;\n-            }\n-            stackOffset++;\n-        }\n+        int stackOffset = getStackOffset(trace);\n \n         for (int i = methodCount; i > 0; i--) {\n             int stackIndex = i + stackOffset;\n@@ -420,5 +415,20 @@ public Settings setLogLevel(LogLevel logLevel) {\n         }\n     }\n \n+    /**\n+     * Determines the starting index of the stack trace, after method calls made by this class.\n+     *\n+     * @param trace the stack trace\n+     * @return  the stack offset\n+     */\n+    private static int getStackOffset(StackTraceElement[] trace) {\n+        for (int i = MIN_STACK_OFFSET; i < trace.length; i++) {\n+            StackTraceElement e = trace[i];\n+            if (!e.getClassName().equals(Logger.class.getName())) {\n+                return --i;\n+            }\n+        }\n+        return -1;\n+    }\n \n }",
+      "parent_sha": "ab3e4e2d74fb907c37b449d32d1f855cf995f383"
+    }
+  },
+  {
+    "oid": "ab3e4e2d74fb907c37b449d32d1f855cf995f383",
+    "message": "fix for stack index offset",
+    "date": "2015-03-27T22:01:38Z",
+    "url": "https://github.com/orhanobut/logger/commit/ab3e4e2d74fb907c37b449d32d1f855cf995f383",
+    "details": {
+      "sha": "7085d4c1068a5da57630930329bc857ee468c4b4",
+      "filename": "logger/src/main/java/com/orhanobut/logger/Logger.java",
+      "status": "modified",
+      "additions": 15,
+      "deletions": 2,
+      "changes": 17,
+      "blob_url": "https://github.com/orhanobut/logger/blob/ab3e4e2d74fb907c37b449d32d1f855cf995f383/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java",
+      "raw_url": "https://github.com/orhanobut/logger/raw/ab3e4e2d74fb907c37b449d32d1f855cf995f383/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java",
+      "contents_url": "https://api.github.com/repos/orhanobut/logger/contents/logger%2Fsrc%2Fmain%2Fjava%2Fcom%2Forhanobut%2Flogger%2FLogger.java?ref=ab3e4e2d74fb907c37b449d32d1f855cf995f383",
+      "patch": "@@ -120,7 +120,7 @@ public static void e(String tag, Exception e) {\n \n     public static void e(String message, int methodCount) {\n         validateMethodCount(methodCount);\n-        e(message, null, methodCount);\n+        e(TAG, message, methodCount);\n     }\n \n     public static void e(String tag, String message, int methodCount) {\n@@ -303,8 +303,21 @@ private static void logHeaderContent(int logType, String tag, int methodCount) {\n             logDivider(logType, tag);\n         }\n         String level = \"\";\n+\n+        int stackOffset = -1;\n+        boolean foundThisClass = false;\n+        for (StackTraceElement e : trace) {\n+            //ignore this class in log output\n+            if(!foundThisClass && e.getClassName().equals(Logger.class.getName())) {\n+                foundThisClass = true;\n+            } else if (foundThisClass && !e.getClassName().equals(Logger.class.getName())){\n+                break;\n+            }\n+            stackOffset++;\n+        }\n+\n         for (int i = methodCount; i > 0; i--) {\n-            int stackIndex = i + 5;\n+            int stackIndex = i + stackOffset;\n             StringBuilder builder = new StringBuilder();\n             builder.append(\"\u2551 \")\n                     .append(level)",
+      "parent_sha": "0c78fa333e89f7cf50318e7e15c68fd1508805b1"
+    }
+  }
+]

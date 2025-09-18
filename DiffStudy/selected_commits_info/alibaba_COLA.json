@@ -1,0 +1,325 @@
+[
+  {
+    "oid": "ac8cecdc589d7ec339a11ef5449ce8a36bbaf718",
+    "message": "Update CatchLogAspect.java\n\n[\u674e\u5c0f\u5e73] #N/A feat: Catching and Logging,\u4fee\u8ba2\u574f\u5473\u9053",
+    "date": "2023-01-20T01:36:16Z",
+    "url": "https://github.com/alibaba/COLA/commit/ac8cecdc589d7ec339a11ef5449ce8a36bbaf718",
+    "details": {
+      "sha": "a9c8f2be825cdf9c14816ce91724b0eeca54e6cd",
+      "filename": "cola-components/cola-component-catchlog-starter/src/main/java/com/alibaba/cola/catchlog/CatchLogAspect.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 4,
+      "changes": 10,
+      "blob_url": "https://github.com/alibaba/COLA/blob/ac8cecdc589d7ec339a11ef5449ce8a36bbaf718/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/ac8cecdc589d7ec339a11ef5449ce8a36bbaf718/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java?ref=ac8cecdc589d7ec339a11ef5449ce8a36bbaf718",
+      "patch": "@@ -1,6 +1,5 @@\n package com.alibaba.cola.catchlog;\n \n-import com.alibaba.cola.exception.BaseException;\n import com.alibaba.cola.exception.BizException;\n import com.alibaba.cola.exception.SysException;\n import com.alibaba.fastjson.JSON;\n@@ -11,6 +10,7 @@\n import org.aspectj.lang.annotation.Aspect;\n import org.aspectj.lang.annotation.Pointcut;\n import org.aspectj.lang.reflect.MethodSignature;\n+import org.springframework.core.annotation.Order;\n \n /**\n  * @Description   :  Catching and Logging\n@@ -58,14 +58,16 @@ private Object handleException(ProceedingJoinPoint joinPoint, Throwable e) {\n             if (log.isDebugEnabled()) {\n                 log.error(e.getMessage(), e);\n             }\n-            return ResponseHandler.handle(returnType, (BaseException) e);\n+            return ResponseHandlerFactory.get().handle(returnType,\n+                ((BizException) e).getErrCode(), e.getMessage());\n         } else if (e instanceof SysException) {\n             log.error(\"SYS EXCEPTION: {}\",e.getMessage(), e);\n-            return ResponseHandler.handle(returnType, (BaseException) e);\n+          return ResponseHandlerFactory.get().handle(returnType,\n+              ((SysException) e).getErrCode(), e.getMessage());\n         }\n \n         log.error(\"UNKNOWN EXCEPTION: {}\", e.getMessage(), e);\n-        return ResponseHandler.handle(returnType, \"UNKNOWN_ERROR\", e.getMessage());\n+        return ResponseHandlerFactory.get().handle(returnType, \"UNKNOWN_ERROR\", e.getMessage());\n     }\n \n ",
+      "parent_sha": "b034b9ddea171607b138918b9f7eeaac5efe5e43"
+    }
+  },
+  {
+    "oid": "a4a1f2b009732ce83e197e7eaaeeb36273ad16d9",
+    "message": "fix parallel state junit test issue",
+    "date": "2024-04-21T03:16:57Z",
+    "url": "https://github.com/alibaba/COLA/commit/a4a1f2b009732ce83e197e7eaaeeb36273ad16d9",
+    "details": {
+      "sha": "4c34f7a0c909b51fc56ce08309d98d27d94bd695",
+      "filename": "cola-components/cola-component-statemachine/src/test/java/com/alibaba/cola/test/StateMachineTest.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/alibaba/COLA/blob/a4a1f2b009732ce83e197e7eaaeeb36273ad16d9/cola-components%2Fcola-component-statemachine%2Fsrc%2Ftest%2Fjava%2Fcom%2Falibaba%2Fcola%2Ftest%2FStateMachineTest.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/a4a1f2b009732ce83e197e7eaaeeb36273ad16d9/cola-components%2Fcola-component-statemachine%2Fsrc%2Ftest%2Fjava%2Fcom%2Falibaba%2Fcola%2Ftest%2FStateMachineTest.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-components%2Fcola-component-statemachine%2Fsrc%2Ftest%2Fjava%2Fcom%2Falibaba%2Fcola%2Ftest%2FStateMachineTest.java?ref=a4a1f2b009732ce83e197e7eaaeeb36273ad16d9",
+      "patch": "@@ -234,9 +234,9 @@ public void testParallel(){\n             System.out.println(state);\n         }\n         States target2 = stateMachine.fireEvent(StateMachineTest.States.STATE2, StateMachineTest.Events.EVENT2, new Context());\n-        Assert.assertEquals(States.STATE4,target2);\n+        Assertions.assertEquals(States.STATE4,target2);\n         States target3 = stateMachine.fireEvent(StateMachineTest.States.STATE3, StateMachineTest.Events.EVENT2, new Context());\n-        Assert.assertEquals(States.STATE4,target3);\n+        Assertions.assertEquals(States.STATE4,target3);\n     }\n \n     private Condition<Context> checkCondition() {",
+      "parent_sha": "942f3bc3fe8f735fd58a7c6a9559009807cca0c4"
+    }
+  },
+  {
+    "oid": "6f6025878a175e2dc57d80963f722785841ec631",
+    "message": "fix: \u8c03\u7528get\u65b9\u6cd5\u4e4b\u540e,\u4f8b\u5982\u548cfastjson\u5171\u540c\u4f7f\u7528\u65f6,\u573a\u666f\u503c\u88ab\u4fee\u6539\u7684\u95ee\u9898",
+    "date": "2020-11-11T10:38:19Z",
+    "url": "https://github.com/alibaba/COLA/commit/6f6025878a175e2dc57d80963f722785841ec631",
+    "details": {
+      "sha": "d6eaa2f78f30c7f33a812e3c26399b594ec12c6e",
+      "filename": "cola-framework-common/src/main/java/com/alibaba/cola/extension/BizScenario.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 5,
+      "changes": 7,
+      "blob_url": "https://github.com/alibaba/COLA/blob/6f6025878a175e2dc57d80963f722785841ec631/cola-framework-common%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2FBizScenario.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/6f6025878a175e2dc57d80963f722785841ec631/cola-framework-common%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2FBizScenario.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-framework-common%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2FBizScenario.java?ref=6f6025878a175e2dc57d80963f722785841ec631",
+      "patch": "@@ -59,13 +59,10 @@ public static BizScenario newDefault(){\n     }\n \n     public String getIdentityWithDefaultScenario(){\n-        this.scenario = DEFAULT_SCENARIO;\n-        return getUniqueIdentity();\n+        return bizId + DOT_SEPARATOR + useCase + DOT_SEPARATOR + DEFAULT_SCENARIO;\n     }\n \n     public String getIdentityWithDefaultUseCase(){\n-        this.scenario = DEFAULT_SCENARIO;\n-        this.useCase = DEFAULT_USE_CASE;\n-        return getUniqueIdentity();\n+        return bizId + DOT_SEPARATOR + DEFAULT_USE_CASE + DOT_SEPARATOR + DEFAULT_SCENARIO;\n     }\n }",
+      "parent_sha": "5d3525e16c3ae2a082825966a641cc5c3836b75e"
+    }
+  },
+  {
+    "oid": "a5b280ad476da6d23dfe11266f7be09020b38d4e",
+    "message": "Update ExtensionCoordinate.java\n\n[\u674e\u5c0f\u5e73] #N/A refactor: \u4fee\u8ba2\u574f\u5473\u9053",
+    "date": "2023-01-20T02:04:56Z",
+    "url": "https://github.com/alibaba/COLA/commit/a5b280ad476da6d23dfe11266f7be09020b38d4e",
+    "details": {
+      "sha": "bc608ff9a68d411a03f790f01c4cd9b2717cbf88",
+      "filename": "cola-components/cola-component-extension-starter/src/main/java/com/alibaba/cola/extension/ExtensionCoordinate.java",
+      "status": "modified",
+      "additions": 32,
+      "deletions": 22,
+      "changes": 54,
+      "blob_url": "https://github.com/alibaba/COLA/blob/a5b280ad476da6d23dfe11266f7be09020b38d4e/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2FExtensionCoordinate.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/a5b280ad476da6d23dfe11266f7be09020b38d4e/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2FExtensionCoordinate.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2FExtensionCoordinate.java?ref=a5b280ad476da6d23dfe11266f7be09020b38d4e",
+      "patch": "@@ -12,14 +12,14 @@\n  * @author fulan.zjf 2017-11-05\n  */\n public class ExtensionCoordinate {\n-    \n-    private String extensionPointName;\n-    private String bizScenarioUniqueIdentity;\n \n+    private final String extensionPointName;\n+    private final String bizScenarioUniqueIdentity;\n \n-\n-    //Wrapper\n-    private Class extensionPointClass;\n+    /**\n+     * Wrapper\n+     */\n+    private Class<?> extensionPointClass;\n     private BizScenario bizScenario;\n \n     public Class getExtensionPointClass() {\n@@ -30,26 +30,22 @@ public BizScenario getBizScenario() {\n         return bizScenario;\n     }\n \n-    public static ExtensionCoordinate valueOf(Class extPtClass, BizScenario bizScenario){\n+    public static ExtensionCoordinate valueOf(Class<?> extPtClass, BizScenario bizScenario){\n         return new ExtensionCoordinate(extPtClass, bizScenario);\n     }\n \n-    public ExtensionCoordinate(Class extPtClass, BizScenario bizScenario){\n+    public ExtensionCoordinate(Class<?> extPtClass, BizScenario bizScenario){\n         this.extensionPointClass = extPtClass;\n         this.extensionPointName = extPtClass.getName();\n         this.bizScenario = bizScenario;\n         this.bizScenarioUniqueIdentity = bizScenario.getUniqueIdentity();\n     }\n \n-    /**\n-     * @param extensionPoint\n-     * @param bizScenario\n-     */\n     public ExtensionCoordinate(String extensionPoint, String bizScenario){\n         this.extensionPointName = extensionPoint;\n         this.bizScenarioUniqueIdentity = bizScenario;\n     }\n-    \n+\n     @Override\n     public int hashCode() {\n         final int prime = 31;\n@@ -60,22 +56,36 @@ public int hashCode() {\n     }\n     @Override\n     public boolean equals(Object obj) {\n-        if (this == obj) return true;\n-        if (obj == null) return false;\n-        if (getClass() != obj.getClass()) return false;\n+        if (this == obj) {\n+          return true;\n+        }\n+\n+        if (obj == null) {\n+          return false;\n+        }\n+\n+        if (getClass() != obj.getClass()) {\n+          return false;\n+        }\n+\n         ExtensionCoordinate other = (ExtensionCoordinate) obj;\n         if (bizScenarioUniqueIdentity == null) {\n-            if (other.bizScenarioUniqueIdentity != null) return false;\n-        } else if (!bizScenarioUniqueIdentity.equals(other.bizScenarioUniqueIdentity)) return false;\n+            if (other.bizScenarioUniqueIdentity != null) {\n+              return false;\n+            }\n+        } else if (!bizScenarioUniqueIdentity.equals(other.bizScenarioUniqueIdentity)) {\n+          return false;\n+        }\n         if (extensionPointName == null) {\n-            if (other.extensionPointName != null) return false;\n-        } else if (!extensionPointName.equals(other.extensionPointName)) return false;\n-        return true;\n+          return other.extensionPointName == null;\n+        } else {\n+          return extensionPointName.equals(other.extensionPointName);\n+        }\n     }\n \n     @Override\n     public String toString() {\n         return \"ExtensionCoordinate [extensionPointName=\" + extensionPointName + \", bizScenarioUniqueIdentity=\" + bizScenarioUniqueIdentity + \"]\";\n     }\n-    \n+\n }",
+      "parent_sha": "ac8cecdc589d7ec339a11ef5449ce8a36bbaf718"
+    }
+  },
+  {
+    "oid": "9532cb5db86b0d7866aaaa1c62f025608ffdf7cf",
+    "message": "bugfix: #490",
+    "date": "2024-05-06T10:38:07Z",
+    "url": "https://github.com/alibaba/COLA/commit/9532cb5db86b0d7866aaaa1c62f025608ffdf7cf",
+    "details": {
+      "sha": "56735ceae6873bbc5fae838c986a5744966d0b04",
+      "filename": "cola-components/cola-component-extension-starter/src/main/java/com/alibaba/cola/extension/register/ExtensionBootstrap.java",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 8,
+      "changes": 20,
+      "blob_url": "https://github.com/alibaba/COLA/blob/9532cb5db86b0d7866aaaa1c62f025608ffdf7cf/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2Fregister%2FExtensionBootstrap.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/9532cb5db86b0d7866aaaa1c62f025608ffdf7cf/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2Fregister%2FExtensionBootstrap.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2Fregister%2FExtensionBootstrap.java?ref=9532cb5db86b0d7866aaaa1c62f025608ffdf7cf",
+      "patch": "@@ -3,6 +3,7 @@\n import com.alibaba.cola.extension.Extension;\n import com.alibaba.cola.extension.ExtensionPointI;\n import com.alibaba.cola.extension.Extensions;\n+import lombok.extern.slf4j.Slf4j;\n import org.springframework.beans.BeansException;\n import org.springframework.context.ApplicationContext;\n import org.springframework.context.ApplicationContextAware;\n@@ -18,6 +19,7 @@\n  * @author Frank Zhang\n  * @date 2020-06-18 7:55 PM\n  */\n+@Slf4j\n @Component\n public class ExtensionBootstrap implements ApplicationContextAware {\n \n@@ -28,14 +30,16 @@ public class ExtensionBootstrap implements ApplicationContextAware {\n \n     @PostConstruct\n     public void init(){\n-        Map<String, Object> extensionBeans = applicationContext.getBeansWithAnnotation(Extension.class);\n-        extensionBeans.values().forEach(\n-                extension -> extensionRegister.doRegistration((ExtensionPointI) extension)\n-        );\n-\n-        // handle @Extensions annotation\n-        Map<String, Object> extensionsBeans = applicationContext.getBeansWithAnnotation(Extensions.class);\n-        extensionsBeans.values().forEach( extension -> extensionRegister.doRegistrationExtensions((ExtensionPointI) extension));\n+        Map<String, ExtensionPointI> extMap = applicationContext.getBeansOfType(ExtensionPointI.class);\n+        for (ExtensionPointI ext : extMap.values()) {\n+            if (ext.getClass().isAnnotationPresent(Extension.class)) {\n+                extensionRegister.doRegistration(ext);\n+            }else if (ext.getClass().isAnnotationPresent(Extensions.class)){\n+                extensionRegister.doRegistrationExtensions(ext);\n+            }else {\n+                log.error(\"There is no annotation for @Extension or @Extension on this extension class:{}\" , ext.getClass());\n+            }\n+        }\n     }\n \n     @Override",
+      "parent_sha": "1a8c433397b3f0b9918ac8ed4dd79f40575f1d6f"
+    }
+  },
+  {
+    "oid": "e4da4602c6a68206d246290351eb86d0900fe12e",
+    "message": "[TEST]:[fix testVerify tc]",
+    "date": "2022-09-15T06:15:39Z",
+    "url": "https://github.com/alibaba/COLA/commit/e4da4602c6a68206d246290351eb86d0900fe12e",
+    "details": {
+      "sha": "9d45e74848bd7192491bacb91779079da6f29260",
+      "filename": "cola-components/cola-component-statemachine/src/test/java/com/alibaba/cola/test/StateMachineTest.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/alibaba/COLA/blob/e4da4602c6a68206d246290351eb86d0900fe12e/cola-components%2Fcola-component-statemachine%2Fsrc%2Ftest%2Fjava%2Fcom%2Falibaba%2Fcola%2Ftest%2FStateMachineTest.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/e4da4602c6a68206d246290351eb86d0900fe12e/cola-components%2Fcola-component-statemachine%2Fsrc%2Ftest%2Fjava%2Fcom%2Falibaba%2Fcola%2Ftest%2FStateMachineTest.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-components%2Fcola-component-statemachine%2Fsrc%2Ftest%2Fjava%2Fcom%2Falibaba%2Fcola%2Ftest%2FStateMachineTest.java?ref=e4da4602c6a68206d246290351eb86d0900fe12e",
+      "patch": "@@ -69,7 +69,7 @@ public void testFailover() {\n \n         builder.setFailoverCallback(new AlertFailoverCallbackImpl<>());\n \n-        StateMachine<States, Events, Context> stateMachine = builder.build(MACHINE_ID);\n+        StateMachine<States, Events, Context> stateMachine = builder.build(MACHINE_ID + \"-testFailover\");\n         Assert.assertThrows(TransitionFailoverException.class,\n             () -> stateMachine.fireEvent(States.STATE2, Events.EVENT1, new Context()));\n     }\n@@ -84,7 +84,7 @@ public void testVerify() {\n             .when(checkCondition())\n             .perform(doAction());\n \n-        StateMachine<States, Events, Context> stateMachine = builder.build(MACHINE_ID);\n+        StateMachine<States, Events, Context> stateMachine = builder.build(MACHINE_ID + \"-testVerify\");\n \n         Assert.assertTrue(stateMachine.verify(States.STATE1, Events.EVENT1));\n         Assert.assertFalse(stateMachine.verify(States.STATE1, Events.EVENT2));",
+      "parent_sha": "be83fad92b461edcc4a73a4cf363a8a476591816"
+    }
+  },
+  {
+    "oid": "15af415639dfe9ecbe9c3a2bbf4bdb1aa7877401",
+    "message": "Update CatchLogAspect.java\n\n[\u674e\u5c0f\u5e73] #N/A feat: Catching and Logging,\u4fee\u8ba2\u574f\u5473\u9053",
+    "date": "2023-01-20T01:22:44Z",
+    "url": "https://github.com/alibaba/COLA/commit/15af415639dfe9ecbe9c3a2bbf4bdb1aa7877401",
+    "details": {
+      "sha": "0968f29e891141f974a3ade7b77f6bc945df82ae",
+      "filename": "cola-components/cola-component-catchlog-starter/src/main/java/com/alibaba/cola/catchlog/CatchLogAspect.java",
+      "status": "modified",
+      "additions": 28,
+      "deletions": 33,
+      "changes": 61,
+      "blob_url": "https://github.com/alibaba/COLA/blob/15af415639dfe9ecbe9c3a2bbf4bdb1aa7877401/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/15af415639dfe9ecbe9c3a2bbf4bdb1aa7877401/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java?ref=15af415639dfe9ecbe9c3a2bbf4bdb1aa7877401",
+      "patch": "@@ -11,23 +11,19 @@\n import org.aspectj.lang.annotation.Aspect;\n import org.aspectj.lang.annotation.Pointcut;\n import org.aspectj.lang.reflect.MethodSignature;\n-import org.springframework.core.annotation.Order;\n-\n-import javax.annotation.Resource;\n \n /**\n- * @ Description   :  Catching and Logging\n- * @ Author        :  Frank Zhang\n- * @ CreateDate    :  2020/11/09\n- * @ Version       :  1.0\n+ * @Description   :  Catching and Logging\n+ * @author        :  Frank Zhang\n+ * @CreateDate    :  2020/11/09\n+ * @version       :  1.0\n  */\n @Aspect\n @Slf4j\n-@Order(1)\n public class CatchLogAspect {\n \n     /**\n-     * The syntax of pointcut : https://blog.csdn.net/zhengchao1991/article/details/53391244\n+     *  <a href=\"https://blog.csdn.net/zhengchao1991/article/details/53391244\">The syntax of pointcut </a>\n      */\n     @Pointcut(\"@within(CatchAndLog) && execution(public * *(..))\")\n     public void pointcut() {\n@@ -53,53 +49,52 @@ public Object around(ProceedingJoinPoint joinPoint) {\n \n     private Object handleException(ProceedingJoinPoint joinPoint, Throwable e) {\n         MethodSignature ms = (MethodSignature) joinPoint.getSignature();\n-        Class returnType = ms.getReturnType();\n+        Class<?> returnType = ms.getReturnType();\n \n         if (e instanceof BizException) {\n-            log.warn(\"BIZ EXCEPTION : \" + e.getMessage());\n-            //\u5728Debug\u7684\u65f6\u5019\uff0c\u5bf9\u4e8eBizException\u4e5f\u6253\u5370\u5806\u6808\n+            log.warn(\"BIZ EXCEPTION : {}\", e.getMessage());\n+            // \u5728Debug\u7684\u65f6\u5019\uff0c\u5bf9\u4e8eBizException\u4e5f\u6253\u5370\u5806\u6808\n             if (log.isDebugEnabled()) {\n                 log.error(e.getMessage(), e);\n             }\n-            return ResponseHandlerFactory.get().handle(returnType, ((BizException) e).getErrCode(), e.getMessage());\n-        }\n-\n-        if (e instanceof SysException) {\n-            log.error(\"SYS EXCEPTION :\");\n-            log.error(e.getMessage(), e);\n-            return ResponseHandlerFactory.get().handle(returnType, ((SysException) e).getErrCode(), e.getMessage());\n+            return ResponseHandler.handle(returnType, (BaseException) e);\n+        } else if (e instanceof SysException) {\n+            log.error(\"SYS EXCEPTION: {}\",e.getMessage(), e);\n+            return ResponseHandler.handle(returnType, (BaseException) e);\n         }\n \n-        log.error(\"UNKNOWN EXCEPTION :\");\n-        log.error(e.getMessage(), e);\n-\n-        return ResponseHandlerFactory.get().handle(returnType, \"UNKNOWN_ERROR\", e.getMessage());\n+        log.error(\"UNKNOWN EXCEPTION: {}\", e.getMessage(), e);\n+        return ResponseHandler.handle(returnType, \"UNKNOWN_ERROR\", e.getMessage());\n     }\n \n+\n     private void logResponse(long startTime, Object response) {\n         try {\n             long endTime = System.currentTimeMillis();\n-            log.debug(\"RESPONSE : \" + JSON.toJSONString(response));\n-            log.debug(\"COST : \" + (endTime - startTime) + \"ms\");\n+            if (log.isDebugEnabled()) {\n+                log.debug(\"RESPONSE : {}\", JSON.toJSONString(response));\n+                log.debug(\"COST : {}ms\", (endTime - startTime));\n+            }\n         } catch (Exception e) {\n             //swallow it\n-            log.error(\"logResponse error : \" + e);\n+            log.error(\"logResponse error : {}\", e.getMessage() , e);\n         }\n     }\n \n     private void logRequest(ProceedingJoinPoint joinPoint) {\n-        try {\n-            if (!log.isDebugEnabled()) {\n-                return;\n-            }\n-            log.debug(\"START PROCESSING: \" + joinPoint.getSignature().toShortString());\n+      if (!log.isDebugEnabled()) {\n+        return;\n+      }\n+\n+      try {\n+            log.debug(\"START PROCESSING: {}\", joinPoint.getSignature().toShortString());\n             Object[] args = joinPoint.getArgs();\n             for (Object arg : args) {\n-                log.debug(\"REQUEST : \" + JSON.toJSONString(arg, SerializerFeature.IgnoreErrorGetter));\n+                log.debug(\"REQUEST : {}\", JSON.toJSONString(arg, SerializerFeature.IgnoreErrorGetter));\n             }\n         } catch (Exception e) {\n             //swallow it\n-            log.error(\"logReqeust error : \" + e);\n+            log.error(\"logReqeust error : {}\", e.getMessage() , e);\n         }\n     }\n ",
+      "parent_sha": "7049a1d5a7a3b3e7d925aa26bb4e053d484f0c25"
+    }
+  },
+  {
+    "oid": "3d73836e19ca0245964cba6af3349c6c3b53fedf",
+    "message": "Update CatchLogAspect.java\n\n[\u674e\u5c0f\u5e73] #N/A feat: Catching and Logging,\u4fee\u8ba2\u574f",
+    "date": "2023-01-20T01:25:09Z",
+    "url": "https://github.com/alibaba/COLA/commit/3d73836e19ca0245964cba6af3349c6c3b53fedf",
+    "details": {
+      "sha": "295c425feeccebad4b5c788c91b277c0a00f602d",
+      "filename": "cola-components/cola-component-catchlog-starter/src/main/java/com/alibaba/cola/catchlog/CatchLogAspect.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 5,
+      "changes": 10,
+      "blob_url": "https://github.com/alibaba/COLA/blob/3d73836e19ca0245964cba6af3349c6c3b53fedf/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/3d73836e19ca0245964cba6af3349c6c3b53fedf/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java?ref=3d73836e19ca0245964cba6af3349c6c3b53fedf",
+      "patch": "@@ -72,12 +72,12 @@ private void logResponse(long startTime, Object response) {\n         try {\n             long endTime = System.currentTimeMillis();\n             if (log.isDebugEnabled()) {\n-                log.debug(\"RESPONSE : {}\", JSON.toJSONString(response));\n-                log.debug(\"COST : {}ms\", (endTime - startTime));\n+                log.debug(\"RESPONSE: {}\", JSON.toJSONString(response));\n+                log.debug(\"COST: {}ms\", (endTime - startTime));\n             }\n         } catch (Exception e) {\n             //swallow it\n-            log.error(\"logResponse error : {}\", e.getMessage() , e);\n+            log.error(\"logResponse error: {}\", e.getMessage() , e);\n         }\n     }\n \n@@ -90,11 +90,11 @@ private void logRequest(ProceedingJoinPoint joinPoint) {\n             log.debug(\"START PROCESSING: {}\", joinPoint.getSignature().toShortString());\n             Object[] args = joinPoint.getArgs();\n             for (Object arg : args) {\n-                log.debug(\"REQUEST : {}\", JSON.toJSONString(arg, SerializerFeature.IgnoreErrorGetter));\n+                log.debug(\"REQUEST: {}\", JSON.toJSONString(arg, SerializerFeature.IgnoreErrorGetter));\n             }\n         } catch (Exception e) {\n             //swallow it\n-            log.error(\"logReqeust error : {}\", e.getMessage() , e);\n+            log.error(\"logReqeust error: {}\", e.getMessage() , e);\n         }\n     }\n ",
+      "parent_sha": "15af415639dfe9ecbe9c3a2bbf4bdb1aa7877401"
+    }
+  },
+  {
+    "oid": "194efe808fd793f54c14afed86fee796fba0fbb1",
+    "message": "enhance exception handling",
+    "date": "2019-01-04T08:28:58Z",
+    "url": "https://github.com/alibaba/COLA/commit/194efe808fd793f54c14afed86fee796fba0fbb1",
+    "details": {
+      "sha": "3f09f8d848f1331b11b937fb0c2725966f6e548e",
+      "filename": "cola-framework/cola-core/src/main/java/com/alibaba/cola/command/CommandBus.java",
+      "status": "modified",
+      "additions": 26,
+      "deletions": 12,
+      "changes": 38,
+      "blob_url": "https://github.com/alibaba/COLA/blob/194efe808fd793f54c14afed86fee796fba0fbb1/cola-framework%2Fcola-core%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcommand%2FCommandBus.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/194efe808fd793f54c14afed86fee796fba0fbb1/cola-framework%2Fcola-core%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcommand%2FCommandBus.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-framework%2Fcola-core%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcommand%2FCommandBus.java?ref=194efe808fd793f54c14afed86fee796fba0fbb1",
+      "patch": "@@ -1,5 +1,6 @@\n package com.alibaba.cola.command;\n \n+import com.alibaba.cola.common.ApplicationContextHelper;\n import com.alibaba.cola.exception.*;\n import org.springframework.beans.BeansException;\n import org.springframework.beans.factory.NoSuchBeanDefinitionException;\n@@ -18,16 +19,14 @@\n  * @author fulan.zjf 2017\u5e7410\u670824\u65e5 \u4e0a\u534812:47:18\n  */\n @Component\n-public class CommandBus implements CommandBusI, ApplicationContextAware{\n+public class CommandBus implements CommandBusI{\n     \n     Logger logger = LoggerFactory.getLogger(CommandBus.class);\n     \n     @Autowired\n     private CommandHub commandHub;\n \n-    private ApplicationContext applicationContext;\n \n-    @SuppressWarnings(\"unchecked\")\n     @Override\n     public Response send(Command cmd) {\n         Response response = null;\n@@ -58,12 +57,34 @@ private Response getResponseInstance(Command cmd) {\n         try {\n             return (Response) responseClz.newInstance();\n         } catch (Exception e) {\n-            logger.error(\"Process \"+cmd+\" error: \"+e.getMessage(), e);\n             throw new ColaException(e.getMessage());\n         }\n     }\n \n     private void defaultHandleException(Command cmd, Response response, Exception exception) {\n+        formResponse(response, exception);\n+\n+        printLog(cmd, response, exception);\n+    }\n+\n+    private void printLog(Command cmd, Response response, Exception exception) {\n+        if(exception instanceof BizException || exception instanceof ParamException){\n+            //biz exception is expected, only warn it\n+            logger.warn(buildErrorMsg(cmd, response));\n+        }\n+        else{\n+            //sys exception should be monitored, and pay attention to it\n+            logger.error(buildErrorMsg(cmd, response), exception);\n+        }\n+    }\n+\n+    private String buildErrorMsg(Command cmd, Response response) {\n+        return \"Process [\" + cmd + \"] failed, errorCode: \"\n+                + response.getErrCode() + \" errorMsg:\"\n+                + response.getErrMessage();\n+    }\n+\n+    private void formResponse(Response response, Exception exception) {\n         if (exception instanceof AppException) {\n             ErrorCodeI errCode = ((AppException) exception).getErrCode();\n             response.setErrCode(errCode.getErrCode());\n@@ -72,22 +93,15 @@ private void defaultHandleException(Command cmd, Response response, Exception ex\n             response.setErrCode(BasicErrorCode.S_UNKNOWN.getErrCode());\n         }\n         response.setErrMessage(exception.getMessage());\n-        logger.error(\"Process [\"+cmd+\"] error, errorCode: \"\n-                + response.getErrCode() + \" errorMsg:\"\n-                + response.getErrMessage(), exception);\n     }\n \n     private ExceptionHandlerI getCustomerizedExceptionHandler() {\n         try {\n-            return applicationContext.getBean(ExceptionHandlerI.class);\n+            return ApplicationContextHelper.getBean(ExceptionHandlerI.class);\n         }\n         catch (NoSuchBeanDefinitionException ex){\n             return null;\n         }\n     }\n \n-    @Override\n-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {\n-        this.applicationContext = applicationContext;\n-    }\n }",
+      "parent_sha": "6dd74127684ee84d75b7a6f2cbb931d98e8f0a85"
+    }
+  },
+  {
+    "oid": "4acb71d66f06a354ecbb92c557ac753cb7ab9e35",
+    "message": "\u4fee\u590d\u4e8b\u4ef6\u548c\u6ce8\u518c\u5904\u7406\u5668\u7684\u6620\u5c04\u7ed1\u5b9a bug\n\n\u4e8b\u4ef6\u6ce8\u518cmapping bugfix",
+    "date": "2020-08-26T08:08:18Z",
+    "url": "https://github.com/alibaba/COLA/commit/4acb71d66f06a354ecbb92c557ac753cb7ab9e35",
+    "details": {
+      "sha": "73d87db273ae0025afddbb394404cf9057343477",
+      "filename": "cola-framework-core/src/main/java/com/alibaba/cola/event/EventHub.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 2,
+      "changes": 3,
+      "blob_url": "https://github.com/alibaba/COLA/blob/4acb71d66f06a354ecbb92c557ac753cb7ab9e35/cola-framework-core%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fevent%2FEventHub.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/4acb71d66f06a354ecbb92c557ac753cb7ab9e35/cola-framework-core%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fevent%2FEventHub.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-framework-core%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fevent%2FEventHub.java?ref=4acb71d66f06a354ecbb92c557ac753cb7ab9e35",
+      "patch": "@@ -50,10 +50,9 @@ public void register(Class<? extends EventI> eventClz, EventHandlerI executor){\n         List<EventHandlerI> eventHandlers = eventRepository.get(eventClz);\n         if(eventHandlers == null){\n             eventHandlers = new ArrayList<>();\n-            eventRepository.put(eventClz, eventHandlers);\n         }\n         eventHandlers.add(executor);\n-\n+        eventRepository.put(eventClz, eventHandlers);\n     }\n \n     private List<EventHandlerI> findHandler(Class<? extends EventI> eventClass){",
+      "parent_sha": "4df70366ae43daf1ef6fcb0333c3ded6cc4d9381"
+    }
+  },
+  {
+    "oid": "0acda5c1d982cbadbc27e3a87c95f8bbdd06af4e",
+    "message": "fix AOP error",
+    "date": "2021-05-28T10:12:58Z",
+    "url": "https://github.com/alibaba/COLA/commit/0acda5c1d982cbadbc27e3a87c95f8bbdd06af4e",
+    "details": {
+      "sha": "f8075484e5132f46a4919e216d6d1a92596fda94",
+      "filename": "cola-components/cola-component-extension-starter/src/main/java/com/alibaba/cola/extension/register/ExtensionRegister.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 1,
+      "changes": 6,
+      "blob_url": "https://github.com/alibaba/COLA/blob/0acda5c1d982cbadbc27e3a87c95f8bbdd06af4e/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2Fregister%2FExtensionRegister.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/0acda5c1d982cbadbc27e3a87c95f8bbdd06af4e/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2Fregister%2FExtensionRegister.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2Fregister%2FExtensionRegister.java?ref=0acda5c1d982cbadbc27e3a87c95f8bbdd06af4e",
+      "patch": "@@ -9,6 +9,7 @@\n \n import com.alibaba.cola.extension.*;\n \n+import org.springframework.aop.support.AopUtils;\n import org.springframework.core.annotation.AnnotationUtils;\n import org.springframework.stereotype.Component;\n import org.springframework.util.ClassUtils;\n@@ -30,6 +31,9 @@ public class ExtensionRegister{\n \n     public void doRegistration(ExtensionPointI extensionObject){\n         Class<?>  extensionClz = extensionObject.getClass();\n+        if (AopUtils.isAopProxy(extensionObject)) {\n+            extensionClz = ClassUtils.getUserClass(extensionObject);\n+        }\n         Extension extensionAnn = AnnotationUtils.findAnnotation(extensionClz, Extension.class);\n         BizScenario bizScenario = BizScenario.valueOf(extensionAnn.bizId(), extensionAnn.useCase(), extensionAnn.scenario());\n         ExtensionCoordinate extensionCoordinate = new ExtensionCoordinate(calculateExtensionPoint(extensionClz), bizScenario.getUniqueIdentity());\n@@ -55,4 +59,4 @@ private String calculateExtensionPoint(Class<?> targetClz) {\n         throw new RuntimeException(\"Your name of ExtensionPoint for \"+targetClz+\" is not valid, must be end of \"+ EXTENSION_EXTPT_NAMING);\n     }\n \n-}\n\\ No newline at end of file\n+}",
+      "parent_sha": "4d1e4028d4608716db9bb52661049ded291b7bd5"
+    }
+  },
+  {
+    "oid": "e38c2ec73356825eeda4a8a70fc522e1f26fce72",
+    "message": "fix log request serialize error",
+    "date": "2021-06-23T08:01:44Z",
+    "url": "https://github.com/alibaba/COLA/commit/e38c2ec73356825eeda4a8a70fc522e1f26fce72",
+    "details": {
+      "sha": "cbe2572da09b7ed04b5b0812abdd6030af9fec22",
+      "filename": "cola-components/cola-component-catchlog-starter/src/main/java/com/alibaba/cola/catchlog/CatchLogAspect.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 1,
+      "changes": 6,
+      "blob_url": "https://github.com/alibaba/COLA/blob/e38c2ec73356825eeda4a8a70fc522e1f26fce72/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/e38c2ec73356825eeda4a8a70fc522e1f26fce72/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-components%2Fcola-component-catchlog-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fcatchlog%2FCatchLogAspect.java?ref=e38c2ec73356825eeda4a8a70fc522e1f26fce72",
+      "patch": "@@ -4,6 +4,7 @@\n import com.alibaba.cola.exception.BizException;\n import com.alibaba.cola.exception.SysException;\n import com.alibaba.fastjson.JSON;\n+import com.alibaba.fastjson.serializer.SerializerFeature;\n import lombok.extern.slf4j.Slf4j;\n import org.aspectj.lang.ProceedingJoinPoint;\n import org.aspectj.lang.annotation.Around;\n@@ -88,10 +89,13 @@ private void logResponse(long startTime, Object response) {\n \n     private void logRequest(ProceedingJoinPoint joinPoint) {\n         try {\n+            if (!log.isDebugEnabled()) {\n+                return;\n+            }\n             log.debug(\"START PROCESSING: \" + joinPoint.getSignature().toShortString());\n             Object[] args = joinPoint.getArgs();\n             for (Object arg : args) {\n-                log.debug(\"REQUEST : \" + JSON.toJSONString(arg));\n+                log.debug(\"REQUEST : \" + JSON.toJSONString(arg, SerializerFeature.IgnoreErrorGetter));\n             }\n         }\n         catch (Exception e){",
+      "parent_sha": "0acda5c1d982cbadbc27e3a87c95f8bbdd06af4e"
+    }
+  },
+  {
+    "oid": "efaf5c5d6eeab5b3cb819a27c29a2c3fbe1be26d",
+    "message": "fix aop use jdk dynamic proxy NPE issue",
+    "date": "2022-08-18T09:10:40Z",
+    "url": "https://github.com/alibaba/COLA/commit/efaf5c5d6eeab5b3cb819a27c29a2c3fbe1be26d",
+    "details": {
+      "sha": "125aaedbed05414e0b5ade913d6d55ee65e73f64",
+      "filename": "cola-components/cola-component-extension-starter/src/main/java/com/alibaba/cola/extension/register/ExtensionRegister.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 3,
+      "changes": 7,
+      "blob_url": "https://github.com/alibaba/COLA/blob/efaf5c5d6eeab5b3cb819a27c29a2c3fbe1be26d/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2Fregister%2FExtensionRegister.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/efaf5c5d6eeab5b3cb819a27c29a2c3fbe1be26d/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2Fregister%2FExtensionRegister.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-components%2Fcola-component-extension-starter%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fextension%2Fregister%2FExtensionRegister.java?ref=efaf5c5d6eeab5b3cb819a27c29a2c3fbe1be26d",
+      "patch": "@@ -10,14 +10,15 @@\n import com.alibaba.cola.extension.*;\n \n import org.springframework.aop.support.AopUtils;\n+import org.springframework.core.annotation.AnnotatedElementUtils;\n import org.springframework.core.annotation.AnnotationUtils;\n import org.springframework.stereotype.Component;\n import org.springframework.util.ClassUtils;\n \n import javax.annotation.Resource;\n \n /**\n- * ExtensionRegister \n+ * ExtensionRegister\n  * @author fulan.zjf 2017-11-05\n  */\n @Component\n@@ -32,9 +33,9 @@ public class ExtensionRegister{\n     public void doRegistration(ExtensionPointI extensionObject){\n         Class<?>  extensionClz = extensionObject.getClass();\n         if (AopUtils.isAopProxy(extensionObject)) {\n-            extensionClz = ClassUtils.getUserClass(extensionObject);\n+            extensionClz = AopUtils.getTargetClass(extensionObject);\n         }\n-        Extension extensionAnn = AnnotationUtils.findAnnotation(extensionClz, Extension.class);\n+        Extension extensionAnn = AnnotatedElementUtils.findMergedAnnotation(extensionClz, Extension.class);\n         BizScenario bizScenario = BizScenario.valueOf(extensionAnn.bizId(), extensionAnn.useCase(), extensionAnn.scenario());\n         ExtensionCoordinate extensionCoordinate = new ExtensionCoordinate(calculateExtensionPoint(extensionClz), bizScenario.getUniqueIdentity());\n         ExtensionPointI preVal = extensionRepository.getExtensionRepo().put(extensionCoordinate, extensionObject);",
+      "parent_sha": "c46f95b28c28b9f6c7f88deaa9a7112d88a8cd4e"
+    }
+  },
+  {
+    "oid": "a35f394eb41a372bad7f4881210be8a511409f7f",
+    "message": "Update CustomerWapAdaptor.java\n\nModify the wrong package\uff1amobile=>wap",
+    "date": "2020-11-04T08:33:21Z",
+    "url": "https://github.com/alibaba/COLA/commit/a35f394eb41a372bad7f4881210be8a511409f7f",
+    "details": {
+      "sha": "b2a3e7917aebf716fc5ea7351194d33c432daa80",
+      "filename": "cola-archetype-web/src/main/resources/archetype-resources/__rootArtifactId__-adaptor/src/main/java/wap/CustomerWapAdaptor.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/alibaba/COLA/blob/a35f394eb41a372bad7f4881210be8a511409f7f/cola-archetype-web%2Fsrc%2Fmain%2Fresources%2Farchetype-resources%2F__rootArtifactId__-adaptor%2Fsrc%2Fmain%2Fjava%2Fwap%2FCustomerWapAdaptor.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/a35f394eb41a372bad7f4881210be8a511409f7f/cola-archetype-web%2Fsrc%2Fmain%2Fresources%2Farchetype-resources%2F__rootArtifactId__-adaptor%2Fsrc%2Fmain%2Fjava%2Fwap%2FCustomerWapAdaptor.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-archetype-web%2Fsrc%2Fmain%2Fresources%2Farchetype-resources%2F__rootArtifactId__-adaptor%2Fsrc%2Fmain%2Fjava%2Fwap%2FCustomerWapAdaptor.java?ref=a35f394eb41a372bad7f4881210be8a511409f7f",
+      "patch": "@@ -1,7 +1,7 @@\n #set( $symbol_pound = '#' )\n #set( $symbol_dollar = '$' )\n #set( $symbol_escape = '\\' )\n-package ${package}.mobile;\n+package ${package}.wap;\n \n /**\n  * Customer Wap Adaptor",
+      "parent_sha": "2bd01696fb77538ce3e92d677ce282e572773fa4"
+    }
+  },
+  {
+    "oid": "6a00153d241092fcbd4b0a2bf8b3d4ca0cbf6183",
+    "message": "fix naming bug",
+    "date": "2018-02-06T09:39:37Z",
+    "url": "https://github.com/alibaba/COLA/commit/6a00153d241092fcbd4b0a2bf8b3d4ca0cbf6183",
+    "details": {
+      "sha": "3950ab055c2cd6dda277184fd1fc8eddc9f356c3",
+      "filename": "sofa-archetype/src/main/resources/archetype-resources/__rootArtifactId__-app/src/main/java/command/query/CustomerFindByCriteriaQueryExe.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 4,
+      "changes": 8,
+      "blob_url": "https://github.com/alibaba/COLA/blob/6a00153d241092fcbd4b0a2bf8b3d4ca0cbf6183/sofa-archetype%2Fsrc%2Fmain%2Fresources%2Farchetype-resources%2F__rootArtifactId__-app%2Fsrc%2Fmain%2Fjava%2Fcommand%2Fquery%2FCustomerFindByCriteriaQueryExe.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/6a00153d241092fcbd4b0a2bf8b3d4ca0cbf6183/sofa-archetype%2Fsrc%2Fmain%2Fresources%2Farchetype-resources%2F__rootArtifactId__-app%2Fsrc%2Fmain%2Fjava%2Fcommand%2Fquery%2FCustomerFindByCriteriaQueryExe.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/sofa-archetype%2Fsrc%2Fmain%2Fresources%2Farchetype-resources%2F__rootArtifactId__-app%2Fsrc%2Fmain%2Fjava%2Fcommand%2Fquery%2FCustomerFindByCriteriaQueryExe.java?ref=6a00153d241092fcbd4b0a2bf8b3d4ca0cbf6183",
+      "patch": "@@ -17,22 +17,22 @@\n import java.util.List;\n \n @Command\n-public class CustomerFindByCriteriaQryExe implements QueryExecutorI<MultiResponse<CustomerCO>, CustomerFindByCriteriaQry> {\n+public class CustomerFindByCriteriaQueryExe implements QueryExecutorI<MultiResponse<CustomerCO>, CustomerFindByCriteriaQry> {\n \n     @Autowired\n     CustomerTunnelI customerDBTunnel;\n-    \n+\n     @Autowired\n     CustomerConvertor customerConvertor;\n-    \n+\n     @Override\n     public MultiResponse<CustomerCO> execute(CustomerFindByCriteriaQry cmd) {\n         CustomerDO customerDO = customerDBTunnel.get(\"123\");\n         List<CustomerCO> customerCos = new ArrayList<>();\n         customerCos.add(customerConvertor.dataToClient(customerDO));\n         return MultiResponse.of(customerCos, customerCos.size());\n     }\n-    \n+\n \n     public CustomerDO get(String id) {\n         CustomerDO customerDO = customerDBTunnel.get(\"123\");",
+      "parent_sha": "3b9a0b23983b52799d5afc999e1bf4c6061ac3fc"
+    }
+  },
+  {
+    "oid": "5fbe02061ddd1c86e9faaae2b09afed2a4955a7f",
+    "message": "! fix UT fail of archetype:generate project by cola-framework-archetype-web",
+    "date": "2021-01-04T13:39:11Z",
+    "url": "https://github.com/alibaba/COLA/commit/5fbe02061ddd1c86e9faaae2b09afed2a4955a7f",
+    "details": {
+      "sha": "bda87037cbba0acefcc8188c087126738c1dff26",
+      "filename": "cola-archetypes/cola-archetype-web/src/main/resources/archetype-resources/start/src/test/java/test/CustomerServiceTest.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 5,
+      "changes": 9,
+      "blob_url": "https://github.com/alibaba/COLA/blob/5fbe02061ddd1c86e9faaae2b09afed2a4955a7f/cola-archetypes%2Fcola-archetype-web%2Fsrc%2Fmain%2Fresources%2Farchetype-resources%2Fstart%2Fsrc%2Ftest%2Fjava%2Ftest%2FCustomerServiceTest.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/5fbe02061ddd1c86e9faaae2b09afed2a4955a7f/cola-archetypes%2Fcola-archetype-web%2Fsrc%2Fmain%2Fresources%2Farchetype-resources%2Fstart%2Fsrc%2Ftest%2Fjava%2Ftest%2FCustomerServiceTest.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-archetypes%2Fcola-archetype-web%2Fsrc%2Fmain%2Fresources%2Farchetype-resources%2Fstart%2Fsrc%2Ftest%2Fjava%2Ftest%2FCustomerServiceTest.java?ref=5fbe02061ddd1c86e9faaae2b09afed2a4955a7f",
+      "patch": "@@ -4,10 +4,10 @@\n package ${package}.test;\n \n import com.alibaba.cola.dto.Response;\n-import com.alibaba.cola.exception.BizException;\n import ${package}.api.CustomerServiceI;\n import ${package}.dto.CustomerAddCmd;\n import ${package}.dto.data.CustomerDTO;\n+import ${package}.dto.data.ErrorCode;\n import org.junit.Assert;\n import org.junit.Before;\n import org.junit.Test;\n@@ -49,7 +49,7 @@ public void testCustomerAddSuccess(){\n         Assert.assertTrue(response.isSuccess());\n     }\n \n-    @Test(expected = BizException.class)\n+    @Test\n     public void testCustomerAddCompanyNameConflict(){\n         //1.prepare\n         CustomerAddCmd customerAddCmd = new CustomerAddCmd();\n@@ -60,8 +60,7 @@ public void testCustomerAddCompanyNameConflict(){\n         //2.execute\n         Response response = customerService.addCustomer(customerAddCmd);\n \n-        //3.Exception\n-        //Assert.assertEquals(ErrorCode.B_CUSTOMER_companyNameConflict.getErrCode(), response.getErrCode());\n-\n+        //3.assert error\n+        Assert.assertEquals(ErrorCode.B_CUSTOMER_companyNameConflict.getErrCode(), response.getErrCode());\n     }\n }",
+      "parent_sha": "bde575910678b2f7236972871fc35adc6084c9c6"
+    }
+  },
+  {
+    "oid": "efdeecb7eda924c2e49bac880c1276190e44d40d",
+    "message": "fix\u4e8b\u4ef6\u5904\u7406\u5668\u548cReturnType\u7684\u6620\u5c04\u5173\u7cfb\u9057\u6f0fbug\n\nhandleException \u4f1a \u83b7\u53d6 responseClz, \u6620\u5c04\u4e0d\u5efa\u7acb\u4f1a\u6709\u95ee\u9898",
+    "date": "2020-08-26T09:26:15Z",
+    "url": "https://github.com/alibaba/COLA/commit/efdeecb7eda924c2e49bac880c1276190e44d40d",
+    "details": {
+      "sha": "41603beaaf1ac57b228f0d9652cc24abb496da7c",
+      "filename": "cola-framework-core/src/main/java/com/alibaba/cola/boot/EventRegister.java",
+      "status": "modified",
+      "additions": 27,
+      "deletions": 2,
+      "changes": 29,
+      "blob_url": "https://github.com/alibaba/COLA/blob/efdeecb7eda924c2e49bac880c1276190e44d40d/cola-framework-core%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fboot%2FEventRegister.java",
+      "raw_url": "https://github.com/alibaba/COLA/raw/efdeecb7eda924c2e49bac880c1276190e44d40d/cola-framework-core%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fboot%2FEventRegister.java",
+      "contents_url": "https://api.github.com/repos/alibaba/COLA/contents/cola-framework-core%2Fsrc%2Fmain%2Fjava%2Fcom%2Falibaba%2Fcola%2Fboot%2FEventRegister.java?ref=efdeecb7eda924c2e49bac880c1276190e44d40d",
+      "patch": "@@ -9,6 +9,7 @@\n \n import com.alibaba.cola.common.ApplicationContextHelper;\n import com.alibaba.cola.common.ColaConstant;\n+import com.alibaba.cola.dto.Response;\n import com.alibaba.cola.event.EventI;\n import com.alibaba.cola.event.EventHandlerI;\n import com.alibaba.cola.event.EventHub;\n@@ -42,23 +43,47 @@ private Class<? extends EventI> getEventFromExecutor(Class<?> eventExecutorClz)\n                                  + \"() is not detected\");\n     }\n \n+    @SuppressWarnings(\"unchecked\")\n+    private Class<? extends Response> getResponseFromExecutor(Class<?> eventExecutorClz){\n+        Method[] methods = eventExecutorClz.getDeclaredMethods();\n+        for (Method method : methods) {\n+            if (isExecuteMethod(method)){\n+                Class<?> clazz = method.getReturnType();\n+                if (Response.class.isAssignableFrom(clazz)) {\n+                    return (Class<? extends Response>) clazz;\n+                }\n+            }\n+        }\n+        throw new ColaException(\"Execute method ReturnType in \" + eventExecutorClz.getSimpleName() + \" should be the subClass of Response\");\n+    }\n+\n+    /**\n+     * \u6839\u636e\u4e8b\u4ef6\u5904\u7406\u5668\u5b9e\u4f8b\u6ce8\u518c\n+     * 1. \u4e8b\u4ef6\u548c\u4e8b\u4ef6\u5904\u7406\u5668\u7684\u6620\u5c04\u5173\u7cfb\n+     * 2. \u4e8b\u4ef6\u5904\u7406\u5668\u548c\u8fd4\u56de\u7c7b\u7684\u6620\u5c04\u5173\u7cfb (\u7528\u4e8e\u5f02\u5e38\u5904\u7406)\n+     *\n+     * @param eventHandler \u4e8b\u4ef6\u5904\u7406\u5668\n+     */\n     public void doRegistration(EventHandlerI eventHandler){\n         Class<? extends EventI> eventClz = getEventFromExecutor(eventHandler.getClass());\n         eventHub.register(eventClz, eventHandler);\n+        Class<? extends Response> responseClz = getResponseFromExecutor(eventHandler.getClass());\n+        eventHub.register(eventHandler.getClass(), responseClz);\n     }\n \n     private boolean isExecuteMethod(Method method){\n         return ColaConstant.EXE_METHOD.equals(method.getName()) && !method.isBridge();\n     }\n \n-    private Class checkAndGetEventParamType(Method method){\n+    @SuppressWarnings(\"unchecked\")\n+    private Class<? extends EventI> checkAndGetEventParamType(Method method){\n         Class<?>[] exeParams = method.getParameterTypes();\n         if (exeParams.length == 0){\n             throw new ColaException(\"Execute method in \"+method.getDeclaringClass()+\" should at least have one parameter\");\n         }\n         if(!EventI.class.isAssignableFrom(exeParams[0]) ){\n             throw new ColaException(\"Execute method in \"+method.getDeclaringClass()+\" should be the subClass of Event\");\n         }\n-        return exeParams[0];\n+        return (Class<? extends EventI>) exeParams[0];\n     }\n }",
+      "parent_sha": "4acb71d66f06a354ecbb92c557ac753cb7ab9e35"
+    }
+  }
+]

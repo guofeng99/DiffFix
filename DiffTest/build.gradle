@@ -1,0 +1,174 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+application {
+    mainClassName = project.hasProperty("mainClass") ? project.getProperty("mainClass") : "benchmark.CmdRunner"
+    applicationDefaultJvmArgs = ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
+}
+group 'ca.concordia'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+def refactoringMinerVersion = project.hasProperty('refactoringMinerVersion') ?
+        project.refactoringMinerVersion :
+        '3.0.8-SNAPSHOT'
+
+dependencies {
+    implementation('com.google.code.gson:gson:2.8.9')
+
+    implementation 'org.eclipse.jdt:org.eclipse.jdt.core:3.38.0'
+//    implementation ("com.github.tsantalis:refactoring-miner:$refactoringMinerVersion") {
+//        exclude group: 'org.slf4j', module: 'slf4j-simple'
+//        exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
+//    }
+    implementation 'org.eclipse.jgit:org.eclipse.jgit:6.7.0.202309050840-r'
+    implementation 'com.github.gumtreediff:core:3.0.0'
+    implementation 'com.github.gumtreediff:gen.jdt:3.0.0'
+
+    implementation 'it.unimi.dsi:fastutil:8.3.1'
+    implementation 'com.sparkjava:spark-core:2.9.1'
+    implementation('org.rendersnake:rendersnake:1.9.0') {
+        exclude group: 'javax.servlet', module: 'servlet-api'
+    }
+
+    implementation files('libs/RefactoringMiner-3.0.7.jar')
+//    implementation files('libs/gen.jdt-3.0.0.jar')
+//    implementation files('libs/core-4.0.0-beta3.jar')
+
+    implementation files('libs/IJM-1.0-SNAPSHOT-customized2.jar')
+    implementation files('libs/gpgt-0.0.1-SNAPSHOT.jar')
+    implementation files('libs/RM-2.2.0-c3.jar')
+    implementation files('libs/iAST-1.0-SNAPSHOT-customized.jar')
+    implementation 'io.github.java-diff-utils:java-diff-utils:4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
+    implementation 'com.beust:jcommander:1.78'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+
+    implementation 'com.opencsv:opencsv:5.5'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.5.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.5.2'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.5.2'
+
+//    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'ch.qos.logback:logback-classic:1.4.12'
+//    implementation 'ch.qos.logback:logback-core:1.4.12'
+//    implementation 'org.slf4j:slf4j-api:2.0.13'
+//    implementation 'org.slf4j:slf4j-simple:2.0.13'
+
+    implementation 'org.hibernate:hibernate-core:5.3.20.Final' // Replace with the latest Hibernate version
+    implementation 'org.hibernate:hibernate-entitymanager:5.3.20.Final' // For JPA support
+    // PostgreSQL JDBC driver
+    implementation 'org.postgresql:postgresql:42.4.1' // Replace with the latest PostgreSQL JDBC driver version
+
+    implementation 'org.fusesource.jansi:jansi:2.4.0'
+}
+task rm2p4_jar(type: Jar) {
+    archiveFileName = 'RM-2.2.0-c3.jar' //Third customization (c3)
+    //destinationDir = file('libs/')
+    from zipTree('libs/RM-2.2.0-c2.jar')
+    exclude 'org/slf4j/*'
+    exclude 'org/slf4j/**'
+    exclude 'org/eclipse/jgit/*'
+    exclude 'org/eclipse/jgit/**'
+    exclude 'org/eclipse/jdt/*'
+    exclude 'org/eclipse/jdt/**'
+    exclude 'com/github/gumtreediff/*'
+    exclude 'com/github/gumtreediff/**'
+}
+task rm2p3_jar(type: Jar) {
+    archiveFileName = 'RM-2.2.0-c2.jar' //Second customization (c2)
+    //destinationDir = file('libs/')
+    from zipTree('libs/RM-2.2.0-customized.jar')
+    exclude 'org/slf4j/*'
+    exclude 'org/slf4j/**'
+    exclude 'org/eclipse/jgit/*'
+    exclude 'org/eclipse/jgit/**'
+    exclude 'org/eclipse/jdt/*'
+    exclude 'org/eclipse/jdt/**'
+}
+task rm2p2_jar(type: Jar) {
+    archiveFileName = 'RM-2.2.0-customized.jar'
+    // Include all contents from the original JAR
+    //destinationDir = file('libs/')
+    from zipTree('libs/RM-2.2.0.jar')
+    exclude 'org/slf4j/*'
+    exclude 'org/slf4j/**'
+}
+task rm2p0_jar(type: Jar) {
+    archiveFileName = 'RM-2.0.0-customized.jar'
+    // Include all contents from the original JAR
+    //destinationDir = file('libs/')
+    from zipTree('libs/RM-2.0.0.jar')
+    exclude 'org/slf4j/*'
+    exclude 'org/slf4j/**'
+}
+
+
+task ijm_jar(type: Jar) {
+    archiveFileName = 'IJM-1.0-SNAPSHOT-customized2.jar'
+    // Include all contents from the original JAR
+    //destinationDir = file('libs/')
+    from zipTree('libs/IJM-1.0-SNAPSHOT-customized.jar')
+    exclude 'com/google/gson/*'
+    exclude 'com/google/gson/**'
+    exclude 'org/slf4j/*'
+    exclude 'org/slf4j/**'
+}
+
+task iast_jar(type: Jar) {
+    archiveFileName = 'iAST-1.0-SNAPSHOT-customized.jar'
+    // Include all contents from the original JAR
+    //destinationDir = file('libs/')
+    from zipTree('libs/iAST-1.0-SNAPSHOT-shaded.jar')
+    exclude 'com/google/gson/*'
+    exclude 'com/google/gson/**'
+    exclude 'org/slf4j/*'
+    exclude 'org/slf4j/**'
+}
+configurations.all {
+    resolutionStrategy {
+        force 'com.fasterxml.jackson.core:jackson-databind:2.5.2'
+        force 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.5.2'
+        force 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+
+    }
+//    exclude group: 'org.slf4j', module: 'slf4j-simple'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+def loadEnvFile() {
+    def envFile = file('.env')
+    if (envFile.exists()) {
+        envFile.eachLine { line ->
+            if (!line.startsWith("#") && line.contains("=")) {
+                def (key, value) = line.split("=")
+                project.ext.set(key.trim(), value.trim())
+            }
+        }
+    }
+}
+
+// Load the .env file
+loadEnvFile()
+run {
+    def refactoringMinerPathValue = System.properties['REFACTORINGMINER_PATH']
+    if (refactoringMinerPathValue && !refactoringMinerPathValue.isEmpty()) {
+        systemProperty("REFACTORINGMINER_PATH", refactoringMinerPathValue)
+    }
+    doFirst {
+        project.ext.properties.each { key, value ->
+            if (key != 'ext') {
+                systemProperty(key, value)
+            }
+        }
+    }
+}

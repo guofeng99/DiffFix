@@ -1,0 +1,154 @@
+[
+  {
+    "oid": "f58f61b438d28e27419dc7d3cfde35314988d1c1",
+    "message": "spring security 5 always require password encoder id\nhttps://spring.io/blog/2017/11/01/spring-security-5-0-0-rc1-released#password-storage-format",
+    "date": "2018-07-17T05:49:59Z",
+    "url": "https://github.com/sqshq/piggymetrics/commit/f58f61b438d28e27419dc7d3cfde35314988d1c1",
+    "details": {
+      "sha": "6012c59ce6b64a2950c6c5990ac24e82caa7884d",
+      "filename": "auth-service/src/main/java/com/piggymetrics/auth/config/OAuth2AuthorizationConfig.java",
+      "status": "modified",
+      "additions": 10,
+      "deletions": 3,
+      "changes": 13,
+      "blob_url": "https://github.com/sqshq/piggymetrics/blob/f58f61b438d28e27419dc7d3cfde35314988d1c1/auth-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fauth%2Fconfig%2FOAuth2AuthorizationConfig.java",
+      "raw_url": "https://github.com/sqshq/piggymetrics/raw/f58f61b438d28e27419dc7d3cfde35314988d1c1/auth-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fauth%2Fconfig%2FOAuth2AuthorizationConfig.java",
+      "contents_url": "https://api.github.com/repos/sqshq/piggymetrics/contents/auth-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fauth%2Fconfig%2FOAuth2AuthorizationConfig.java?ref=f58f61b438d28e27419dc7d3cfde35314988d1c1",
+      "patch": "@@ -13,6 +13,7 @@\n import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;\n import org.springframework.security.oauth2.provider.token.TokenStore;\n import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;\n+import org.springframework.util.StringUtils;\n \n /**\n  * @author cdov\n@@ -22,6 +23,7 @@\n public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdapter {\n \n     private TokenStore tokenStore = new InMemoryTokenStore();\n+    private final String NOOP_PASSWORD_ENCODE = \"{noop}\";\n \n     @Autowired\n     @Qualifier(\"authenticationManagerBean\")\n@@ -41,21 +43,22 @@ public void configure(ClientDetailsServiceConfigurer clients) throws Exception {\n         // @formatter:off\n         clients.inMemory()\n                 .withClient(\"browser\")\n+                .secret(NOOP_PASSWORD_ENCODE)\n                 .authorizedGrantTypes(\"refresh_token\", \"password\")\n                 .scopes(\"ui\")\n                 .and()\n                 .withClient(\"account-service\")\n-                .secret(env.getProperty(\"ACCOUNT_SERVICE_PASSWORD\"))\n+                .secret(noOpPasswordEncoder(env.getProperty(\"ACCOUNT_SERVICE_PASSWORD\")))\n                 .authorizedGrantTypes(\"client_credentials\", \"refresh_token\")\n                 .scopes(\"server\")\n                 .and()\n                 .withClient(\"statistics-service\")\n-                .secret(env.getProperty(\"STATISTICS_SERVICE_PASSWORD\"))\n+                .secret(noOpPasswordEncoder(env.getProperty(\"STATISTICS_SERVICE_PASSWORD\")))\n                 .authorizedGrantTypes(\"client_credentials\", \"refresh_token\")\n                 .scopes(\"server\")\n                 .and()\n                 .withClient(\"notification-service\")\n-                .secret(env.getProperty(\"NOTIFICATION_SERVICE_PASSWORD\"))\n+                .secret(noOpPasswordEncoder(env.getProperty(\"NOTIFICATION_SERVICE_PASSWORD\")))\n                 .authorizedGrantTypes(\"client_credentials\", \"refresh_token\")\n                 .scopes(\"server\");\n         // @formatter:on\n@@ -75,4 +78,8 @@ public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws\n                 .tokenKeyAccess(\"permitAll()\")\n                 .checkTokenAccess(\"isAuthenticated()\");\n     }\n+\n+    private String noOpPasswordEncoder(String password) {\n+        return StringUtils.isEmpty(password) ? NOOP_PASSWORD_ENCODE : NOOP_PASSWORD_ENCODE.concat(password);\n+    }\n }",
+      "parent_sha": "0a71de6d6f3d4db97df469e47b72b6de7940752b"
+    }
+  },
+  {
+    "oid": "836a97f2b387ff921591f967e601145c2001c0dc",
+    "message": "fixed exchange rates test after the provider API change",
+    "date": "2018-09-25T12:55:19Z",
+    "url": "https://github.com/sqshq/piggymetrics/commit/836a97f2b387ff921591f967e601145c2001c0dc",
+    "details": {
+      "sha": "bd4dc51122e121eb8bc73e1a8d796f097bd0b9b5",
+      "filename": "statistics-service/src/test/java/com/piggymetrics/statistics/client/ExchangeRatesClientTest.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 2,
+      "changes": 3,
+      "blob_url": "https://github.com/sqshq/piggymetrics/blob/836a97f2b387ff921591f967e601145c2001c0dc/statistics-service%2Fsrc%2Ftest%2Fjava%2Fcom%2Fpiggymetrics%2Fstatistics%2Fclient%2FExchangeRatesClientTest.java",
+      "raw_url": "https://github.com/sqshq/piggymetrics/raw/836a97f2b387ff921591f967e601145c2001c0dc/statistics-service%2Fsrc%2Ftest%2Fjava%2Fcom%2Fpiggymetrics%2Fstatistics%2Fclient%2FExchangeRatesClientTest.java",
+      "contents_url": "https://api.github.com/repos/sqshq/piggymetrics/contents/statistics-service%2Fsrc%2Ftest%2Fjava%2Fcom%2Fpiggymetrics%2Fstatistics%2Fclient%2FExchangeRatesClientTest.java?ref=836a97f2b387ff921591f967e601145c2001c0dc",
+      "patch": "@@ -12,7 +12,6 @@\n \n import static org.junit.Assert.assertEquals;\n import static org.junit.Assert.assertNotNull;\n-import static org.junit.Assert.assertNull;\n \n @RunWith(SpringRunner.class)\n @SpringBootTest\n@@ -30,7 +29,7 @@ public void shouldRetrieveExchangeRates() {\n \t\tassertEquals(container.getBase(), Currency.getBase());\n \n \t\tassertNotNull(container.getRates());\n-\t\tassertNull(container.getRates().get(Currency.USD.name()));\n+\t\tassertNotNull(container.getRates().get(Currency.USD.name()));\n \t\tassertNotNull(container.getRates().get(Currency.EUR.name()));\n \t\tassertNotNull(container.getRates().get(Currency.RUB.name()));\n \t}",
+      "parent_sha": "480ce4a2ee5adfe6eb23c367c7e691ca8352cb06"
+    }
+  },
+  {
+    "oid": "33fafc7df10b976cd534032e3cf48d5e9ccdd2cd",
+    "message": "fix openfiegn import for accountServiceClient",
+    "date": "2018-07-16T06:38:09Z",
+    "url": "https://github.com/sqshq/piggymetrics/commit/33fafc7df10b976cd534032e3cf48d5e9ccdd2cd",
+    "details": {
+      "sha": "dd26acea653419cd91dfe8d9f1c072a6eda74da0",
+      "filename": "notification-service/src/main/java/com/piggymetrics/notification/client/AccountServiceClient.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/sqshq/piggymetrics/blob/33fafc7df10b976cd534032e3cf48d5e9ccdd2cd/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Fclient%2FAccountServiceClient.java",
+      "raw_url": "https://github.com/sqshq/piggymetrics/raw/33fafc7df10b976cd534032e3cf48d5e9ccdd2cd/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Fclient%2FAccountServiceClient.java",
+      "contents_url": "https://api.github.com/repos/sqshq/piggymetrics/contents/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Fclient%2FAccountServiceClient.java?ref=33fafc7df10b976cd534032e3cf48d5e9ccdd2cd",
+      "patch": "@@ -1,6 +1,6 @@\n package com.piggymetrics.notification.client;\n \n-import org.springframework.cloud.netflix.feign.FeignClient;\n+import org.springframework.cloud.openfeign.FeignClient;\n import org.springframework.http.MediaType;\n import org.springframework.web.bind.annotation.PathVariable;\n import org.springframework.web.bind.annotation.RequestMapping;",
+      "parent_sha": "7ea73058d8e1d3b1ce4ce57b3a01aad5505a8c5b"
+    }
+  },
+  {
+    "oid": "b2ff99fb11cba32390f372105c56e665f56b461f",
+    "message": "specific password encoder instead of using id password encoder",
+    "date": "2018-07-17T06:21:46Z",
+    "url": "https://github.com/sqshq/piggymetrics/commit/b2ff99fb11cba32390f372105c56e665f56b461f",
+    "details": {
+      "sha": "e084a9486bb45048142a2597fa4eb71a5a3071dc",
+      "filename": "auth-service/src/main/java/com/piggymetrics/auth/config/OAuth2AuthorizationConfig.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 8,
+      "changes": 14,
+      "blob_url": "https://github.com/sqshq/piggymetrics/blob/b2ff99fb11cba32390f372105c56e665f56b461f/auth-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fauth%2Fconfig%2FOAuth2AuthorizationConfig.java",
+      "raw_url": "https://github.com/sqshq/piggymetrics/raw/b2ff99fb11cba32390f372105c56e665f56b461f/auth-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fauth%2Fconfig%2FOAuth2AuthorizationConfig.java",
+      "contents_url": "https://api.github.com/repos/sqshq/piggymetrics/contents/auth-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fauth%2Fconfig%2FOAuth2AuthorizationConfig.java?ref=b2ff99fb11cba32390f372105c56e665f56b461f",
+      "patch": "@@ -6,14 +6,14 @@\n import org.springframework.context.annotation.Configuration;\n import org.springframework.core.env.Environment;\n import org.springframework.security.authentication.AuthenticationManager;\n+import org.springframework.security.crypto.password.NoOpPasswordEncoder;\n import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;\n import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;\n import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;\n import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;\n import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;\n import org.springframework.security.oauth2.provider.token.TokenStore;\n import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;\n-import org.springframework.util.StringUtils;\n \n /**\n  * @author cdov\n@@ -48,17 +48,17 @@ public void configure(ClientDetailsServiceConfigurer clients) throws Exception {\n                 .scopes(\"ui\")\n                 .and()\n                 .withClient(\"account-service\")\n-                .secret(noOpPasswordEncoder(env.getProperty(\"ACCOUNT_SERVICE_PASSWORD\")))\n+                .secret(env.getProperty(\"ACCOUNT_SERVICE_PASSWORD\"))\n                 .authorizedGrantTypes(\"client_credentials\", \"refresh_token\")\n                 .scopes(\"server\")\n                 .and()\n                 .withClient(\"statistics-service\")\n-                .secret(noOpPasswordEncoder(env.getProperty(\"STATISTICS_SERVICE_PASSWORD\")))\n+                .secret(env.getProperty(\"STATISTICS_SERVICE_PASSWORD\"))\n                 .authorizedGrantTypes(\"client_credentials\", \"refresh_token\")\n                 .scopes(\"server\")\n                 .and()\n                 .withClient(\"notification-service\")\n-                .secret(noOpPasswordEncoder(env.getProperty(\"NOTIFICATION_SERVICE_PASSWORD\")))\n+                .secret(env.getProperty(\"NOTIFICATION_SERVICE_PASSWORD\"))\n                 .authorizedGrantTypes(\"client_credentials\", \"refresh_token\")\n                 .scopes(\"server\");\n         // @formatter:on\n@@ -76,10 +76,8 @@ public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws E\n     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {\n         oauthServer\n                 .tokenKeyAccess(\"permitAll()\")\n-                .checkTokenAccess(\"isAuthenticated()\");\n+                .checkTokenAccess(\"isAuthenticated()\")\n+                .passwordEncoder(NoOpPasswordEncoder.getInstance());\n     }\n \n-    private String noOpPasswordEncoder(String password) {\n-        return StringUtils.isEmpty(password) ? NOOP_PASSWORD_ENCODE : NOOP_PASSWORD_ENCODE.concat(password);\n-    }\n }",
+      "parent_sha": "f58f61b438d28e27419dc7d3cfde35314988d1c1"
+    }
+  },
+  {
+    "oid": "6ce199c52dfa6cff6a6a71261d0b06fecc7c5723",
+    "message": "minor fix",
+    "date": "2016-03-08T22:14:28Z",
+    "url": "https://github.com/sqshq/piggymetrics/commit/6ce199c52dfa6cff6a6a71261d0b06fecc7c5723",
+    "details": {
+      "sha": "e23fa07fc7a3c320f3bf1197349a8891ba2fa2f1",
+      "filename": "notification-service/src/main/java/com/piggymetrics/notification/controller/NotificationController.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/sqshq/piggymetrics/blob/6ce199c52dfa6cff6a6a71261d0b06fecc7c5723/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Fcontroller%2FNotificationController.java",
+      "raw_url": "https://github.com/sqshq/piggymetrics/raw/6ce199c52dfa6cff6a6a71261d0b06fecc7c5723/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Fcontroller%2FNotificationController.java",
+      "contents_url": "https://api.github.com/repos/sqshq/piggymetrics/contents/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Fcontroller%2FNotificationController.java?ref=6ce199c52dfa6cff6a6a71261d0b06fecc7c5723",
+      "patch": "@@ -25,6 +25,6 @@ public Object getCurrentNotificationsSettings(Principal principal) {\n \n \t@RequestMapping(path = \"/current\", method = RequestMethod.PUT)\n \tpublic Object saveCurrentNotificationsSettings(Principal principal, @Valid @RequestBody Recipient recipient) {\n-\t\treturn recipientService.saveChanges(principal.getName(), recipient);\n+\t\treturn recipientService.save(principal.getName(), recipient);\n \t}\n }",
+      "parent_sha": "7badad71a953d06a0cebc8bbc7139ab73c87b6d5"
+    }
+  },
+  {
+    "oid": "b4de7f38969e82aa4abef4e69585ffe251c8424d",
+    "message": "fix",
+    "date": "2016-03-12T18:17:26Z",
+    "url": "https://github.com/sqshq/piggymetrics/commit/b4de7f38969e82aa4abef4e69585ffe251c8424d",
+    "details": {
+      "sha": "f9d8905308adb59d58cb2ddf1f74f6a8407ac2e8",
+      "filename": "notification-service/src/main/java/com/piggymetrics/notification/service/RecipientServiceImpl.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/sqshq/piggymetrics/blob/b4de7f38969e82aa4abef4e69585ffe251c8424d/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Fservice%2FRecipientServiceImpl.java",
+      "raw_url": "https://github.com/sqshq/piggymetrics/raw/b4de7f38969e82aa4abef4e69585ffe251c8424d/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Fservice%2FRecipientServiceImpl.java",
+      "contents_url": "https://api.github.com/repos/sqshq/piggymetrics/contents/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Fservice%2FRecipientServiceImpl.java?ref=b4de7f38969e82aa4abef4e69585ffe251c8424d",
+      "patch": "@@ -36,7 +36,7 @@ public Recipient save(String accountName, Recipient recipient) {\n \t\trecipient.getScheduledNotifications().values()\n \t\t\t\t.forEach(settings -> {\n \t\t\t\t\tif (settings.getLastNotified() == null) {\n-\t\t\t\t\t\tsettings.setLastNotified(new Date(0));\n+\t\t\t\t\t\tsettings.setLastNotified(new Date());\n \t\t\t\t\t}\n \t\t\t\t});\n \n@@ -67,7 +67,7 @@ public List<Recipient> findReadyToNotify(NotificationType type) {\n \t */\n \t@Override\n \tpublic void markNotified(NotificationType type, Recipient recipient) {\n-\t\trecipient.getScheduledNotifications().get(type).setLastNotified(new Date(0));\n+\t\trecipient.getScheduledNotifications().get(type).setLastNotified(new Date());\n \t\trepository.save(recipient);\n \t}\n }",
+      "parent_sha": "c6f343fdc400c72ec16aaf0e07e93d586d7c6fb3"
+    }
+  },
+  {
+    "oid": "c90fff1fb5b6a6a5335c903f8b960522b0d2b88c",
+    "message": "fix openfeign import",
+    "date": "2018-07-16T06:01:40Z",
+    "url": "https://github.com/sqshq/piggymetrics/commit/c90fff1fb5b6a6a5335c903f8b960522b0d2b88c",
+    "details": {
+      "sha": "8b18607d9c8f508a6f74887bf8c8d4e853628f34",
+      "filename": "statistics-service/src/main/java/com/piggymetrics/statistics/client/ExchangeRatesClient.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/sqshq/piggymetrics/blob/c90fff1fb5b6a6a5335c903f8b960522b0d2b88c/statistics-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fstatistics%2Fclient%2FExchangeRatesClient.java",
+      "raw_url": "https://github.com/sqshq/piggymetrics/raw/c90fff1fb5b6a6a5335c903f8b960522b0d2b88c/statistics-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fstatistics%2Fclient%2FExchangeRatesClient.java",
+      "contents_url": "https://api.github.com/repos/sqshq/piggymetrics/contents/statistics-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fstatistics%2Fclient%2FExchangeRatesClient.java?ref=c90fff1fb5b6a6a5335c903f8b960522b0d2b88c",
+      "patch": "@@ -2,7 +2,7 @@\n \n import com.piggymetrics.statistics.domain.Currency;\n import com.piggymetrics.statistics.domain.ExchangeRatesContainer;\n-import org.springframework.cloud.netflix.feign.FeignClient;\n+import org.springframework.cloud.openfeign.FeignClient;\n import org.springframework.web.bind.annotation.RequestMapping;\n import org.springframework.web.bind.annotation.RequestMethod;\n import org.springframework.web.bind.annotation.RequestParam;",
+      "parent_sha": "aa536d888b4c76ffc623592187110d2f500137b1"
+    }
+  },
+  {
+    "oid": "3ecad94e24f410970ec01f27a2c42ffad2bd081e",
+    "message": "add single quote for RecipientRepository",
+    "date": "2018-07-16T06:39:07Z",
+    "url": "https://github.com/sqshq/piggymetrics/commit/3ecad94e24f410970ec01f27a2c42ffad2bd081e",
+    "details": {
+      "sha": "e24fd976189b51563c51427c8f7daabd18884de8",
+      "filename": "notification-service/src/main/java/com/piggymetrics/notification/repository/RecipientRepository.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/sqshq/piggymetrics/blob/3ecad94e24f410970ec01f27a2c42ffad2bd081e/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Frepository%2FRecipientRepository.java",
+      "raw_url": "https://github.com/sqshq/piggymetrics/raw/3ecad94e24f410970ec01f27a2c42ffad2bd081e/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Frepository%2FRecipientRepository.java",
+      "contents_url": "https://api.github.com/repos/sqshq/piggymetrics/contents/notification-service%2Fsrc%2Fmain%2Fjava%2Fcom%2Fpiggymetrics%2Fnotification%2Frepository%2FRecipientRepository.java?ref=3ecad94e24f410970ec01f27a2c42ffad2bd081e",
+      "patch": "@@ -12,11 +12,11 @@ public interface RecipientRepository extends CrudRepository<Recipient, String> {\n \n \tRecipient findByAccountName(String name);\n \n-\t@Query(\"{ $and: [ {scheduledNotifications.BACKUP.active: true }, { $where: 'this.scheduledNotifications.BACKUP.lastNotified < \" +\n+\t@Query(\"{ $and: [ {'scheduledNotifications.BACKUP.active': true }, { $where: 'this.scheduledNotifications.BACKUP.lastNotified < \" +\n \t\t\t\"new Date(new Date().setDate(new Date().getDate() - this.scheduledNotifications.BACKUP.frequency ))' }] }\")\n \tList<Recipient> findReadyForBackup();\n \n-\t@Query(\"{ $and: [ {scheduledNotifications.REMIND.active: true }, { $where: 'this.scheduledNotifications.REMIND.lastNotified < \" +\n+\t@Query(\"{ $and: [ {'scheduledNotifications.REMIND.active': true }, { $where: 'this.scheduledNotifications.REMIND.lastNotified < \" +\n \t\t\t\"new Date(new Date().setDate(new Date().getDate() - this.scheduledNotifications.REMIND.frequency ))' }] }\")\n \tList<Recipient> findReadyForRemind();\n ",
+      "parent_sha": "33fafc7df10b976cd534032e3cf48d5e9ccdd2cd"
+    }
+  }
+]

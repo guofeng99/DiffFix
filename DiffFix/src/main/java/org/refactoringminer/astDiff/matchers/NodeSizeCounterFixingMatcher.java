@@ -1,0 +1,1246 @@
+package org.refactoringminer.astDiff.matchers;
+
+import com.github.gumtreediff.tree.Tree;
+import com.github.gumtreediff.tree.TreeUtils;
+import org.refactoringminer.astDiff.models.ExtendedMultiMappingStore;
+import org.refactoringminer.astDiff.utils.Constants;
+import org.refactoringminer.astDiff.utils.TreeUtilFunctions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
+
+/* Created on 2024-10-31 */
+public class NodeSizeCounterFixingMatcher extends BaseFixingMatcher {
+    private List<Tree> unMappedSrcImports;
+    private List<Tree> unMappedDstImports;
+
+    private Stack<MethodDeclInfo> methodDeclStack;
+    private Stack<CompositeStmtInfo> compStmtStack;
+
+    private List<Tree> unmatchedStmtInWholeSrc;
+    private List<Tree> unmatchedStmtInWholeDst;
+
+    private Set<Tree> skipDstDecls;
+
+    private Set<Tree> prunedMappedSrcs;
+    private Set<Tree> prunedMappedSrcsWithIdentRoot;
+    private Set<Tree> skipDstStmts;
+    private Set<Tree> identRoots;
+
+    private final static Logger logger = LoggerFactory.getLogger(NodeSizeCounterFixingMatcher.class);
+
+    @Override
+    public void match(Tree src, Tree dst, ExtendedMultiMappingStore mappingStore) {
+        if(src.getMetrics().hash==dst.getMetrics().hash)
+            return;
+
+        if(!(src.hasSameType(dst) && src.getType().name.equals(Constants.COMPILATION_UNIT)))
+            return;
+
+        initDS(src,dst,mappingStore);
+
+        logger.info("Srcs size: {}",src.getMetrics().size);
+
+        var allMappedSrcsSize = 0;
+        for(var srcNode:mappings.allMappedSrcs()){
+            if(mapInSrc(srcNode))
+                allMappedSrcsSize++;
+        }
+
+        logger.info("allMappedSrcs size: {}",allMappedSrcsSize);
+
+        logger.info("unmappedNodes size: {}",TreeUtils.preOrder(src).stream().filter(e->!mappings.isSrcMapped(e)).count()+TreeUtils.preOrder(dst).stream().filter(e->!mappings.isDstMapped(e)).count());
+
+        current_pass = "WarmUp";
+        warmUp();
+
+        logger.info("curMappedSrcs size: {}",curMappedSrcs.size());
+        logger.info("prunedMappedSrcs size: {}",prunedMappedSrcs.size());
+        logger.info("prunedMappedSrcsWithIdentRoot size: {}",prunedMappedSrcsWithIdentRoot.size());
+    }
+
+    @Override
+    protected void initDS(Tree src_, Tree dst_, ExtendedMultiMappingStore mappingStore){
+        super.initDS(src_,dst_,mappingStore);
+
+        unMappedSrcImports = new ArrayList<>();
+        unMappedDstImports = new ArrayList<>();
+
+        methodDeclStack = new Stack<>();
+        compStmtStack = new Stack<>();
+
+        unmatchedStmtInWholeSrc = new ArrayList<>();
+        unmatchedStmtInWholeDst = new ArrayList<>();
+
+        prunedMappedSrcs = new TreeSet<>(comparator);
+//        prunedMappedSrcs.addAll(curMappedSrcs);
+
+        skipDstDecls = new HashSet<>();
+        skipDstStmts = new HashSet<>();
+        identRoots = new HashSet<>();
+
+        prunedMappedSrcsWithIdentRoot = new TreeSet<>(comparator);
+    }
+
+    @Override
+    protected void tryToFixType(Tree src){
+        if(!mappings.isSrcMapped(src)) return;
+        for(var dst:Set.copyOf(mappings.getDsts(src)))
+            if(!src.hasSameType(dst))
+                removeFromMapping(src,dst);
+        if(mappings.isSrcMapped(src))
+            if(mapInSrc(src)){
+                curMappedSrcs.add(src);
+                prunedMappedSrcs.add(src);
+            }
+    }
+
+    protected void tryToFixTypeWithoutAdd(Tree src){
+        if(!mappings.isSrcMapped(src)) return;
+        for(var dst:Set.copyOf(mappings.getDsts(src)))
+            if(!src.hasSameType(dst))
+                removeFromMapping(src,dst);
+    }
+
+
+    protected void trivalTraverseWithoutAdd(Tree src){
+        for(var child:src.getChildren()){
+            tryToFixTypeWithoutAdd(child);
+            trivalTraverseWithoutAdd(child);
+        }
+    }
+
+    private void warmUp(){
+        for(var child:src.getChildren()){
+            tryToFixType(child);
+            switch(child.getType().name){
+                case Constants.IMPORT_DECLARATION -> {
+                    if(mappings.isSrcMapped(child)){
+                        curMappedSrcs.remove(child);
+                        prunedMappedSrcs.remove(child);
+                        trivalTraverseWithoutAdd(child);
+                    }
+                    else{
+                        unMappedSrcImports.add(child);
+                    }
+                }
+                case Constants.TYPE_DECLARATION -> {
+                    var needTraverse = true;
+                    if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                        var dstDecl = mappings.getDsts(child).iterator().next();
+                        if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                            checkMappingRecursively(child,dstDecl);
+                            curMappedSrcs.remove(child);
+                            prunedMappedSrcs.remove(child);
+                            needTraverse = false;
+                            skipDstDecls.add(dstDecl);
+                        }
+                    }
+                    if(needTraverse){
+                        var typeDeclInfo = new TypeDeclInfo(child);
+                        typeDeclInfo.traverseSrc();
+                        child.setMetadata("typeDeclInfo",typeDeclInfo);
+                    }
+                }
+                case Constants.ENUM_DECLARATION -> {
+                    var needTraverse = true;
+                    if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                        var dstDecl = mappings.getDsts(child).iterator().next();
+                        if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                            checkMappingRecursively(child,dstDecl);
+                            curMappedSrcs.remove(child);
+                            prunedMappedSrcs.remove(child);
+                            needTraverse = false;
+                            skipDstDecls.add(dstDecl);
+                        }
+                    }
+                    if(needTraverse){
+                        var enumDeclInfo = new EnumDeclInfo(child);
+                        enumDeclInfo.traverseSrc();
+                        child.setMetadata("enumDeclInfo",enumDeclInfo);
+                    }
+                }
+                default -> {
+                    trivalTraverse(child);
+                }
+            }
+        }
+
+        for(var child:dst.getChildren()){
+            switch(child.getType().name){
+                case Constants.IMPORT_DECLARATION -> {
+                    if(!mappings.isDstMapped(child)){
+                        unMappedDstImports.add(child);
+                    }
+                }
+                case Constants.TYPE_DECLARATION -> {
+                    if(!skipDstDecls.contains(child)){
+                        var typeDeclInfo = new TypeDeclInfo(child);
+                        typeDeclInfo.traverseDst();
+                        child.setMetadata("typeDeclInfo",typeDeclInfo);
+                    }
+                }
+                case Constants.ENUM_DECLARATION -> {
+                    if(!skipDstDecls.contains(child)){
+                        var enumDeclInfo = new EnumDeclInfo(child);
+                        enumDeclInfo.traverseDst();
+                        child.setMetadata("enumDeclInfo",enumDeclInfo);
+                    }
+                }
+            }
+        }
+
+        prunedMappedSrcsWithIdentRoot.addAll(prunedMappedSrcs);
+        prunedMappedSrcsWithIdentRoot.addAll(identRoots);
+    }
+
+
+    private class BasicInfo{
+        Tree root;
+
+        BasicInfo(Tree root){
+            this.root = root;
+        }
+
+        public void processRootSrc(){}
+
+        public void processRootDst(){}
+
+        public void traverseSrc(){
+            List<Tree> nodes = new ArrayList<>();
+            processRootSrc();
+            nodes.add(root);
+            int pos=0;
+            while(pos<nodes.size()){
+                Tree cur=nodes.get(pos);
+                tryToFixType(cur);
+
+                switch(cur.getType().name){
+                    case Constants.ANONYMOUS_CLASS_DECLARATION -> {
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(cur) && mappings.isSrcUnique(cur)){
+                            var dstDecl = mappings.getDsts(cur).iterator().next();
+                            if(cur.getMetrics().hash==dstDecl.getMetrics().hash){
+                                checkMappingRecursively(cur,dstDecl);
+                                curMappedSrcs.remove(cur);
+                                prunedMappedSrcs.remove(cur);
+                                needTraverse = false;
+                                skipDstDecls.add(dstDecl);
+                            }
+                        }
+                        if(needTraverse) {
+                            var typeDeclInfo = new TypeDeclInfo(cur);
+                            typeDeclInfo.traverseSrc();
+                            cur.setMetadata("typeDeclInfo", typeDeclInfo);
+                        }
+                    }
+                    case Constants.INFIX_EXPRESSION -> {
+                        if(isRelationalOperator(cur.getChild(1))){
+                            if(!methodDeclStack.isEmpty()){
+                                var methodDeclInfo = methodDeclStack.peek();
+                                methodDeclInfo.relExps.add(cur);
+                            }
+                        }
+                        nodes.addAll(cur.getChildren());
+                    }
+                    case Constants.METHOD_INVOCATION -> {
+                        if(!methodDeclStack.isEmpty()){
+                            var methodDeclInfo = methodDeclStack.peek();
+
+                            if(!compStmtStack.isEmpty()){
+                                for(var compStmtInfo:compStmtStack){
+                                    if(compStmtInfo.root.getPos()<methodDeclInfo.root.getPos())
+                                        continue;
+                                    if(compStmtInfo.root.getType().name.equals(Constants.BLOCK))
+                                        compStmtInfo.methodCalls.add(cur);
+                                }
+                            }
+                        }
+                        nodes.addAll(cur.getChildren());
+                    }
+                    default -> {
+                        nodes.addAll(cur.getChildren());
+                    }
+                }
+                ++pos;
+            }
+        }
+
+        public void traverseDst(){
+            List<Tree> nodes = new ArrayList<>();
+            processRootDst();
+            nodes.add(root);
+            int pos=0;
+            while(pos<nodes.size()) {
+                Tree cur = nodes.get(pos);
+
+                switch(cur.getType().name) {
+                    case Constants.ANONYMOUS_CLASS_DECLARATION -> {
+                        if(!skipDstDecls.contains(cur)){
+                            var typeDeclInfo = new TypeDeclInfo(cur);
+                            typeDeclInfo.traverseDst();
+                            cur.setMetadata("typeDeclInfo", typeDeclInfo);
+                        }
+                    }
+                    case Constants.INFIX_EXPRESSION -> {
+                        if (isRelationalOperator(cur.getChild(1))) {
+                            if (!methodDeclStack.isEmpty()) {
+                                var methodDeclInfo = methodDeclStack.peek();
+                                methodDeclInfo.relExps.add(cur);
+                            }
+                        }
+                        nodes.addAll(cur.getChildren());
+                    }
+                    case Constants.METHOD_INVOCATION -> {
+                        if(!methodDeclStack.isEmpty()){
+                            var methodDeclInfo = methodDeclStack.peek();
+
+                            if(!compStmtStack.isEmpty()){
+                                for(var compStmtInfo:compStmtStack){
+                                    if(compStmtInfo.root.getPos()<methodDeclInfo.root.getPos())
+                                        continue;
+                                    if(compStmtInfo.root.getType().name.equals(Constants.BLOCK))
+                                        compStmtInfo.methodCalls.add(cur);
+                                }
+                            }
+                        }
+                        nodes.addAll(cur.getChildren());
+                    }
+                    default -> {
+                        nodes.addAll(cur.getChildren());
+                    }
+                }
+                ++pos;
+            }
+        }
+    }
+
+    private class LeafStmtInfo extends BasicInfo {
+        LeafStmtInfo(Tree root){
+            super(root);
+        }
+
+        @Override
+        public void processRootSrc(){
+            if(!mappings.isSrcMapped(root))
+                unmatchedStmtInWholeSrc.add(root);
+        }
+
+        @Override
+        public void processRootDst(){
+            if(!mappings.isDstMapped(root))
+                unmatchedStmtInWholeDst.add(root);
+        }
+    }
+
+    private class RetStmtInfo extends LeafStmtInfo {
+        RetStmtInfo(Tree root){
+            super(root);
+        }
+
+        @Override
+        public void processRootSrc(){
+            super.processRootSrc();
+
+            if(!methodDeclStack.isEmpty()){
+                var methodDeclInfo = methodDeclStack.peek();
+                methodDeclInfo.retStmts.add(root);
+
+                if(!mappings.isSrcMapped(root)){
+                    if(!compStmtStack.isEmpty()){
+                        for(var compStmtInfo:compStmtStack){
+                            if(compStmtInfo.root.getPos()<methodDeclInfo.root.getPos())
+                                continue;
+                            compStmtInfo.unmatchedDescRetStmt.add(root);
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void processRootDst(){
+            super.processRootDst();
+
+            if(!methodDeclStack.isEmpty()){
+                var methodDeclInfo = methodDeclStack.peek();
+                methodDeclInfo.retStmts.add(root);
+
+                if(!mappings.isDstMapped(root)){
+                    if(!compStmtStack.isEmpty()){
+                        for(var compStmtInfo:compStmtStack){
+                            if(compStmtInfo.root.getPos()<methodDeclInfo.root.getPos())
+                                continue;
+                            compStmtInfo.unmatchedDescRetStmt.add(root);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private class ThrowStmtInfo extends LeafStmtInfo {
+        ThrowStmtInfo(Tree root){
+            super(root);
+        }
+
+        @Override
+        public void processRootSrc(){
+            super.processRootSrc();
+
+            if(!mappings.isSrcMapped(root)){
+                if(!compStmtStack.isEmpty()){
+                    for(var compStmtInfo:compStmtStack){
+                        compStmtInfo.unmatchedDescThrowStmt.add(root);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void processRootDst(){
+            super.processRootDst();
+
+            if(!mappings.isDstMapped(root)){
+                if(!compStmtStack.isEmpty()){
+                    for(var compStmtInfo:compStmtStack){
+                        compStmtInfo.unmatchedDescThrowStmt.add(root);
+                    }
+                }
+            }
+        }
+    }
+
+    private class FieldDeclInfo extends BasicInfo {
+        FieldDeclInfo(Tree root){
+            super(root);
+        }
+    }
+
+    private class CondInfo extends BasicInfo {
+        CondInfo(Tree root){
+            super(root);
+        }
+    }
+
+    private class CompositeStmtInfo {
+        Tree root;
+        List<Tree> unmatchedChildrenStmt;
+        List<Tree> unmatchedDescRetStmt;
+        List<Tree> unmatchedDescThrowStmt;
+        List<Tree> methodCalls; // only works in Block
+        List<Tree> blocks; // only works in Block
+        Tree cond;
+
+        CompositeStmtInfo(Tree root){
+            this.root = root;
+            this.unmatchedChildrenStmt = new ArrayList<>();
+            this.unmatchedDescRetStmt = new ArrayList<>();
+            this.unmatchedDescThrowStmt = new ArrayList<>();
+            this.methodCalls = new ArrayList<>();
+            this.blocks = new ArrayList<>();
+        }
+
+        public void processRootSrc(){
+            switch (root.getType().name){
+                case Constants.IF_STATEMENT, Constants.WHILE_STATEMENT -> {
+                    cond = root.getChild(0);
+                }
+                case Constants.FOR_STATEMENT, Constants.DO_STATEMENT -> {
+                    var candidates = root.getChildren().stream().filter(c -> !TreeUtilFunctions.isStatement(c.getType().name)
+                            && !c.getType().name.equals("VariableDeclarationExpression")).toList();
+                    if(candidates.size()==1){
+                        cond = candidates.get(0);
+                    }
+                }
+                case Constants.BLOCK -> {
+                    if(!methodDeclStack.isEmpty()){
+                        var methodDeclInfo = methodDeclStack.peek();
+
+                        if(!compStmtStack.isEmpty()){
+                            for(var compStmtInfo:compStmtStack){
+                                if(compStmtInfo.root.getPos()<methodDeclInfo.root.getPos())
+                                    continue;
+                                if(compStmtInfo.root.getType().name.equals(Constants.BLOCK))
+                                    compStmtInfo.blocks.add(root);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(cond!=null){
+                var needTraverse = true;
+                if(cond.getMetrics().height>1 && mappings.isSrcMapped(cond) && mappings.isSrcUnique(cond)){
+                    var dstCond = mappings.getDsts(cond).iterator().next();
+                    if(cond.getMetrics().hash==dstCond.getMetrics().hash){
+                        checkMappingRecursively2(cond,dstCond);
+                        prunedMappedSrcs.remove(cond);
+                        identRoots.add(cond);
+                        skipDstStmts.add(dstCond);
+                        needTraverse = false;
+                    }
+                }
+                if(needTraverse){
+                    var condInfo = new CondInfo(cond);
+                    condInfo.traverseSrc();
+                    cond.setMetadata("condInfo",condInfo);
+                }
+            }
+        }
+
+        public void processRootDst(){
+            switch (root.getType().name){
+                case Constants.IF_STATEMENT, Constants.WHILE_STATEMENT -> {
+                    cond = root.getChild(0);
+                }
+                case Constants.FOR_STATEMENT, Constants.DO_STATEMENT -> {
+                    var candidates = root.getChildren().stream().filter(c -> !TreeUtilFunctions.isStatement(c.getType().name)
+                            && !c.getType().name.equals("VariableDeclarationExpression")).toList();
+                    if(candidates.size()==1){
+                        cond = candidates.get(0);
+                    }
+                }
+                case Constants.BLOCK -> {
+                    if(!methodDeclStack.isEmpty()){
+                        var methodDeclInfo = methodDeclStack.peek();
+
+                        if(!compStmtStack.isEmpty()){
+                            for(var compStmtInfo:compStmtStack){
+                                if(compStmtInfo.root.getPos()<methodDeclInfo.root.getPos())
+                                    continue;
+                                if(compStmtInfo.root.getType().name.equals(Constants.BLOCK))
+                                    compStmtInfo.blocks.add(root);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(cond!=null && !skipDstStmts.contains(cond)){
+                var condInfo = new CondInfo(cond);
+                condInfo.traverseDst();
+                cond.setMetadata("condInfo",condInfo);
+            }
+        }
+
+        public void traverseSrc(){
+            if(!mappings.isSrcMapped(root))
+                unmatchedStmtInWholeSrc.add(root);
+
+            processRootSrc();
+
+            for(var child:root.getChildren()){
+                tryToFixType(child);
+                var type = child.getType().name;
+                if(TreeUtilFunctions.isCompositeStatement(type)){
+                    var needTraverse = true;
+                    if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                        var dstStmt = mappings.getDsts(child).iterator().next();
+                        if(child.getMetrics().hash==dstStmt.getMetrics().hash){
+                            checkMappingRecursively2(child,dstStmt);
+                            recoverSrcStmtMap(child);
+                            prunedMappedSrcs.remove(child);
+                            identRoots.add(child);
+                            skipDstStmts.add(dstStmt);
+                            needTraverse = false;
+                        }
+                    }
+                    if(needTraverse){
+                        var compositeStmtInfo = new CompositeStmtInfo(child);
+                        compStmtStack.push(compositeStmtInfo);
+                        compositeStmtInfo.traverseSrc();
+                        compStmtStack.pop();
+                        child.setMetadata("compositeStmtInfo",compositeStmtInfo);
+                    }
+                }
+                else if(TreeUtilFunctions.isLeafStatement(type)){
+                    var needTraverse = true;
+                    if(child.getMetrics().height>1 && mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                        var dstStmt = mappings.getDsts(child).iterator().next();
+                        if(child.getMetrics().hash==dstStmt.getMetrics().hash){
+                            checkMappingRecursively2(child,dstStmt);
+                            prunedMappedSrcs.remove(child);
+                            identRoots.add(child);
+                            skipDstStmts.add(dstStmt);
+                            needTraverse = false;
+                        }
+                    }
+                    if(needTraverse){
+                        var leafStmtInfo = getLeafStmtInfo(child, type);
+                        leafStmtInfo.traverseSrc();
+                        child.setMetadata("leafStmtInfo",leafStmtInfo);
+                    }
+
+                    if(prevStmtInTraverse!=null){
+                        srcNextStmtMap.put(prevStmtInTraverse,child);
+                        srcPrevStmtMap.put(child,prevStmtInTraverse);
+                    }
+                    srcIdenticalStmts.putIfAbsent(child.getMetrics().hash,new ArrayList<>());
+                    srcIdenticalStmts.get(child.getMetrics().hash).add(child);
+                    prevStmtInTraverse=child;
+                }
+                else if(child!=cond){
+                    trivalTraverse(child);
+                }
+                if(!mappings.isSrcMapped(child)){
+                    if(TreeUtilFunctions.isLeafStatement(type))
+                        unmatchedChildrenStmt.add(child);
+                }
+            }
+        }
+
+        public void traverseDst(){
+            if(!mappings.isDstMapped(root))
+                unmatchedStmtInWholeDst.add(root);
+
+            processRootDst();
+
+            for(var child:root.getChildren()) {
+                var type = child.getType().name;
+                if (TreeUtilFunctions.isCompositeStatement(type)) {
+                    if(skipDstStmts.contains(child)){
+                        recoverDstStmtMap(child);
+                    }
+                    else{
+                        var compositeStmtInfo = new CompositeStmtInfo(child);
+                        compStmtStack.push(compositeStmtInfo);
+                        compositeStmtInfo.traverseDst();
+                        compStmtStack.pop();
+                        child.setMetadata("compositeStmtInfo",compositeStmtInfo);
+                    }
+                } else if (TreeUtilFunctions.isLeafStatement(type)) {
+                    if(!skipDstStmts.contains(child)){
+                        var leafStmtInfo = getLeafStmtInfo(child, type);
+                        leafStmtInfo.traverseDst();
+                        child.setMetadata("leafStmtInfo",leafStmtInfo);
+                    }
+
+                    if(prevStmtInTraverse!=null){
+                        dstNextStmtMap.put(prevStmtInTraverse,child);
+                        dstPrevStmtMap.put(child,prevStmtInTraverse);
+                    }
+                    dstIdenticalStmts.putIfAbsent(child.getMetrics().hash,new ArrayList<>());
+                    dstIdenticalStmts.get(child.getMetrics().hash).add(child);
+                    prevStmtInTraverse=child;
+                }
+                if(!mappings.isDstMapped(child)) {
+                    if(TreeUtilFunctions.isLeafStatement(type))
+                        unmatchedChildrenStmt.add(child);
+                }
+            }
+        }
+
+        private LeafStmtInfo getLeafStmtInfo(Tree child, String type) {
+            LeafStmtInfo leafStmtInfo;
+            switch(type){
+                case Constants.RETURN_STATEMENT -> {
+                    leafStmtInfo = new RetStmtInfo(child);
+                }
+                case Constants.THROW_STATEMENT -> {
+                    leafStmtInfo = new ThrowStmtInfo(child);
+                }
+                default -> {
+                    leafStmtInfo = new LeafStmtInfo(child);
+                }
+            }
+            return leafStmtInfo;
+        }
+    }
+
+    private class MethodDeclInfo{
+        Tree root;
+        Tree name;
+        List<Tree> params;
+        Tree block;
+        List<Tree> retStmts;
+        List<Tree> relExps;
+
+        MethodDeclInfo(Tree root){
+            this.root = root;
+            this.params = new ArrayList<>();
+            this.retStmts = new ArrayList<>();
+            this.relExps = new ArrayList<>();
+        }
+
+        public void traverseSrc(){
+            for(var child:root.getChildren()) {
+                tryToFixType(child);
+                switch (child.getType().name){
+                    case Constants.SIMPLE_NAME -> {
+                        this.name=child;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstName = mappings.getDsts(child).iterator().next();
+                            if(!child.getLabel().equals(dstName.getLabel())
+                                    && dstName.getParent().getType().name.equals(Constants.METHOD_DECLARATION)){
+                                renameMap.put(child.getLabel(),dstName.getLabel());
+                            }
+                        }
+                    }
+                    case "SingleVariableDeclaration" -> {
+                        this.params.add(child);
+                        trivalTraverse(child);
+                    }
+
+                    case Constants.BLOCK -> {
+                        prevStmtInTraverse = null;
+                        this.block = child;
+
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstBlock = mappings.getDsts(child).iterator().next();
+                            if(child.getMetrics().hash==dstBlock.getMetrics().hash){
+                                checkMappingRecursively2(child,dstBlock);
+                                prunedMappedSrcs.remove(child);
+                                identRoots.add(child);
+                                skipDstStmts.add(dstBlock);
+                                needTraverse = false;
+                            }
+                        }
+                        if(needTraverse){
+                            var compositeStmtInfo = new CompositeStmtInfo(child);
+                            compStmtStack.push(compositeStmtInfo);
+                            compositeStmtInfo.traverseSrc();
+                            compStmtStack.pop();
+                            child.setMetadata("compositeStmtInfo",compositeStmtInfo);
+                        }
+                    }
+                    case Constants.JAVA_DOC -> {
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstDecl = mappings.getDsts(child).iterator().next();
+                            if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                                curMappedSrcs.remove(child);
+                                prunedMappedSrcs.remove(child);
+                                trivalTraverseWithoutAdd(child);
+                                needTraverse = false;
+                            }
+                        }
+                        if(needTraverse){
+                            trivalTraverse(child);
+                        }
+                    }
+                    default -> {
+                        trivalTraverse(child);
+                    }
+                }
+            }
+        }
+
+        public void traverseDst(){
+            for(var child:root.getChildren()) {
+                switch (child.getType().name) {
+                    case Constants.SIMPLE_NAME -> {
+                        this.name = child;
+                    }
+                    case "SingleVariableDeclaration" -> {
+                        this.params.add(child);
+                    }
+                    case Constants.BLOCK -> {
+                        prevStmtInTraverse = null;
+                        this.block = child;
+
+                        if(!skipDstStmts.contains(child)){
+                            var compositeStmtInfo = new CompositeStmtInfo(child);
+                            compStmtStack.push(compositeStmtInfo);
+                            compositeStmtInfo.traverseDst();
+                            compStmtStack.pop();
+                            child.setMetadata("compositeStmtInfo",compositeStmtInfo);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private class TypeDeclInfo{
+        private Tree root;
+        private Tree name;
+        private List<Tree> unmatchedMethodDecls;
+
+        TypeDeclInfo(Tree root){
+            this.root = root;
+            this.unmatchedMethodDecls = new ArrayList<>();
+        }
+
+        public void traverseSrc(){
+            for(var child:root.getChildren()){
+                tryToFixType(child);
+                switch (child.getType().name){
+                    case Constants.SIMPLE_NAME -> {
+                        this.name = child;
+                    }
+                    case Constants.METHOD_DECLARATION, Constants.INITIALIZER -> {
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstDecl = mappings.getDsts(child).iterator().next();
+                            if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                                checkMappingRecursively(child,dstDecl);
+                                curMappedSrcs.remove(child);
+                                prunedMappedSrcs.remove(child);
+                                needTraverse = false;
+                                skipDstDecls.add(dstDecl);
+                            }
+                        }
+                        if(needTraverse){
+                            var methodDeclInfo = new MethodDeclInfo(child);
+                            methodDeclStack.push(methodDeclInfo);
+                            methodDeclInfo.traverseSrc();
+                            methodDeclStack.pop();
+                            child.setMetadata("methodDeclInfo",methodDeclInfo);
+
+                            if(!mappings.isSrcMapped(child))
+                                unmatchedMethodDecls.add(child);
+                        }
+                    }
+                    case Constants.TYPE_DECLARATION -> {
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstDecl = mappings.getDsts(child).iterator().next();
+                            if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                                checkMappingRecursively(child,dstDecl);
+                                curMappedSrcs.remove(child);
+                                prunedMappedSrcs.remove(child);
+                                needTraverse = false;
+                                skipDstDecls.add(dstDecl);
+                            }
+                        }
+                        if(needTraverse){
+                            var typeDeclInfo = new TypeDeclInfo(child);
+                            typeDeclInfo.traverseSrc();
+                            child.setMetadata("typeDeclInfo",typeDeclInfo);
+                        }
+                    }
+                    case Constants.ENUM_DECLARATION -> {
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstDecl = mappings.getDsts(child).iterator().next();
+                            if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                                checkMappingRecursively(child,dstDecl);
+                                curMappedSrcs.remove(child);
+                                prunedMappedSrcs.remove(child);
+                                needTraverse = false;
+                                skipDstDecls.add(dstDecl);
+                            }
+                        }
+                        if(needTraverse){
+                            var enumDeclInfo = new EnumDeclInfo(child);
+                            enumDeclInfo.traverseSrc();
+                            child.setMetadata("enumDeclInfo",enumDeclInfo);
+                        }
+                    }
+                    case Constants.FIELD_DECLARATION -> {
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstDecl = mappings.getDsts(child).iterator().next();
+                            if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                                checkMappingRecursively(child,dstDecl);
+                                curMappedSrcs.remove(child);
+                                prunedMappedSrcs.remove(child);
+                                needTraverse = false;
+                                skipDstDecls.add(dstDecl);
+                            }
+                        }
+                        if(needTraverse){
+                            var fieldDeclInfo = new FieldDeclInfo(child);
+                            fieldDeclInfo.traverseSrc();
+                            child.setMetadata("fieldDeclInfo",fieldDeclInfo);
+                        }
+                    }
+                    case Constants.JAVA_DOC -> {
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstDecl = mappings.getDsts(child).iterator().next();
+                            if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                                curMappedSrcs.remove(child);
+                                prunedMappedSrcs.remove(child);
+                                trivalTraverseWithoutAdd(child);
+                                needTraverse = false;
+                            }
+                        }
+                        if(needTraverse){
+                            trivalTraverse(child);
+                        }
+                    }
+                    default -> {
+                        trivalTraverse(child);
+                    }
+                }
+            }
+        }
+
+        public void traverseDst(){
+            for(var child:root.getChildren()){
+                switch (child.getType().name){
+                    case Constants.SIMPLE_NAME -> {
+                        this.name = child;
+                    }
+                    case Constants.METHOD_DECLARATION, Constants.INITIALIZER -> {
+                        if(!skipDstDecls.contains(child)){
+                            var methodDeclInfo = new MethodDeclInfo(child);
+                            methodDeclStack.push(methodDeclInfo);
+                            methodDeclInfo.traverseDst();
+                            methodDeclStack.pop();
+                            child.setMetadata("methodDeclInfo",methodDeclInfo);
+
+                            if(!mappings.isDstMapped(child)){
+                                unmatchedMethodDecls.add(child);
+                            }
+                        }
+                    }
+                    case Constants.TYPE_DECLARATION -> {
+                        if(!skipDstDecls.contains(child)){
+                            var typeDeclInfo = new TypeDeclInfo(child);
+                            typeDeclInfo.traverseDst();
+                            child.setMetadata("typeDeclInfo",typeDeclInfo);
+                        }
+                    }
+                    case Constants.ENUM_DECLARATION -> {
+                        if(!skipDstDecls.contains(child)){
+                            var enumDeclInfo = new EnumDeclInfo(child);
+                            enumDeclInfo.traverseDst();
+                            child.setMetadata("enumDeclInfo",enumDeclInfo);
+                        }
+                    }
+                    case Constants.FIELD_DECLARATION -> {
+                        if(!skipDstDecls.contains(child)){
+                            var fieldDeclInfo = new FieldDeclInfo(child);
+                            fieldDeclInfo.traverseDst();
+                            child.setMetadata("fieldDeclInfo",fieldDeclInfo);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private class EnumConstDeclInfo{
+        Tree root;
+        Tree name;
+
+        public EnumConstDeclInfo(Tree root){
+            this.root = root;
+        }
+
+        public void traverseSrc(){
+            for(var child:root.getChildren()){
+                tryToFixType(child);
+                switch (child.getType().name){
+                    case Constants.SIMPLE_NAME -> {
+                        this.name = child;
+                    }
+                    case Constants.ANONYMOUS_CLASS_DECLARATION -> {
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstDecl = mappings.getDsts(child).iterator().next();
+                            if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                                checkMappingRecursively(child,dstDecl);
+                                curMappedSrcs.remove(child);
+                                prunedMappedSrcs.remove(child);
+                                needTraverse = false;
+                                skipDstDecls.add(dstDecl);
+                            }
+                        }
+                        if(needTraverse) {
+                            var typeDeclInfo = new TypeDeclInfo(child);
+                            typeDeclInfo.traverseSrc();
+                            child.setMetadata("typeDeclInfo", typeDeclInfo);
+                        }
+                    }
+                    default -> {
+                        trivalTraverse(child);
+                    }
+                }
+            }
+        }
+
+        public void traverseDst(){
+            for(var child:root.getChildren()){
+                switch (child.getType().name){
+                    case Constants.SIMPLE_NAME -> {
+                        this.name = child;
+                    }
+                    case Constants.ANONYMOUS_CLASS_DECLARATION -> {
+                        if(!skipDstDecls.contains(child)){
+                            var typeDeclInfo = new TypeDeclInfo(child);
+                            typeDeclInfo.traverseDst();
+                            child.setMetadata("typeDeclInfo", typeDeclInfo);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private class EnumDeclInfo{
+        Tree root;
+        Tree name;
+
+        EnumDeclInfo(Tree root){
+            this.root = root;
+        }
+
+        public void traverseSrc(){
+            for(var child:root.getChildren()){
+                tryToFixType(child);
+                switch (child.getType().name){
+                    case Constants.SIMPLE_NAME -> {
+                        this.name = child;
+                    }
+                    case Constants.ENUM_CONSTANT_DECLARATION -> {
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstDecl = mappings.getDsts(child).iterator().next();
+                            if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                                checkMappingRecursively(child,dstDecl);
+                                curMappedSrcs.remove(child);
+                                prunedMappedSrcs.remove(child);
+                                needTraverse = false;
+                                skipDstDecls.add(dstDecl);
+                            }
+                        }
+                        if(needTraverse){
+                            var enumConstDeclInfo = new EnumConstDeclInfo(child);
+                            enumConstDeclInfo.traverseSrc();
+                            child.setMetadata("enumConstDeclInfo",enumConstDeclInfo);
+                        }
+                    }
+                    case Constants.METHOD_DECLARATION -> {
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstDecl = mappings.getDsts(child).iterator().next();
+                            if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                                checkMappingRecursively(child,dstDecl);
+                                curMappedSrcs.remove(child);
+                                prunedMappedSrcs.remove(child);
+                                needTraverse = false;
+                                skipDstDecls.add(dstDecl);
+                            }
+                        }
+                        if(needTraverse){
+                            var methodDeclInfo = new MethodDeclInfo(child);
+                            methodDeclStack.push(methodDeclInfo);
+                            methodDeclInfo.traverseSrc();
+                            methodDeclStack.pop();
+                            child.setMetadata("methodDeclInfo",methodDeclInfo);
+                        }
+                    }
+                    case Constants.TYPE_DECLARATION -> {
+                        var needTraverse = true;
+                        if(mappings.isSrcMapped(child) && mappings.isSrcUnique(child)){
+                            var dstDecl = mappings.getDsts(child).iterator().next();
+                            if(child.getMetrics().hash==dstDecl.getMetrics().hash){
+                                checkMappingRecursively(child,dstDecl);
+                                curMappedSrcs.remove(child);
+                                prunedMappedSrcs.remove(child);
+                                needTraverse = false;
+                                skipDstDecls.add(dstDecl);
+                            }
+                        }
+                        if(needTraverse){
+                            var typeDeclInfo = new TypeDeclInfo(child);
+                            typeDeclInfo.traverseSrc();
+                            child.setMetadata("typeDeclInfo",typeDeclInfo);
+                        }
+                    }
+                    case Constants.FIELD_DECLARATION -> {
+                        var fieldDeclInfo = new FieldDeclInfo(child);
+                        fieldDeclInfo.traverseSrc();
+                        child.setMetadata("fieldDeclInfo",fieldDeclInfo);
+                    }
+                    default -> {
+                        trivalTraverse(child);
+                    }
+                }
+            }
+        }
+
+        public void traverseDst(){
+            for(var child:root.getChildren()){
+                switch (child.getType().name){
+                    case Constants.SIMPLE_NAME -> {
+                        this.name = child;
+                    }
+                    case Constants.ENUM_CONSTANT_DECLARATION -> {
+                        if(!skipDstDecls.contains(child)){
+                            var enumConstDeclInfo = new EnumConstDeclInfo(child);
+                            enumConstDeclInfo.traverseDst();
+                            child.setMetadata("enumConstDeclInfo",enumConstDeclInfo);
+                        }
+                    }
+                    case Constants.METHOD_DECLARATION -> {
+                        if(!skipDstDecls.contains(child)){
+                            var methodDeclInfo = new MethodDeclInfo(child);
+                            methodDeclStack.push(methodDeclInfo);
+                            methodDeclInfo.traverseDst();
+                            methodDeclStack.pop();
+                            child.setMetadata("methodDeclInfo",methodDeclInfo);
+                        }
+                    }
+                    case Constants.TYPE_DECLARATION -> {
+                        if(!skipDstDecls.contains(child)){
+                            var typeDeclInfo = new TypeDeclInfo(child);
+                            typeDeclInfo.traverseDst();
+                            child.setMetadata("typeDeclInfo",typeDeclInfo);
+                        }
+                    }
+                    case Constants.FIELD_DECLARATION -> {
+                        var fieldDeclInfo = new FieldDeclInfo(child);
+                        fieldDeclInfo.traverseDst();
+                        child.setMetadata("fieldDeclInfo",fieldDeclInfo);
+                    }
+                }
+            }
+        }
+    }
+
+    private void recoverSrcStmtMap(Tree t){
+        for (var child : t.getChildren()) {
+            if (TreeUtilFunctions.isLeafStatement(child.getType().name)) {
+                if(prevStmtInTraverse!=null){
+                    srcNextStmtMap.put(prevStmtInTraverse,child);
+                    srcPrevStmtMap.put(child,prevStmtInTraverse);
+                }
+//                srcIdenticalStmts.putIfAbsent(child.getMetrics().hash,new ArrayList<>());
+//                srcIdenticalStmts.get(child.getMetrics().hash).add(child);
+                prevStmtInTraverse=child;
+                identRoots.add(child);
+            }
+            else recoverSrcStmtMap(child);
+        }
+    }
+
+    private void recoverDstStmtMap(Tree t){
+        for (var child : t.getChildren()) {
+            if (TreeUtilFunctions.isLeafStatement(child.getType().name)) {
+                if(prevStmtInTraverse!=null){
+                    dstNextStmtMap.put(prevStmtInTraverse,child);
+                    dstPrevStmtMap.put(child,prevStmtInTraverse);
+                }
+//                dstIdenticalStmts.putIfAbsent(child.getMetrics().hash,new ArrayList<>());
+//                dstIdenticalStmts.get(child.getMetrics().hash).add(child);
+                prevStmtInTraverse=child;
+            }
+            else recoverDstStmtMap(child);
+        }
+    }
+
+    private void checkMappingRecursively(Tree src,Tree dst){
+        checkMapping(src,dst);
+//        curMappedSrcs.remove(src);
+//        prunedMappedSrcs.remove(src);
+        if (dst.getChildren().size() == src.getChildren().size())
+            for (int i = 0; i < src.getChildren().size(); i++)
+                checkMappingRecursively(src.getChild(i), dst.getChild(i));
+    }
+
+    @Override
+    protected void checkMappingRecursively2(Tree src,Tree dst){
+        checkMapping(src,dst);
+        curMappedSrcs.add(src);
+//        prunedMappedSrcs.remove(src);
+        if (dst.getChildren().size() == src.getChildren().size())
+            for (int i = 0; i < src.getChildren().size(); i++)
+                checkMappingRecursively2(src.getChild(i), dst.getChild(i));
+    }
+
+    @Override
+    protected void addToMapping(Tree src,Tree dst){
+        mappings.addMapping(src, dst);
+        curMappedSrcs.add(src);
+        prunedMappedSrcs.add(src);
+        if(prunedMappedSrcsWithIdentRoot!=null) {
+            prunedMappedSrcsWithIdentRoot.add(src);
+        }
+
+        if(isDebug){
+            if(newRemovedSrc.contains(src)){
+                newRemovedSrc.remove(src);
+                if(src.getMetadata("pass")!=null){
+                    logger.info("current pass: {}, match src node that prev removed in pass: {}, node pos: {}, node type: {}",current_pass,src.getMetadata("pass"),src.getPos(),src.getType().name);
+                    src.setMetadata("pass",current_pass);
+                }
+            }
+            else{
+                newMatchedSrc.add(src);
+                if(src.getMetadata("pass")!=null){
+                    logger.info("current pass: {}, match src node that prev removed in pass: {}, node pos: {}, node type: {}",current_pass,src.getMetadata("pass"),src.getPos(),src.getType().name);
+                    src.setMetadata("pass",current_pass);
+                }
+                else{
+                    logger.info("current pass: {}, match src node that prev not matched, node pos: {}, node type: {}",current_pass,src.getPos(),src.getType().name);
+                    src.setMetadata("pass",current_pass);
+                }
+            }
+
+            if(newRemovedDst.contains(dst)){
+                newRemovedDst.remove(dst);
+                if(dst.getMetadata("pass")!=null){
+                    logger.info("current pass: {}, match dst node that prev removed in pass: {}, node pos: {}, node type: {}",current_pass,dst.getMetadata("pass"),dst.getPos(),dst.getType().name);
+                    dst.setMetadata("pass",current_pass);
+                }
+            }
+            else{
+                newMatchedDst.add(dst);
+                if(dst.getMetadata("pass")!=null){
+                    logger.info("current pass: {}, match dst node that prev removed in pass: {}, node pos: {}, node type: {}",current_pass,dst.getMetadata("pass"),dst.getPos(),dst.getType().name);
+                    dst.setMetadata("pass",current_pass);
+                }
+                else{
+                    logger.info("current pass: {}, match dst node that prev not matched, node pos: {}, node type: {}",current_pass,dst.getPos(),dst.getType().name);
+                    dst.setMetadata("pass",current_pass);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void removeFromMapping(Tree src,Tree dst){
+        mappings.removeMapping(src, dst);
+        curMappedSrcs.remove(src);
+        prunedMappedSrcs.remove(src);
+        if(prunedMappedSrcsWithIdentRoot!=null)
+            prunedMappedSrcsWithIdentRoot.remove(src);
+
+        if(isDebug){
+            if(newMatchedSrc.contains(src)){
+                newMatchedSrc.remove(src);
+                if(src.getMetadata("pass")!=null){
+                    logger.info("current pass: {}, remove src node that prev matched in pass: {}, node pos: {}, node type: {}",current_pass,src.getMetadata("pass"),src.getPos(),src.getType().name);
+                    src.setMetadata("pass",current_pass);
+                }
+            }
+            else{
+                newRemovedSrc.add(src);
+                if(src.getMetadata("pass")!=null){
+                    logger.info("current pass: {}, remove src node that prev matched in pass: {}, node pos: {}, node type: {}",current_pass,src.getMetadata("pass"),src.getPos(),src.getType().name);
+                    src.setMetadata("pass",current_pass);
+                }
+                else{
+                    logger.info("current pass: {}, remove src node that prev matched, node pos: {}, node type: {}",current_pass,src.getPos(),src.getType().name);
+                    src.setMetadata("pass",current_pass);
+                }
+            }
+
+            if(newMatchedDst.contains(dst)){
+                newMatchedDst.remove(dst);
+                if(dst.getMetadata("pass")!=null){
+                    logger.info("current pass: {}, remove dst node that prev matched in pass: {}, node pos: {}, node type: {}",current_pass,dst.getMetadata("pass"),dst.getPos(),dst.getType().name);
+                    dst.setMetadata("pass",current_pass);
+                }
+            }
+            else{
+                newRemovedDst.add(dst);
+                if(dst.getMetadata("pass")!=null){
+                    logger.info("current pass: {}, remove dst node that prev matched in pass: {}, node pos: {}, node type: {}",current_pass,dst.getMetadata("pass"),dst.getPos(),dst.getType().name);
+                    dst.setMetadata("pass",current_pass);
+                }
+                else{
+                    logger.info("current pass: {}, remove dst node that prev matched, node pos: {}, node type: {}",current_pass,dst.getPos(),dst.getType().name);
+                    dst.setMetadata("pass",current_pass);
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,401 @@
+[
+  {
+    "oid": "2cbd91c6c05921f735ad2408cea9c345adc2e2e3",
+    "message": "1\u3001\u5c06http 304\u4f5c\u4e3a\u6b63\u5e38\u72b6\u6001\u5904\u7406\uff1b2\u3001\u5e94\u4e3aETag\uff0c\u800c\u4e0d\u662fETags\n\n1\u3001\u5c06http 304\u4f5c\u4e3a\u6b63\u5e38\u72b6\u6001\u5904\u7406\uff0c\u907f\u514d\u5927\u91cf304\u9519\u8bef\u5199\u5230\u65e5\u5fd7\u6587\u4ef6\u91cc\uff1b2\u3001\u5e94\u4e3aETag\uff0c\u800c\u4e0d\u662fETags",
+    "date": "2015-08-03T09:46:23Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/2cbd91c6c05921f735ad2408cea9c345adc2e2e3",
+    "details": {
+      "sha": "b1f0cbd18813c0b7b003a3982dc4c7354584cfe4",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Monitor.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 3,
+      "changes": 6,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/2cbd91c6c05921f735ad2408cea9c345adc2e2e3/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/2cbd91c6c05921f735ad2408cea9c345adc2e2e3/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java?ref=2cbd91c6c05921f735ad2408cea9c345adc2e2e3",
+      "patch": "@@ -62,15 +62,15 @@ public void run() {\n \t\t\tresponse = httpclient.execute(head);\n \t\t\t\n \t\t\t//\u8fd4\u56de200 \u624d\u505a\u64cd\u4f5c\n-\t\t\tif(response.getStatusLine().getStatusCode()==200){\n+\t\t\tif(response.getStatusLine().getStatusCode()==200 || response.getStatusLine().getStatusCode()==304){\n \t\t\t\n \t\t\t\tif (!response.getLastHeader(\"Last-Modified\").getValue().equalsIgnoreCase(last_modified)\n-\t\t\t\t\t||!response.getLastHeader(\"ETags\").getValue().equalsIgnoreCase(eTags)) {\n+\t\t\t\t\t||!response.getLastHeader(\"ETag\").getValue().equalsIgnoreCase(eTags)) {\n \n \t\t\t\t\t// \u8fdc\u7a0b\u8bcd\u5e93\u6709\u66f4\u65b0,\u9700\u8981\u91cd\u65b0\u52a0\u8f7d\u8bcd\u5178\uff0c\u5e76\u4fee\u6539last_modified,eTags\n \t\t\t\t\tDictionary.getSingleton().reLoadMainDict();\n \t\t\t\t\tlast_modified = response.getLastHeader(\"Last-Modified\")==null?null:response.getLastHeader(\"Last-Modified\").getValue();\n-\t\t\t\t\teTags = response.getLastHeader(\"ETags\")==null?null:response.getLastHeader(\"ETags\").getValue();\n+\t\t\t\t\teTags = response.getLastHeader(\"ETag\")==null?null:response.getLastHeader(\"ETag\").getValue();\n \t\t\t\t}\n \t\t\t}else{\n \t\t\t\tDictionary.logger.info(\"remote_ext_dict {} return bad code {}\" , location , response.getStatusLine().getStatusCode() );",
+      "parent_sha": "2f367029e493bb23585e8b83e10a02032e38d77d"
+    }
+  },
+  {
+    "oid": "0e8ddbd749d94c6f91b2b329e760ddfb87568db4",
+    "message": "ext dic&stopwords can be dir (#437)\n\nallow dir for ext_dict and ext_stopwords in IKAnalyzer.cfg.xml\r\nBy: Peng Chen<figroc@gmail.com>",
+    "date": "2018-02-24T08:40:21Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/0e8ddbd749d94c6f91b2b329e760ddfb87568db4",
+    "details": {
+      "sha": "a43087c45f12819ab438a648bc48d00b48e9d985",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Dictionary.java",
+      "status": "modified",
+      "additions": 34,
+      "deletions": 6,
+      "changes": 40,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/0e8ddbd749d94c6f91b2b329e760ddfb87568db4/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/0e8ddbd749d94c6f91b2b329e760ddfb87568db4/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java?ref=0e8ddbd749d94c6f91b2b329e760ddfb87568db4",
+      "patch": "@@ -32,7 +32,11 @@\n import java.io.IOException;\r\n import java.io.InputStream;\r\n import java.io.InputStreamReader;\r\n+import java.nio.file.attribute.BasicFileAttributes;\r\n+import java.nio.file.Files;\r\n+import java.nio.file.FileVisitResult;\r\n import java.nio.file.Path;\r\n+import java.nio.file.SimpleFileVisitor;\r\n import java.util.*;\r\n import java.util.concurrent.Executors;\r\n import java.util.concurrent.ScheduledExecutorService;\r\n@@ -173,6 +177,30 @@ public static synchronized Dictionary initial(Configuration cfg) {\n \t\treturn singleton;\r\n \t}\r\n \r\n+\tprivate List<String> walkFileTree(List<String> files, Path path) {\r\n+\t\tif (Files.isRegularFile(path)) {\r\n+\t\t\tfiles.add(path.toString());\r\n+\t\t} else if (Files.isDirectory(path)) try {\r\n+\t\t\tFiles.walkFileTree(path, new SimpleFileVisitor<Path>() {\r\n+\t\t\t\t@Override\r\n+\t\t\t\tpublic FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {\r\n+\t\t\t\t\tfiles.add(file.toString());\r\n+\t\t\t\t\treturn FileVisitResult.CONTINUE;\r\n+\t\t\t\t}\r\n+\t\t\t\t@Override\r\n+\t\t\t\tpublic FileVisitResult visitFileFailed(Path file, IOException e) {\r\n+\t\t\t\t\tlogger.error(\"[Ext Loading] listing files\", e);\r\n+\t\t\t\t\treturn FileVisitResult.CONTINUE;\r\n+\t\t\t\t}\r\n+\t\t\t});\r\n+\t\t} catch (IOException e) {\r\n+\t\t\tlogger.error(\"[Ext Loading] listing files\", e);\r\n+\t\t} else {\r\n+\t\t\tlogger.warn(\"[Ext Loading] file not found: \" + path);\r\n+\t\t}\r\n+\t\treturn files;\r\n+\t}\r\n+\r\n \tpublic List<String> getExtDictionarys() {\r\n \t\tList<String> extDictFiles = new ArrayList<String>(2);\r\n \t\tString extDictCfg = getProperty(EXT_DICT);\r\n@@ -181,8 +209,8 @@ public List<String> getExtDictionarys() {\n \t\t\tString[] filePaths = extDictCfg.split(\";\");\r\n \t\t\tfor (String filePath : filePaths) {\r\n \t\t\t\tif (filePath != null && !\"\".equals(filePath.trim())) {\r\n-\t\t\t\t\tPath file = PathUtils.get(filePath.trim());\r\n-\t\t\t\t\textDictFiles.add(file.toString());\r\n+\t\t\t\t\tPath file = PathUtils.get(getDictRoot(), filePath.trim());\r\n+\t\t\t\t\twalkFileTree(extDictFiles, file);\r\n \r\n \t\t\t\t}\r\n \t\t\t}\r\n@@ -214,8 +242,8 @@ public List<String> getExtStopWordDictionarys() {\n \t\t\tString[] filePaths = extStopWordDictCfg.split(\";\");\r\n \t\t\tfor (String filePath : filePaths) {\r\n \t\t\t\tif (filePath != null && !\"\".equals(filePath.trim())) {\r\n-\t\t\t\t\tPath file = PathUtils.get(filePath.trim());\r\n-\t\t\t\t\textStopWordDictFiles.add(file.toString());\r\n+\t\t\t\t\tPath file = PathUtils.get(getDictRoot(), filePath.trim());\r\n+\t\t\t\t\twalkFileTree(extStopWordDictFiles, file);\r\n \r\n \t\t\t\t}\r\n \t\t\t}\r\n@@ -391,7 +419,7 @@ private void loadExtDict() {\n \t\t\tfor (String extDictName : extDictFiles) {\r\n \t\t\t\t// \u8bfb\u53d6\u6269\u5c55\u8bcd\u5178\u6587\u4ef6\r\n \t\t\t\tlogger.info(\"[Dict Loading] \" + extDictName);\r\n-\t\t\t\tPath file = PathUtils.get(getDictRoot(), extDictName);\r\n+\t\t\t\tPath file = PathUtils.get(extDictName);\r\n \t\t\t\ttry {\r\n \t\t\t\t\tis = new FileInputStream(file.toFile());\r\n \t\t\t\t} catch (FileNotFoundException e) {\r\n@@ -545,7 +573,7 @@ private void loadStopWordDict() {\n \t\t\t\tlogger.info(\"[Dict Loading] \" + extStopWordDictName);\r\n \r\n \t\t\t\t// \u8bfb\u53d6\u6269\u5c55\u8bcd\u5178\u6587\u4ef6\r\n-\t\t\t\tfile = PathUtils.get(getDictRoot(), extStopWordDictName);\r\n+\t\t\t\tfile = PathUtils.get(extStopWordDictName);\r\n \t\t\t\ttry {\r\n \t\t\t\t\tis = new FileInputStream(file.toFile());\r\n \t\t\t\t} catch (FileNotFoundException e) {\r",
+      "parent_sha": "7a1445fddaacfe9a50cccd22f8927ba3907aa040"
+    }
+  },
+  {
+    "oid": "71b521178156fed5694aad86457446442330ae27",
+    "message": "pretty logging",
+    "date": "2016-01-13T02:53:05Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/71b521178156fed5694aad86457446442330ae27",
+    "details": {
+      "sha": "09d3a966c79f6dc984d294ecb98c3c912e70ca82",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Dictionary.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 6,
+      "changes": 12,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/71b521178156fed5694aad86457446442330ae27/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/71b521178156fed5694aad86457446442330ae27/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java?ref=71b521178156fed5694aad86457446442330ae27",
+      "patch": "@@ -270,7 +270,7 @@ private void loadExtDict(){\n \t\t\tInputStream is = null;\r\n \t\t\tfor(String extDictName : extDictFiles){\r\n \t\t\t\t//\u8bfb\u53d6\u6269\u5c55\u8bcd\u5178\u6587\u4ef6\r\n-                logger.info(\"[Dict Loading]\" + extDictName);\r\n+                logger.info(\"[Dict Loading] \" + extDictName);\r\n \t\t\t\tPath file = PathUtils.get(configuration.getDictRoot(), extDictName);\r\n                 try {\r\n                     is = new FileInputStream(file.toFile());\r\n@@ -316,11 +316,11 @@ private void loadExtDict(){\n \tprivate void loadRemoteExtDict(){\r\n \t\tList<String> remoteExtDictFiles  = configuration.getRemoteExtDictionarys();\r\n \t\tfor(String location:remoteExtDictFiles){\r\n-\t\t\tlogger.info(\"[Dict Loading]\" + location);\r\n+\t\t\tlogger.info(\"[Dict Loading] \" + location);\r\n \t\t\tList<String> lists = getRemoteWords(location);\r\n \t\t\t//\u5982\u679c\u627e\u4e0d\u5230\u6269\u5c55\u7684\u5b57\u5178\uff0c\u5219\u5ffd\u7565\r\n \t\t\tif(lists == null){\r\n-\t\t\t\tlogger.error(\"[Dict Loading]\"+location+\"\u52a0\u8f7d\u5931\u8d25\");\r\n+\t\t\t\tlogger.error(\"[Dict Loading] \"+location+\"\u52a0\u8f7d\u5931\u8d25\");\r\n \t\t\t\tcontinue;\r\n \t\t\t}\r\n \t\t\tfor(String theWord:lists){\r\n@@ -426,7 +426,7 @@ private void loadStopWordDict(){\n \t\tif(extStopWordDictFiles != null){\r\n \t\t\tis = null;\r\n \t\t\tfor(String extStopWordDictName : extStopWordDictFiles){\r\n-                logger.info(\"[Dict Loading]\" + extStopWordDictName);\r\n+                logger.info(\"[Dict Loading] \" + extStopWordDictName);\r\n \r\n                 //\u8bfb\u53d6\u6269\u5c55\u8bcd\u5178\u6587\u4ef6\r\n                 file=PathUtils.get(configuration.getDictRoot(), extStopWordDictName);\r\n@@ -469,11 +469,11 @@ private void loadStopWordDict(){\n \t\t//\u52a0\u8f7d\u8fdc\u7a0b\u505c\u7528\u8bcd\u5178\r\n \t\tList<String> remoteExtStopWordDictFiles  = configuration.getRemoteExtStopWordDictionarys();\r\n \t\tfor(String location:remoteExtStopWordDictFiles){\r\n-\t\t\tlogger.info(\"[Dict Loading]\" + location);\r\n+\t\t\tlogger.info(\"[Dict Loading] \" + location);\r\n \t\t\tList<String> lists = getRemoteWords(location);\r\n \t\t\t//\u5982\u679c\u627e\u4e0d\u5230\u6269\u5c55\u7684\u5b57\u5178\uff0c\u5219\u5ffd\u7565\r\n \t\t\tif(lists == null){\r\n-\t\t\t\tlogger.error(\"[Dict Loading]\"+location+\"\u52a0\u8f7d\u5931\u8d25\");\r\n+\t\t\t\tlogger.error(\"[Dict Loading] \"+location+\"\u52a0\u8f7d\u5931\u8d25\");\r\n \t\t\t\tcontinue;\r\n \t\t\t}\r\n \t\t\tfor(String theWord:lists){\r",
+      "parent_sha": "7bf3f97eaae95e88da495b3058488ddac5d95575"
+    }
+  },
+  {
+    "oid": "f0dc55aad665285627fb7f313c4d637b1bcc427a",
+    "message": "Update Dictionary.java\n\n\u7ed9\u8fdc\u7a0b\u52a0\u8f7d\u5efa\u7acb\u76d1\u63a7",
+    "date": "2014-09-24T08:21:31Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/f0dc55aad665285627fb7f313c4d637b1bcc427a",
+    "details": {
+      "sha": "efe32d201db66db8277a4fb65638d9746544f084",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Dictionary.java",
+      "status": "modified",
+      "additions": 119,
+      "deletions": 3,
+      "changes": 122,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/f0dc55aad665285627fb7f313c4d637b1bcc427a/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/f0dc55aad665285627fb7f313c4d637b1bcc427a/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java?ref=f0dc55aad665285627fb7f313c4d637b1bcc427a",
+      "patch": "@@ -25,11 +25,18 @@\n  */\r\n package org.wltea.analyzer.dic;\r\n \r\n+import org.apache.http.client.ClientProtocolException;\r\n+import org.apache.http.client.config.RequestConfig;\r\n+import org.apache.http.client.methods.CloseableHttpResponse;\r\n+import org.apache.http.client.methods.HttpGet;\r\n+import org.apache.http.impl.client.CloseableHttpClient;\r\n+import org.apache.http.impl.client.HttpClients;\r\n import org.elasticsearch.common.logging.ESLogger;\r\n import org.elasticsearch.common.logging.Loggers;\r\n import org.wltea.analyzer.cfg.Configuration;\r\n \r\n import java.io.*;\r\n+import java.util.ArrayList;\r\n import java.util.Collection;\r\n import java.util.List;\r\n \r\n@@ -92,6 +99,17 @@ public static synchronized Dictionary initial(Configuration cfg){\n                     singleton.loadSuffixDict();\r\n                     singleton.loadPrepDict();\r\n                     singleton.loadStopWordDict();\r\n+                    \r\n+                  //\u5efa\u7acb\u76d1\u63a7\u7ebf\u7a0b\r\n+                    for(String location:cfg.getRemoteExtDictionarys()){\r\n+                        Thread monitor = new Thread(new Monitor(location));\r\n+                \tmonitor.start();\r\n+                    }\r\n+                    for(String location:cfg.getRemoteExtStopWordDictionarys()){\r\n+                        Thread monitor = new Thread(new Monitor(location));\r\n+                \tmonitor.start();\r\n+                    }\r\n+                    \r\n                     return singleton;\r\n \t\t\t\t}\r\n \t\t\t}\r\n@@ -224,6 +242,8 @@ private void loadMainDict(){\n \t\t}\r\n \t\t//\u52a0\u8f7d\u6269\u5c55\u8bcd\u5178\r\n \t\tthis.loadExtDict();\r\n+\t\t//\u52a0\u8f7d\u8fdc\u7a0b\u81ea\u5b9a\u4e49\u8bcd\u5e93\r\n+\t\tthis.loadRemoteExtDict();\r\n \t}\t\r\n \t\r\n \t/**\r\n@@ -275,6 +295,76 @@ private void loadExtDict(){\n \t\t}\t\t\r\n \t}\r\n \t\r\n+\t\r\n+\t/**\r\n+\t * \u52a0\u8f7d\u8fdc\u7a0b\u6269\u5c55\u8bcd\u5178\u5230\u4e3b\u8bcd\u5e93\u8868\r\n+\t */\r\n+\tprivate void loadRemoteExtDict(){\r\n+\t\tList<String> remoteExtDictFiles  = configuration.getRemoteExtDictionarys();\r\n+\t\tfor(String location:remoteExtDictFiles){\r\n+\t\t\tlogger.info(\"[Dict Loading]\" + location);\r\n+\t\t\tList<String> lists = getRemoteWords(location);\r\n+\t\t\t//\u5982\u679c\u627e\u4e0d\u5230\u6269\u5c55\u7684\u5b57\u5178\uff0c\u5219\u5ffd\u7565\r\n+\t\t\tif(lists == null){\r\n+\t\t\t\tlogger.error(\"[Dict Loading]\"+location+\"\u52a0\u8f7d\u5931\u8d25\");\r\n+\t\t\t\tcontinue;\r\n+\t\t\t}\r\n+\t\t\tfor(String theWord:lists){\r\n+\t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n+\t\t\t\t\t//\u52a0\u8f7d\u6269\u5c55\u8bcd\u5178\u6570\u636e\u5230\u4e3b\u5185\u5b58\u8bcd\u5178\u4e2d\r\n+\t\t\t\t\tlogger.info(theWord);\r\n+\t\t\t\t\t_MainDict.fillSegment(theWord.trim().toLowerCase().toCharArray());\r\n+\t\t\t\t}\r\n+\t\t\t}\r\n+\t\t}\r\n+\t\t\r\n+\t}\r\n+\t\r\n+\t/**\r\n+\t * \u4ece\u8fdc\u7a0b\u670d\u52a1\u5668\u4e0a\u4e0b\u8f7d\u81ea\u5b9a\u4e49\u8bcd\u6761\r\n+\t */\r\n+\tprivate static List<String> getRemoteWords(String location){\r\n+\t\t\r\n+\t\tList<String> buffer = new ArrayList<String>();\r\n+\t\tRequestConfig rc = RequestConfig.custom().setConnectionRequestTimeout(10*1000)\r\n+\t\t\t\t.setConnectTimeout(10*1000).setSocketTimeout(60*1000).build();\r\n+\t\tCloseableHttpClient httpclient = HttpClients.createDefault();\r\n+\t\tCloseableHttpResponse response;\r\n+\t\tBufferedReader in;\r\n+\t\tHttpGet get = new HttpGet(location);\r\n+\t\tget.setConfig(rc);\r\n+\t\ttry {\r\n+\t\t\tresponse = httpclient.execute(get);\r\n+\t\t\tif(response.getStatusLine().getStatusCode()==200){\r\n+\t\t\t\t\r\n+\t\t\t\tString charset = \"UTF-8\";\r\n+\t\t\t\t//\u83b7\u53d6\u7f16\u7801\uff0c\u9ed8\u8ba4\u4e3autf-8\r\n+\t\t\t\tif(response.getEntity().getContentType().getValue().contains(\"charset=\")){\r\n+\t\t\t\t\tString contentType=response.getEntity().getContentType().getValue();\r\n+\t\t\t\t\tcharset=contentType.substring(contentType.lastIndexOf(\"=\")+1);\r\n+\t\t\t\t}\r\n+\t\t\t\tin = new BufferedReader(new InputStreamReader(response.getEntity().getContent(),charset));\r\n+\t\t\t\tString line ;\r\n+\t\t\t\twhile((line = in.readLine())!=null){\r\n+\t\t\t\t\tbuffer.add(line);\r\n+\t\t\t\t}\r\n+\t\t\t\tin.close();\r\n+\t\t\t\tresponse.close();\r\n+\t\t\t\treturn buffer;\r\n+\t\t\t}\r\n+\t\t\tresponse.close();\r\n+\t\t} catch (ClientProtocolException e) {\r\n+\t\t\te.printStackTrace();\r\n+\t\t} catch (IllegalStateException e) {\r\n+\t\t\te.printStackTrace();\r\n+\t\t} catch (IOException e) {\r\n+\t\t\te.printStackTrace();\r\n+\t\t}\r\n+\t\treturn buffer;\r\n+\t}\r\n+\t\r\n+\t\r\n+\t\r\n \t/**\r\n \t * \u52a0\u8f7d\u7528\u6237\u6269\u5c55\u7684\u505c\u6b62\u8bcd\u8bcd\u5178\r\n \t */\r\n@@ -360,7 +450,28 @@ private void loadStopWordDict(){\n \t\t\t\t\t}\r\n \t\t\t\t}\r\n \t\t\t}\r\n-\t\t}\t\t\r\n+\t\t}\r\n+\t\t\r\n+\t\t//\u52a0\u8f7d\u8fdc\u7a0b\u505c\u7528\u8bcd\u5178\r\n+\t\tList<String> remoteExtStopWordDictFiles  = configuration.getRemoteExtStopWordDictionarys();\r\n+\t\tfor(String location:remoteExtStopWordDictFiles){\r\n+\t\t\tlogger.info(\"[Dict Loading]\" + location);\r\n+\t\t\tList<String> lists = getRemoteWords(location);\r\n+\t\t\t//\u5982\u679c\u627e\u4e0d\u5230\u6269\u5c55\u7684\u5b57\u5178\uff0c\u5219\u5ffd\u7565\r\n+\t\t\tif(lists == null){\r\n+\t\t\t\tlogger.error(\"[Dict Loading]\"+location+\"\u52a0\u8f7d\u5931\u8d25\");\r\n+\t\t\t\tcontinue;\r\n+\t\t\t}\r\n+\t\t\tfor(String theWord:lists){\r\n+\t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n+\t\t\t\t\t//\u52a0\u8f7d\u8fdc\u7a0b\u8bcd\u5178\u6570\u636e\u5230\u4e3b\u5185\u5b58\u4e2d\r\n+\t\t\t\t\tlogger.info(theWord);\r\n+\t\t\t\t\t_StopWords.fillSegment(theWord.trim().toLowerCase().toCharArray());\r\n+\t\t\t\t}\r\n+\t\t\t}\r\n+\t\t}\r\n+\t\t\r\n+\t\t\r\n \t}\r\n \t\r\n \t/**\r\n@@ -511,6 +622,11 @@ private void loadPrepDict(){\n             }\r\n         }\r\n     }\r\n-\r\n-\t\r\n+    \r\n+    public void reLoadMainDict(){\r\n+    \tlogger.info(\"\u91cd\u65b0\u52a0\u8f7d\u8bcd\u5178...\");\r\n+\tloadMainDict();\r\n+\tloadStopWordDict();\r\n+    }\r\n+    \r\n }\r",
+      "parent_sha": "11a8947603a9b736691f138317487ed90da1daea"
+    }
+  },
+  {
+    "oid": "b97a6d89d8fe3f4c8d9e24232362ce24b6bd0a52",
+    "message": "optimize Dictionary reload process",
+    "date": "2015-01-21T07:28:05Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/b97a6d89d8fe3f4c8d9e24232362ce24b6bd0a52",
+    "details": {
+      "sha": "885996236358aee3ba6b7f6601fb490738a4d042",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Dictionary.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 2,
+      "changes": 9,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/b97a6d89d8fe3f4c8d9e24232362ce24b6bd0a52/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/b97a6d89d8fe3f4c8d9e24232362ce24b6bd0a52/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java?ref=b97a6d89d8fe3f4c8d9e24232362ce24b6bd0a52",
+      "patch": "@@ -638,8 +638,13 @@ private void loadPrepDict(){\n     \r\n     public void reLoadMainDict(){\r\n     \tlogger.info(\"\u91cd\u65b0\u52a0\u8f7d\u8bcd\u5178...\");\r\n-\tloadMainDict();\r\n-\tloadStopWordDict();\r\n+\t\t// \u65b0\u5f00\u4e00\u4e2a\u5b9e\u4f8b\u52a0\u8f7d\u8bcd\u5178\uff0c\u51cf\u5c11\u52a0\u8f7d\u8fc7\u7a0b\u5bf9\u5f53\u524d\u8bcd\u5178\u4f7f\u7528\u7684\u5f71\u54cd\r\n+\t\tDictionary tmpDict = new Dictionary();\r\n+\t\ttmpDict.loadMainDict();\r\n+\t\ttmpDict.loadStopWordDict();\r\n+\t\t_MainDict = tmpDict._MainDict;\r\n+\t\t_StopWords = tmpDict._StopWords;\r\n+\t\tlogger.info(\"\u91cd\u65b0\u52a0\u8f7d\u8bcd\u5178\u5b8c\u6bd5...\");\r\n     }\r\n     \r\n }\r",
+      "parent_sha": "d60e7a68779db03309677c122c4beb233592d255"
+    }
+  },
+  {
+    "oid": "51d3979513d431ca002fa974952d01d86a9f96f9",
+    "message": "fix buffer boundary issues and cursor handling in IK tokenizer: (#1080)\n\n* Adjusted the calculation of offset in fillBuffer() to correctly handle cases when the cursor reaches the end of the buffer, preventing duplicate processing of the last character.\r\n\r\nCo-authored-by: Hj Wu <black99129@gmail..com>",
+    "date": "2024-12-12T01:01:43Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/51d3979513d431ca002fa974952d01d86a9f96f9",
+    "details": {
+      "sha": "4a59d8cdc4c87291fde77f27fbd65cb7f3239e0e",
+      "filename": "core/src/main/java/org/wltea/analyzer/core/AnalyzeContext.java",
+      "status": "modified",
+      "additions": 9,
+      "deletions": 4,
+      "changes": 13,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/51d3979513d431ca002fa974952d01d86a9f96f9/core%2Fsrc%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcore%2FAnalyzeContext.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/51d3979513d431ca002fa974952d01d86a9f96f9/core%2Fsrc%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcore%2FAnalyzeContext.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/core%2Fsrc%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcore%2FAnalyzeContext.java?ref=51d3979513d431ca002fa974952d01d86a9f96f9",
+      "patch": "@@ -121,15 +121,20 @@ int fillBuffer(Reader reader) throws IOException{\n     \t\treadCount = reader.read(segmentBuff);\r\n \t\t\tthis.lastUselessCharNum = 0;\r\n     \t}else{\r\n-    \t\tint offset = this.available - this.cursor;\r\n+\t\t\t// moveCursor()\u53ea\u80fd\u5c06cursor\u79fb\u52a8\u5230available-1\uff0c\u9700\u8981+1\r\n+    \t\tint offset = this.available - (this.cursor + 1);\r\n     \t\tif(offset > 0){\r\n     \t\t\t//\u6700\u8fd1\u4e00\u6b21\u8bfb\u53d6\u7684>\u6700\u8fd1\u4e00\u6b21\u5904\u7406\u7684\uff0c\u5c06\u672a\u5904\u7406\u7684\u5b57\u4e32\u62f7\u8d1d\u5230segmentBuff\u5934\u90e8\r\n-    \t\t\tSystem.arraycopy(this.segmentBuff , this.cursor , this.segmentBuff , 0 , offset);\r\n+\t\t\t\t//\u5f53\u524dcursor\u662f\u5df2\u7ecf\u5904\u7406\u8fc7\u7684\u5b57\u7b26\uff0c\u9700\u8981+1\r\n+    \t\t\tSystem.arraycopy(this.segmentBuff , this.cursor + 1, this.segmentBuff , 0 , offset);\r\n     \t\t\treadCount = offset;\r\n     \t\t}\r\n     \t\t//\u7ee7\u7eed\u8bfb\u53d6reader \uff0c\u4ee5onceReadIn - onceAnalyzed\u4e3a\u8d77\u59cb\u4f4d\u7f6e\uff0c\u7ee7\u7eed\u586b\u5145segmentBuff\u5269\u4f59\u7684\u90e8\u5206\r\n-    \t\treadCount += reader.read(this.segmentBuff , offset , BUFF_SIZE - offset);\r\n-    \t}            \t\r\n+    \t\tint numRead = reader.read(this.segmentBuff, offset, BUFF_SIZE - offset);\r\n+\t\t\tif (numRead != -1) {\r\n+\t\t\t\treadCount += numRead;\r\n+\t\t\t}\r\n+    \t}\r\n     \t//\u8bb0\u5f55\u6700\u540e\u4e00\u6b21\u4eceReader\u4e2d\u8bfb\u5165\u7684\u53ef\u7528\u5b57\u7b26\u957f\u5ea6\r\n     \tthis.available = readCount;\r\n     \t//\u91cd\u7f6e\u5f53\u524d\u6307\u9488\r",
+      "parent_sha": "5a04b42bc89d1476e6e6e68a51926e0d0e7c7bf3"
+    }
+  },
+  {
+    "oid": "6c29956a8fb8ba970c8f3e3d00e5427301ac61b8",
+    "message": "Update Monitor.java\n\n-- \u914d\u5408 Dictionary\u91cc\u7684\u5468\u671f\u4efb\u52a1\u8c03\u5ea6\u7684\u4fee\u6539 \u53bb\u9664\u4e86\u8fd9\u91cc\u7684while(true)  Exception\u505a\u4e86\u7edf\u4e00  \u5176\u4f59\u5747\u672a\u4f5c\u4fee\u6539",
+    "date": "2014-12-04T03:18:29Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/6c29956a8fb8ba970c8f3e3d00e5427301ac61b8",
+    "details": {
+      "sha": "65bc744623f042763776477de12e18485fbc94b4",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Monitor.java",
+      "status": "modified",
+      "additions": 33,
+      "deletions": 41,
+      "changes": 74,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/6c29956a8fb8ba970c8f3e3d00e5427301ac61b8/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/6c29956a8fb8ba970c8f3e3d00e5427301ac61b8/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java?ref=6c29956a8fb8ba970c8f3e3d00e5427301ac61b8",
+      "patch": "@@ -2,15 +2,11 @@\n \n import java.io.IOException;\n \n-import org.apache.http.Header;\n-import org.apache.http.client.ClientProtocolException;\n import org.apache.http.client.config.RequestConfig;\n import org.apache.http.client.methods.CloseableHttpResponse;\n import org.apache.http.client.methods.HttpHead;\n import org.apache.http.impl.client.CloseableHttpClient;\n import org.apache.http.impl.client.HttpClients;\n-import org.wltea.analyzer.help.Sleep;\n-import org.wltea.analyzer.help.Sleep.Type;\n \n public class Monitor implements Runnable {\n \t\n@@ -44,53 +40,49 @@ public Monitor(String location) {\n \t */\n \t\n \tpublic void run() {\n+\t\t\n \t\t//\u8d85\u65f6\u8bbe\u7f6e\n \t\tRequestConfig rc = RequestConfig.custom().setConnectionRequestTimeout(10*1000)\n \t\t\t\t.setConnectTimeout(10*1000).setSocketTimeout(15*1000).build();\n-\t\twhile (true) {\n-\t\t\tHttpHead head = new HttpHead(location);\n-\t\t\thead.setConfig(rc);\n+\t\t\n+\t\tHttpHead head = new HttpHead(location);\n+\t\thead.setConfig(rc);\n+\t\t\n+\t\t//\u8bbe\u7f6e\u8bf7\u6c42\u5934\n+\t\tif (last_modified != null) {\n+\t\t\thead.setHeader(\"If-Modified-Since\", last_modified);\n+\t\t}\n+\t\tif (eTags != null) {\n+\t\t\thead.setHeader(\"If-None-Match\", eTags);\n+\t\t}\n+\t\t\n+\t\tCloseableHttpResponse response = null;\n+\t\ttry {\n \t\t\t\n-\t\t\t//\u8bbe\u7f6e\u8bf7\u6c42\u5934\n-\t\t\tif (last_modified != null) {\n-\t\t\t\thead.setHeader(\"If-Modified-Since\", last_modified);\n-\t\t\t}\n-\t\t\tif (eTags != null) {\n-\t\t\t\thead.setHeader(\"If-None-Match\", eTags);\n+\t\t\tresponse = httpclient.execute(head);\n+\t\t\t\n+\t\t\t//\u8fd4\u56de200 \u624d\u505a\u64cd\u4f5c\n+\t\t\tif(response.getStatusLine().getStatusCode()==200){\n+\t\t\t\n+\t\t\t\tif (!response.getLastHeader(\"Last-Modified\").getValue().equalsIgnoreCase(last_modified)\n+\t\t\t\t\t||!response.getLastHeader(\"ETags\").getValue().equalsIgnoreCase(eTags)) {\n+\n+\t\t\t\t\t// \u8fdc\u7a0b\u8bcd\u5e93\u6709\u66f4\u65b0,\u9700\u8981\u91cd\u65b0\u52a0\u8f7d\u8bcd\u5178\uff0c\u5e76\u4fee\u6539last_modified,eTags\n+\t\t\t\t\tDictionary.getSingleton().reLoadMainDict();\n+\t\t\t\t\tlast_modified = response.getLastHeader(\"Last-Modified\")==null?null:response.getLastHeader(\"Last-Modified\").getValue();\n+\t\t\t\t\teTags = response.getLastHeader(\"ETags\")==null?null:response.getLastHeader(\"ETags\").getValue();\n+\t\t\t\t}\n \t\t\t}\n \t\t\t\n-\t\t\tCloseableHttpResponse response = null;\n+\t\t} catch (Exception e) {\n+\t\t\te.printStackTrace();\n+\t\t}finally{\n \t\t\ttry {\n-\t\t\t\tresponse = httpclient.execute(head);\n-\t\t\t\t\n-\t\t\t\t//\u8fd4\u56de304 Not Modified\uff0c\u8bcd\u5e93\u672a\u66f4\u65b0\n-\t\t\t\tif(response.getStatusLine().getStatusCode()==304){\n-\t\t\t\t\tcontinue;\n-\t\t\t\t}else if(response.getStatusLine().getStatusCode()==200){\n-\t\t\t\t\n-\t\t\t\t\tif (!response.getLastHeader(\"Last-Modified\").getValue().equalsIgnoreCase(last_modified)\n-\t\t\t\t\t\t||!response.getLastHeader(\"ETags\").getValue().equalsIgnoreCase(eTags)) {\n-\t\n-\t\t\t\t\t\t// \u8fdc\u7a0b\u8bcd\u5e93\u6709\u66f4\u65b0,\u9700\u8981\u91cd\u65b0\u52a0\u8f7d\u8bcd\u5178\uff0c\u5e76\u4fee\u6539last_modified,eTags\n-\t\t\t\t\t\tDictionary.getSingleton().reLoadMainDict();\n-\t\t\t\t\t\tlast_modified = response.getLastHeader(\"Last-Modified\")==null?null:response.getLastHeader(\"Last-Modified\").getValue();\n-\t\t\t\t\t\teTags = response.getLastHeader(\"ETags\")==null?null:response.getLastHeader(\"ETags\").getValue();\n-\t\t\t\t\t}\n-\t\t\t\t}\n-\t\t\t\t\n-\t\t\t} catch (ClientProtocolException e) {\n-\t\t\t\te.printStackTrace();\n+\t\t\t\tresponse.close();\n \t\t\t} catch (IOException e) {\n \t\t\t\te.printStackTrace();\n-\t\t\t}finally{\n-\t\t\t\ttry {\n-\t\t\t\t\tresponse.close();\n-\t\t\t\t} catch (IOException e) {\n-\t\t\t\t\te.printStackTrace();\n-\t\t\t\t}\n-\t\t\t\tSleep.sleep(Type.SEC, 60);\n \t\t\t}\n-\t\t}\t\n+\t\t}\n \t}\n \t\n }",
+      "parent_sha": "8a49a5ed8840c2b4c7d507ceba874df5594ee09a"
+    }
+  },
+  {
+    "oid": "c77cfcb6efdfc187dcc4306e49676b19aa9296f5",
+    "message": "update scope to GLOBAL",
+    "date": "2015-11-26T08:02:31Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/c77cfcb6efdfc187dcc4306e49676b19aa9296f5",
+    "details": {
+      "sha": "ee089a4428093e5af21fb74884d35e4ff12e19a0",
+      "filename": "src/main/java/org/elasticsearch/indices/analysis/IKIndicesAnalysis.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 3,
+      "changes": 6,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/c77cfcb6efdfc187dcc4306e49676b19aa9296f5/src%2Fmain%2Fjava%2Forg%2Felasticsearch%2Findices%2Fanalysis%2FIKIndicesAnalysis.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/c77cfcb6efdfc187dcc4306e49676b19aa9296f5/src%2Fmain%2Fjava%2Forg%2Felasticsearch%2Findices%2Fanalysis%2FIKIndicesAnalysis.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Felasticsearch%2Findices%2Fanalysis%2FIKIndicesAnalysis.java?ref=c77cfcb6efdfc187dcc4306e49676b19aa9296f5",
+      "patch": "@@ -25,15 +25,15 @@ public IKIndicesAnalysis(final Settings settings,\n         super(settings);\n         this.useSmart = settings.get(\"use_smart\", \"false\").equals(\"true\");\n         indicesAnalysisService.analyzerProviderFactories().put(\"ik\",\n-                new PreBuiltAnalyzerProviderFactory(\"ik\", AnalyzerScope.INDICES,\n+                new PreBuiltAnalyzerProviderFactory(\"ik\", AnalyzerScope.GLOBAL,\n                         new IKAnalyzer(useSmart)));\n \n         indicesAnalysisService.analyzerProviderFactories().put(\"ik_smart\",\n-                new PreBuiltAnalyzerProviderFactory(\"ik_smart\", AnalyzerScope.INDICES,\n+                new PreBuiltAnalyzerProviderFactory(\"ik_smart\", AnalyzerScope.GLOBAL,\n                         new IKAnalyzer(true)));\n \n         indicesAnalysisService.analyzerProviderFactories().put(\"ik_max_word\",\n-                new PreBuiltAnalyzerProviderFactory(\"ik_max_word\", AnalyzerScope.INDICES,\n+                new PreBuiltAnalyzerProviderFactory(\"ik_max_word\", AnalyzerScope.GLOBAL,\n                         new IKAnalyzer(false)));\n \n         indicesAnalysisService.tokenizerFactories().put(\"ik\",",
+      "parent_sha": "b8a8cb6ae25045e3afa8ac6772245cde9f21166f"
+    }
+  },
+  {
+    "oid": "1d750a9bdd9f9c62c89fbe9493cf1e88f49c69b1",
+    "message": "Update AnalyzeContext.java (#617)",
+    "date": "2018-11-20T13:15:37Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/1d750a9bdd9f9c62c89fbe9493cf1e88f49c69b1",
+    "details": {
+      "sha": "982882e06fa796b2cb85b6d7f7fbd926c18b046f",
+      "filename": "src/main/java/org/wltea/analyzer/core/AnalyzeContext.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/1d750a9bdd9f9c62c89fbe9493cf1e88f49c69b1/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcore%2FAnalyzeContext.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/1d750a9bdd9f9c62c89fbe9493cf1e88f49c69b1/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcore%2FAnalyzeContext.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcore%2FAnalyzeContext.java?ref=1d750a9bdd9f9c62c89fbe9493cf1e88f49c69b1",
+      "patch": "@@ -48,7 +48,7 @@ class AnalyzeContext {\n \tprivate static final int BUFF_EXHAUST_CRITICAL = 100;\t\r\n \t\r\n  \r\n-\t//\u5b57\u7b26\u7a9c\u8bfb\u53d6\u7f13\u51b2\r\n+\t//\u5b57\u7b26\u4e32\u8bfb\u53d6\u7f13\u51b2\r\n     private char[] segmentBuff;\r\n     //\u5b57\u7b26\u7c7b\u578b\u6570\u7ec4\r\n     private int[] charTypes;\r",
+      "parent_sha": "3a7a81c29d01f7f4a9accf9ca638c11aa37d76e2"
+    }
+  },
+  {
+    "oid": "1375ca6d39c53c85542ee4e8c147bfff8131e420",
+    "message": "fix #789",
+    "date": "2020-06-10T08:05:01Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/1375ca6d39c53c85542ee4e8c147bfff8131e420",
+    "details": {
+      "sha": "216ff17ed1a71860e8966ba4ea0446d73316b4b0",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Dictionary.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/1375ca6d39c53c85542ee4e8c147bfff8131e420/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/1375ca6d39c53c85542ee4e8c147bfff8131e420/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java?ref=1375ca6d39c53c85542ee4e8c147bfff8131e420",
+      "patch": "@@ -80,7 +80,7 @@ public class Dictionary {\n \t */\r\n \tprivate Configuration configuration;\r\n \r\n-\tprivate static final Logger logger = ESPluginLoggerFactory.getLogger(Monitor.class.getName());\r\n+\tprivate static final Logger logger = ESPluginLoggerFactory.getLogger(Dictionary.class.getName());\r\n \r\n \tprivate static ScheduledExecutorService pool = Executors.newScheduledThreadPool(1);\r\n \r",
+      "parent_sha": "4619effa155056eb67411a87e8a96b5a78cc6d0b"
+    }
+  },
+  {
+    "oid": "7028b9ea05aed580a815c4085d55ff34f5b51245",
+    "message": "BOM handling of dict file (#517)\n\nSigned-off-by: Peng Chen <figroc@gmail.com>",
+    "date": "2018-04-02T05:29:22Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/7028b9ea05aed580a815c4085d55ff34f5b51245",
+    "details": {
+      "sha": "4e077ce2c844129b12498e774bea40cc55878285",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Dictionary.java",
+      "status": "modified",
+      "additions": 30,
+      "deletions": 252,
+      "changes": 282,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/7028b9ea05aed580a815c4085d55ff34f5b51245/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/7028b9ea05aed580a815c4085d55ff34f5b51245/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java?ref=7028b9ea05aed580a815c4085d55ff34f5b51245",
+      "patch": "@@ -26,7 +26,6 @@\n package org.wltea.analyzer.dic;\r\n \r\n import java.io.BufferedReader;\r\n-import java.io.File;\r\n import java.io.FileInputStream;\r\n import java.io.FileNotFoundException;\r\n import java.io.IOException;\r\n@@ -201,6 +200,28 @@ public FileVisitResult visitFileFailed(Path file, IOException e) {\n \t\treturn files;\r\n \t}\r\n \r\n+\tprivate void loadDictFile(DictSegment dict, Path file, boolean critical, String name) {\r\n+\t\ttry (InputStream is = new FileInputStream(file.toFile())) {\r\n+\t\t\tBufferedReader br = new BufferedReader(\r\n+\t\t\t\t\tnew InputStreamReader(is, \"UTF-8\"), 512);\r\n+\t\t\tString word = br.readLine();\r\n+\t\t\tif (word != null) {\r\n+\t\t\t\tif (word.startsWith(\"\\uFEFF\"))\r\n+\t\t\t\t\tword = word.substring(1);\r\n+\t\t\t\tfor (; word != null; word = br.readLine()) {\r\n+\t\t\t\t\tword = word.trim();\r\n+\t\t\t\t\tif (word.isEmpty()) continue;\r\n+\t\t\t\t\tdict.fillSegment(word.toCharArray());\r\n+\t\t\t\t}\r\n+\t\t\t}\r\n+\t\t} catch (FileNotFoundException e) {\r\n+\t\t\tlogger.error(\"ik-analyzer: \" + name + \" not found\", e);\r\n+\t\t\tif (critical) throw new RuntimeException(\"ik-analyzer: \" + name + \" not found!!!\", e);\r\n+\t\t} catch (IOException e) {\r\n+\t\t\tlogger.error(\"ik-analyzer: \" + name + \" loading failed\", e);\r\n+\t\t}\r\n+\t}\r\n+\r\n \tpublic List<String> getExtDictionarys() {\r\n \t\tList<String> extDictFiles = new ArrayList<String>(2);\r\n \t\tString extDictCfg = getProperty(EXT_DICT);\r\n@@ -371,37 +392,7 @@ private void loadMainDict() {\n \r\n \t\t// \u8bfb\u53d6\u4e3b\u8bcd\u5178\u6587\u4ef6\r\n \t\tPath file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_MAIN);\r\n-\r\n-\t\tInputStream is = null;\r\n-\t\ttry {\r\n-\t\t\tis = new FileInputStream(file.toFile());\r\n-\t\t} catch (FileNotFoundException e) {\r\n-\t\t\tlogger.error(e.getMessage(), e);\r\n-\t\t}\r\n-\r\n-\t\ttry {\r\n-\t\t\tBufferedReader br = new BufferedReader(new InputStreamReader(is, \"UTF-8\"), 512);\r\n-\t\t\tString theWord = null;\r\n-\t\t\tdo {\r\n-\t\t\t\ttheWord = br.readLine();\r\n-\t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n-\t\t\t\t\t_MainDict.fillSegment(theWord.trim().toCharArray());\r\n-\t\t\t\t}\r\n-\t\t\t} while (theWord != null);\r\n-\r\n-\t\t} catch (IOException e) {\r\n-\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\r\n-\t\t} finally {\r\n-\t\t\ttry {\r\n-\t\t\t\tif (is != null) {\r\n-\t\t\t\t\tis.close();\r\n-\t\t\t\t\tis = null;\r\n-\t\t\t\t}\r\n-\t\t\t} catch (IOException e) {\r\n-\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t\t}\r\n-\t\t}\r\n+\t\tloadDictFile(_MainDict, file, false, \"Main Dict\");\r\n \t\t// \u52a0\u8f7d\u6269\u5c55\u8bcd\u5178\r\n \t\tthis.loadExtDict();\r\n \t\t// \u52a0\u8f7d\u8fdc\u7a0b\u81ea\u5b9a\u4e49\u8bcd\u5e93\r\n@@ -415,44 +406,11 @@ private void loadExtDict() {\n \t\t// \u52a0\u8f7d\u6269\u5c55\u8bcd\u5178\u914d\u7f6e\r\n \t\tList<String> extDictFiles = getExtDictionarys();\r\n \t\tif (extDictFiles != null) {\r\n-\t\t\tInputStream is = null;\r\n \t\t\tfor (String extDictName : extDictFiles) {\r\n \t\t\t\t// \u8bfb\u53d6\u6269\u5c55\u8bcd\u5178\u6587\u4ef6\r\n \t\t\t\tlogger.info(\"[Dict Loading] \" + extDictName);\r\n \t\t\t\tPath file = PathUtils.get(extDictName);\r\n-\t\t\t\ttry {\r\n-\t\t\t\t\tis = new FileInputStream(file.toFile());\r\n-\t\t\t\t} catch (FileNotFoundException e) {\r\n-\t\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t\t\t}\r\n-\r\n-\t\t\t\t// \u5982\u679c\u627e\u4e0d\u5230\u6269\u5c55\u7684\u5b57\u5178\uff0c\u5219\u5ffd\u7565\r\n-\t\t\t\tif (is == null) {\r\n-\t\t\t\t\tcontinue;\r\n-\t\t\t\t}\r\n-\t\t\t\ttry {\r\n-\t\t\t\t\tBufferedReader br = new BufferedReader(new InputStreamReader(is, \"UTF-8\"), 512);\r\n-\t\t\t\t\tString theWord = null;\r\n-\t\t\t\t\tdo {\r\n-\t\t\t\t\t\ttheWord = br.readLine();\r\n-\t\t\t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n-\t\t\t\t\t\t\t// \u52a0\u8f7d\u6269\u5c55\u8bcd\u5178\u6570\u636e\u5230\u4e3b\u5185\u5b58\u8bcd\u5178\u4e2d\r\n-\t\t\t\t\t\t\t_MainDict.fillSegment(theWord.trim().toCharArray());\r\n-\t\t\t\t\t\t}\r\n-\t\t\t\t\t} while (theWord != null);\r\n-\r\n-\t\t\t\t} catch (IOException e) {\r\n-\t\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t\t\t} finally {\r\n-\t\t\t\t\ttry {\r\n-\t\t\t\t\t\tif (is != null) {\r\n-\t\t\t\t\t\t\tis.close();\r\n-\t\t\t\t\t\t\tis = null;\r\n-\t\t\t\t\t\t}\r\n-\t\t\t\t\t} catch (IOException e) {\r\n-\t\t\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t\t\t\t}\r\n-\t\t\t\t}\r\n+\t\t\t\tloadDictFile(_MainDict, file, false, \"Extra Dict\");\r\n \t\t\t}\r\n \t\t}\r\n \t}\r\n@@ -533,80 +491,17 @@ private void loadStopWordDict() {\n \r\n \t\t// \u8bfb\u53d6\u4e3b\u8bcd\u5178\u6587\u4ef6\r\n \t\tPath file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_STOP);\r\n-\r\n-\t\tInputStream is = null;\r\n-\t\ttry {\r\n-\t\t\tis = new FileInputStream(file.toFile());\r\n-\t\t} catch (FileNotFoundException e) {\r\n-\t\t\tlogger.error(e.getMessage(), e);\r\n-\t\t}\r\n-\r\n-\t\ttry {\r\n-\t\t\tBufferedReader br = new BufferedReader(new InputStreamReader(is, \"UTF-8\"), 512);\r\n-\t\t\tString theWord = null;\r\n-\t\t\tdo {\r\n-\t\t\t\ttheWord = br.readLine();\r\n-\t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n-\t\t\t\t\t_StopWords.fillSegment(theWord.trim().toCharArray());\r\n-\t\t\t\t}\r\n-\t\t\t} while (theWord != null);\r\n-\r\n-\t\t} catch (IOException e) {\r\n-\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\r\n-\t\t} finally {\r\n-\t\t\ttry {\r\n-\t\t\t\tif (is != null) {\r\n-\t\t\t\t\tis.close();\r\n-\t\t\t\t\tis = null;\r\n-\t\t\t\t}\r\n-\t\t\t} catch (IOException e) {\r\n-\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t\t}\r\n-\t\t}\r\n+\t\tloadDictFile(_StopWords, file, false, \"Main Stopwords\");\r\n \r\n \t\t// \u52a0\u8f7d\u6269\u5c55\u505c\u6b62\u8bcd\u5178\r\n \t\tList<String> extStopWordDictFiles = getExtStopWordDictionarys();\r\n \t\tif (extStopWordDictFiles != null) {\r\n-\t\t\tis = null;\r\n \t\t\tfor (String extStopWordDictName : extStopWordDictFiles) {\r\n \t\t\t\tlogger.info(\"[Dict Loading] \" + extStopWordDictName);\r\n \r\n \t\t\t\t// \u8bfb\u53d6\u6269\u5c55\u8bcd\u5178\u6587\u4ef6\r\n \t\t\t\tfile = PathUtils.get(extStopWordDictName);\r\n-\t\t\t\ttry {\r\n-\t\t\t\t\tis = new FileInputStream(file.toFile());\r\n-\t\t\t\t} catch (FileNotFoundException e) {\r\n-\t\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t\t\t}\r\n-\t\t\t\t// \u5982\u679c\u627e\u4e0d\u5230\u6269\u5c55\u7684\u5b57\u5178\uff0c\u5219\u5ffd\u7565\r\n-\t\t\t\tif (is == null) {\r\n-\t\t\t\t\tcontinue;\r\n-\t\t\t\t}\r\n-\t\t\t\ttry {\r\n-\t\t\t\t\tBufferedReader br = new BufferedReader(new InputStreamReader(is, \"UTF-8\"), 512);\r\n-\t\t\t\t\tString theWord = null;\r\n-\t\t\t\t\tdo {\r\n-\t\t\t\t\t\ttheWord = br.readLine();\r\n-\t\t\t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n-\t\t\t\t\t\t\t// \u52a0\u8f7d\u6269\u5c55\u505c\u6b62\u8bcd\u5178\u6570\u636e\u5230\u5185\u5b58\u4e2d\r\n-\t\t\t\t\t\t\t_StopWords.fillSegment(theWord.trim().toCharArray());\r\n-\t\t\t\t\t\t}\r\n-\t\t\t\t\t} while (theWord != null);\r\n-\r\n-\t\t\t\t} catch (IOException e) {\r\n-\t\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\r\n-\t\t\t\t} finally {\r\n-\t\t\t\t\ttry {\r\n-\t\t\t\t\t\tif (is != null) {\r\n-\t\t\t\t\t\t\tis.close();\r\n-\t\t\t\t\t\t\tis = null;\r\n-\t\t\t\t\t\t}\r\n-\t\t\t\t\t} catch (IOException e) {\r\n-\t\t\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t\t\t\t}\r\n-\t\t\t\t}\r\n+\t\t\t\tloadDictFile(_StopWords, file, false, \"Extra Stopwords\");\r\n \t\t\t}\r\n \t\t}\r\n \r\n@@ -639,142 +534,25 @@ private void loadQuantifierDict() {\n \t\t_QuantifierDict = new DictSegment((char) 0);\r\n \t\t// \u8bfb\u53d6\u91cf\u8bcd\u8bcd\u5178\u6587\u4ef6\r\n \t\tPath file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_QUANTIFIER);\r\n-\t\tInputStream is = null;\r\n-\t\ttry {\r\n-\t\t\tis = new FileInputStream(file.toFile());\r\n-\t\t} catch (FileNotFoundException e) {\r\n-\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t}\r\n-\t\ttry {\r\n-\t\t\tBufferedReader br = new BufferedReader(new InputStreamReader(is, \"UTF-8\"), 512);\r\n-\t\t\tString theWord = null;\r\n-\t\t\tdo {\r\n-\t\t\t\ttheWord = br.readLine();\r\n-\t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n-\t\t\t\t\t_QuantifierDict.fillSegment(theWord.trim().toCharArray());\r\n-\t\t\t\t}\r\n-\t\t\t} while (theWord != null);\r\n-\r\n-\t\t} catch (IOException ioe) {\r\n-\t\t\tlogger.error(\"Quantifier Dictionary loading exception.\");\r\n-\r\n-\t\t} finally {\r\n-\t\t\ttry {\r\n-\t\t\t\tif (is != null) {\r\n-\t\t\t\t\tis.close();\r\n-\t\t\t\t\tis = null;\r\n-\t\t\t\t}\r\n-\t\t\t} catch (IOException e) {\r\n-\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t\t}\r\n-\t\t}\r\n+\t\tloadDictFile(_QuantifierDict, file, false, \"Quantifier\");\r\n \t}\r\n \r\n \tprivate void loadSurnameDict() {\r\n-\r\n \t\t_SurnameDict = new DictSegment((char) 0);\r\n \t\tPath file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_SURNAME);\r\n-\t\tInputStream is = null;\r\n-\t\ttry {\r\n-\t\t\tis = new FileInputStream(file.toFile());\r\n-\t\t} catch (FileNotFoundException e) {\r\n-\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t}\r\n-\t\tif (is == null) {\r\n-\t\t\tthrow new RuntimeException(\"Surname Dictionary not found!!!\");\r\n-\t\t}\r\n-\t\ttry {\r\n-\t\t\tBufferedReader br = new BufferedReader(new InputStreamReader(is, \"UTF-8\"), 512);\r\n-\t\t\tString theWord;\r\n-\t\t\tdo {\r\n-\t\t\t\ttheWord = br.readLine();\r\n-\t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n-\t\t\t\t\t_SurnameDict.fillSegment(theWord.trim().toCharArray());\r\n-\t\t\t\t}\r\n-\t\t\t} while (theWord != null);\r\n-\t\t} catch (IOException e) {\r\n-\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t} finally {\r\n-\t\t\ttry {\r\n-\t\t\t\tif (is != null) {\r\n-\t\t\t\t\tis.close();\r\n-\t\t\t\t\tis = null;\r\n-\t\t\t\t}\r\n-\t\t\t} catch (IOException e) {\r\n-\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t\t}\r\n-\t\t}\r\n+\t\tloadDictFile(_SurnameDict, file, true, \"Surname\");\r\n \t}\r\n \r\n \tprivate void loadSuffixDict() {\r\n-\r\n \t\t_SuffixDict = new DictSegment((char) 0);\r\n \t\tPath file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_SUFFIX);\r\n-\t\tInputStream is = null;\r\n-\t\ttry {\r\n-\t\t\tis = new FileInputStream(file.toFile());\r\n-\t\t} catch (FileNotFoundException e) {\r\n-\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t}\r\n-\t\tif (is == null) {\r\n-\t\t\tthrow new RuntimeException(\"Suffix Dictionary not found!!!\");\r\n-\t\t}\r\n-\t\ttry {\r\n-\r\n-\t\t\tBufferedReader br = new BufferedReader(new InputStreamReader(is, \"UTF-8\"), 512);\r\n-\t\t\tString theWord;\r\n-\t\t\tdo {\r\n-\t\t\t\ttheWord = br.readLine();\r\n-\t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n-\t\t\t\t\t_SuffixDict.fillSegment(theWord.trim().toCharArray());\r\n-\t\t\t\t}\r\n-\t\t\t} while (theWord != null);\r\n-\t\t} catch (IOException e) {\r\n-\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t} finally {\r\n-\t\t\ttry {\r\n-\t\t\t\tis.close();\r\n-\t\t\t\tis = null;\r\n-\t\t\t} catch (IOException e) {\r\n-\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t\t}\r\n-\t\t}\r\n+\t\tloadDictFile(_SuffixDict, file, true, \"Suffix\");\r\n \t}\r\n \r\n \tprivate void loadPrepDict() {\r\n-\r\n \t\t_PrepDict = new DictSegment((char) 0);\r\n \t\tPath file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_PREP);\r\n-\t\tInputStream is = null;\r\n-\t\ttry {\r\n-\t\t\tis = new FileInputStream(file.toFile());\r\n-\t\t} catch (FileNotFoundException e) {\r\n-\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t}\r\n-\t\tif (is == null) {\r\n-\t\t\tthrow new RuntimeException(\"Preposition Dictionary not found!!!\");\r\n-\t\t}\r\n-\t\ttry {\r\n-\r\n-\t\t\tBufferedReader br = new BufferedReader(new InputStreamReader(is, \"UTF-8\"), 512);\r\n-\t\t\tString theWord;\r\n-\t\t\tdo {\r\n-\t\t\t\ttheWord = br.readLine();\r\n-\t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n-\r\n-\t\t\t\t\t_PrepDict.fillSegment(theWord.trim().toCharArray());\r\n-\t\t\t\t}\r\n-\t\t\t} while (theWord != null);\r\n-\t\t} catch (IOException e) {\r\n-\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t} finally {\r\n-\t\t\ttry {\r\n-\t\t\t\tis.close();\r\n-\t\t\t\tis = null;\r\n-\t\t\t} catch (IOException e) {\r\n-\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n-\t\t\t}\r\n-\t\t}\r\n+\t\tloadDictFile(_PrepDict, file, true, \"Preposition\");\r\n \t}\r\n \r\n \tpublic void reLoadMainDict() {\r",
+      "parent_sha": "4ab2616a966e0a33c03c98fe413409f59ef7ec77"
+    }
+  },
+  {
+    "oid": "9768188eb252ad4fccd72d03dbdb56673e19d105",
+    "message": "Casting math operands before assignment",
+    "date": "2016-02-11T18:04:45Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/9768188eb252ad4fccd72d03dbdb56673e19d105",
+    "details": {
+      "sha": "ce34d7296176ad8aca24f5089c224bc12be3f878",
+      "filename": "src/main/java/org/wltea/analyzer/help/Sleep.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 3,
+      "changes": 6,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/9768188eb252ad4fccd72d03dbdb56673e19d105/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fhelp%2FSleep.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/9768188eb252ad4fccd72d03dbdb56673e19d105/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fhelp%2FSleep.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fhelp%2FSleep.java?ref=9768188eb252ad4fccd72d03dbdb56673e19d105",
+      "patch": "@@ -15,13 +15,13 @@ public static void sleep(Type type,int num){\n \t\t\t\t\tThread.sleep(num);\n \t\t\t\t\treturn;\n \t\t\t\tcase SEC:\n-\t\t\t\t\tThread.sleep(num*1000);\n+\t\t\t\t\tThread.sleep(num*1000L);\n \t\t\t\t\treturn;\n \t\t\t\tcase MIN:\n-\t\t\t\t\tThread.sleep(num*60*1000);\n+\t\t\t\t\tThread.sleep(num*60*1000L);\n \t\t\t\t\treturn;\n \t\t\t\tcase HOUR:\n-\t\t\t\t\tThread.sleep(num*60*60*1000);\n+\t\t\t\t\tThread.sleep(num*60*60*1000L);\n \t\t\t\t\treturn;\n \t\t\t\tdefault:\n                     logger.error(\"\u8f93\u5165\u7c7b\u578b\u9519\u8bef\uff0c\u5e94\u4e3aMSEC,SEC,MIN,HOUR\u4e4b\u4e00\");",
+      "parent_sha": "3f0214a8e370379baf12313e3c96f58872640362"
+    }
+  },
+  {
+    "oid": "52d3a6bab9c741e95f3d729d73eb39b81566b632",
+    "message": "fix bug when upgrading to elasticsearch-0.19.4",
+    "date": "2012-05-22T07:26:48Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/52d3a6bab9c741e95f3d729d73eb39b81566b632",
+    "details": {
+      "sha": "5d0331b62ca123d484409c1e1ffb3b1f43e92ec1",
+      "filename": "src/main/java/org/elasticsearch/index/analysis/IkAnalyzerProvider.java",
+      "status": "modified",
+      "additions": 15,
+      "deletions": 2,
+      "changes": 17,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/52d3a6bab9c741e95f3d729d73eb39b81566b632/src%2Fmain%2Fjava%2Forg%2Felasticsearch%2Findex%2Fanalysis%2FIkAnalyzerProvider.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/52d3a6bab9c741e95f3d729d73eb39b81566b632/src%2Fmain%2Fjava%2Forg%2Felasticsearch%2Findex%2Fanalysis%2FIkAnalyzerProvider.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Felasticsearch%2Findex%2Fanalysis%2FIkAnalyzerProvider.java?ref=52d3a6bab9c741e95f3d729d73eb39b81566b632",
+      "patch": "@@ -28,15 +28,28 @@ public IkAnalyzerProvider(Index index, @IndexSettings Settings indexSettings, En\n         analyzer=new IKAnalyzer(indexSettings);\r\n     }\r\n \r\n-    @Override\r\n+/*    @Override\r\n     public String name() {\r\n         return \"ik\";\r\n     }\r\n \r\n     @Override\r\n     public AnalyzerScope scope() {\r\n         return AnalyzerScope.INDEX;\r\n-    }\r\n+    }*/\r\n+\r\n+\r\n+    public IkAnalyzerProvider(Index index, Settings indexSettings, String name,\r\n+    \t\tSettings settings) {\r\n+\t\tsuper(index, indexSettings, name, settings);\r\n+\t\tanalyzer=new IKAnalyzer(indexSettings);\r\n+\t}\r\n+\r\n+\tpublic IkAnalyzerProvider(Index index, Settings indexSettings,\r\n+\t\t\tString prefixSettings, String name, Settings settings) {\r\n+\t\tsuper(index, indexSettings, prefixSettings, name, settings);\r\n+\t\tanalyzer=new IKAnalyzer(indexSettings);\r\n+\t}\r\n \r\n \r\n     @Override public IKAnalyzer get() {\r",
+      "parent_sha": "7b8d4bcf7f463ceb7cbaa77ec9e10a79af7bdcba"
+    }
+  },
+  {
+    "oid": "8a49a5ed8840c2b4c7d507ceba874df5594ee09a",
+    "message": "Update Dictionary.java\n\n-- \u4fee\u6539\u7684 \u5efa\u7acb\u76d1\u63a7\u7ebf\u7a0b\u90e8\u5206\u4ee3\u7801 \u6539\u7528ScheduledExecutorService\uff0c \u4e4b\u524d\u7684while(true) sleep\u4e0d\u80fd\u7b97\u662f\u4e00\u79cd\u4f18\u96c5\u7684\u6267\u884c\u5468\u671f\u4efb\u52a1\u7684\u65b9\u5f0f\uff0c\u76f8\u5e94\u7684Monitor\u7c7b\u5c06while\u90e8\u5206\u505a\u4e86\u5254\u9664",
+    "date": "2014-12-04T03:16:23Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/8a49a5ed8840c2b4c7d507ceba874df5594ee09a",
+    "details": {
+      "sha": "b1bc64c3f302c4c990c07c5d2f9738c9861b6e4e",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Dictionary.java",
+      "status": "modified",
+      "additions": 29,
+      "deletions": 16,
+      "changes": 45,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/8a49a5ed8840c2b4c7d507ceba874df5594ee09a/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/8a49a5ed8840c2b4c7d507ceba874df5594ee09a/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java?ref=8a49a5ed8840c2b4c7d507ceba874df5594ee09a",
+      "patch": "@@ -25,6 +25,20 @@\n  */\r\n package org.wltea.analyzer.dic;\r\n \r\n+import java.io.BufferedReader;\r\n+import java.io.File;\r\n+import java.io.FileInputStream;\r\n+import java.io.FileNotFoundException;\r\n+import java.io.IOException;\r\n+import java.io.InputStream;\r\n+import java.io.InputStreamReader;\r\n+import java.util.ArrayList;\r\n+import java.util.Collection;\r\n+import java.util.List;\r\n+import java.util.concurrent.Executors;\r\n+import java.util.concurrent.ScheduledExecutorService;\r\n+import java.util.concurrent.TimeUnit;\r\n+\r\n import org.apache.http.client.ClientProtocolException;\r\n import org.apache.http.client.config.RequestConfig;\r\n import org.apache.http.client.methods.CloseableHttpResponse;\r\n@@ -35,11 +49,6 @@\n import org.elasticsearch.common.logging.Loggers;\r\n import org.wltea.analyzer.cfg.Configuration;\r\n \r\n-import java.io.*;\r\n-import java.util.ArrayList;\r\n-import java.util.Collection;\r\n-import java.util.List;\r\n-\r\n /**\r\n  * \u8bcd\u5178\u7ba1\u7406\u7c7b,\u5355\u5b50\u6a21\u5f0f\r\n  */\r\n@@ -69,13 +78,18 @@ public class Dictionary {\n \t */\r\n \tprivate Configuration configuration;\r\n     private ESLogger logger=null;\r\n+    \r\n+    private static ScheduledExecutorService pool = Executors.newScheduledThreadPool(1);\r\n+    \r\n     public static final String PATH_DIC_MAIN = \"ik/main.dic\";\r\n     public static final String PATH_DIC_SURNAME = \"ik/surname.dic\";\r\n     public static final String PATH_DIC_QUANTIFIER = \"ik/quantifier.dic\";\r\n     public static final String PATH_DIC_SUFFIX = \"ik/suffix.dic\";\r\n     public static final String PATH_DIC_PREP = \"ik/preposition.dic\";\r\n     public static final String PATH_DIC_STOP = \"ik/stopword.dic\";\r\n+    \r\n     private Dictionary(){\r\n+    \t\r\n         logger = Loggers.getLogger(\"ik-analyzer\");\r\n     }\r\n \r\n@@ -100,17 +114,16 @@ public static synchronized Dictionary initial(Configuration cfg){\n                     singleton.loadPrepDict();\r\n                     singleton.loadStopWordDict();\r\n                     \r\n-                  //\u5efa\u7acb\u76d1\u63a7\u7ebf\u7a0b\r\n-                    for(String location:cfg.getRemoteExtDictionarys()){\r\n-                        Thread monitor = new Thread(new Monitor(location));\r\n-                \tmonitor.start();\r\n-                    }\r\n-                    for(String location:cfg.getRemoteExtStopWordDictionarys()){\r\n-                        Thread monitor = new Thread(new Monitor(location));\r\n-                \tmonitor.start();\r\n-                    }\r\n-                    \r\n-                    return singleton;\r\n+\t                //\u5efa\u7acb\u76d1\u63a7\u7ebf\u7a0b\r\n+\t                for(String location:cfg.getRemoteExtDictionarys()){\r\n+\t                \t//10 \u79d2\u662f\u521d\u59cb\u5ef6\u8fdf\u53ef\u4ee5\u4fee\u6539\u7684  60\u662f\u95f4\u9694\u65f6\u95f4  \u5355\u4f4d\u79d2\r\n+\t            \t\tpool.scheduleAtFixedRate(new Monitor(location), 10, 60, TimeUnit.SECONDS);\r\n+\t                }\r\n+\t                for(String location:cfg.getRemoteExtStopWordDictionarys()){\r\n+\t            \t\tpool.scheduleAtFixedRate(new Monitor(location), 10, 60, TimeUnit.SECONDS);\r\n+\t                }\r\n+\t                    \r\n+\t                return singleton;\r\n \t\t\t\t}\r\n \t\t\t}\r\n \t\t}\r",
+      "parent_sha": "9da221e218ad6a930efde4052d3e4567973f2f0f"
+    }
+  },
+  {
+    "oid": "3d8fa5bee0acd1385e5ee8a796c56b9b0a7e775b",
+    "message": "Fixing redundant nullcheck of value known to be non-null.",
+    "date": "2016-01-26T20:23:30Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/3d8fa5bee0acd1385e5ee8a796c56b9b0a7e775b",
+    "details": {
+      "sha": "9fb775b4f20e17398de4eccc5c8ff59e9db63272",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Dictionary.java",
+      "status": "modified",
+      "additions": 14,
+      "deletions": 14,
+      "changes": 28,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/3d8fa5bee0acd1385e5ee8a796c56b9b0a7e775b/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/3d8fa5bee0acd1385e5ee8a796c56b9b0a7e775b/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java?ref=3d8fa5bee0acd1385e5ee8a796c56b9b0a7e775b",
+      "patch": "@@ -297,10 +297,8 @@ private void loadExtDict(){\n                     logger.error(\"ik-analyzer\",e);\r\n                 }finally{\r\n \t\t\t\t\ttry {\r\n-\t\t\t\t\t\tif(is != null){\r\n-\t\t                    is.close();\r\n-\t\t                    is = null;\r\n-\t\t\t\t\t\t}\r\n+\t\t\t\t\t\tis.close();\r\n+\t\t\t\t\t\tis = null;\r\n \t\t\t\t\t} catch (IOException e) {\r\n                         logger.error(\"ik-analyzer\",e);\r\n                     }\r\n@@ -318,11 +316,14 @@ private void loadRemoteExtDict(){\n \t\tfor(String location:remoteExtDictFiles){\r\n \t\t\tlogger.info(\"[Dict Loading] \" + location);\r\n \t\t\tList<String> lists = getRemoteWords(location);\r\n+\t\t\t\r\n+\t\t\t/** Redundant Nullcheck as the list is initialized in the getRemoteWords method\r\n \t\t\t//\u5982\u679c\u627e\u4e0d\u5230\u6269\u5c55\u7684\u5b57\u5178\uff0c\u5219\u5ffd\u7565\r\n \t\t\tif(lists == null){\r\n \t\t\t\tlogger.error(\"[Dict Loading] \"+location+\"\u52a0\u8f7d\u5931\u8d25\");\r\n \t\t\t\tcontinue;\r\n-\t\t\t}\r\n+\t\t\t}*/\r\n+\t\t\t\r\n \t\t\tfor(String theWord:lists){\r\n \t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n \t\t\t\t\t//\u52a0\u8f7d\u6269\u5c55\u8bcd\u5178\u6570\u636e\u5230\u4e3b\u5185\u5b58\u8bcd\u5178\u4e2d\r\n@@ -455,10 +456,8 @@ private void loadStopWordDict(){\n \t\t\t\t\t\r\n \t\t\t\t}finally{\r\n \t\t\t\t\ttry {\r\n-\t\t\t\t\t\tif(is != null){\r\n-\t\t                    is.close();\r\n-\t\t                    is = null;\r\n-\t\t\t\t\t\t}\r\n+\t\t\t\t\t\tis.close();\r\n+\t\t\t\t\t\tis = null;\r\n \t\t\t\t\t} catch (IOException e) {\r\n                         logger.error(\"ik-analyzer\",e);\r\n \t\t\t\t\t}\r\n@@ -471,11 +470,14 @@ private void loadStopWordDict(){\n \t\tfor(String location:remoteExtStopWordDictFiles){\r\n \t\t\tlogger.info(\"[Dict Loading] \" + location);\r\n \t\t\tList<String> lists = getRemoteWords(location);\r\n+\t\t\t\r\n+\t\t\t/** Redundant Nullcheck as the list is initialized in the getRemoteWords method\r\n \t\t\t//\u5982\u679c\u627e\u4e0d\u5230\u6269\u5c55\u7684\u5b57\u5178\uff0c\u5219\u5ffd\u7565\r\n \t\t\tif(lists == null){\r\n \t\t\t\tlogger.error(\"[Dict Loading] \"+location+\"\u52a0\u8f7d\u5931\u8d25\");\r\n \t\t\t\tcontinue;\r\n-\t\t\t}\r\n+\t\t\t}*/\r\n+\t\t\t\r\n \t\t\tfor(String theWord:lists){\r\n \t\t\t\tif (theWord != null && !\"\".equals(theWord.trim())) {\r\n \t\t\t\t\t//\u52a0\u8f7d\u8fdc\u7a0b\u8bcd\u5178\u6570\u636e\u5230\u4e3b\u5185\u5b58\u4e2d\r\n@@ -554,10 +556,8 @@ private void loadSurnameDict(){\n             logger.error(\"ik-analyzer\",e);\r\n         }finally{\r\n             try {\r\n-                if(is != null){\r\n-                    is.close();\r\n-                    is = null;\r\n-                }\r\n+\t\t\t\tis.close();\r\n+\t\t\t\tis = null;\r\n             } catch (IOException e) {\r\n                 logger.error(\"ik-analyzer\",e);\r\n             }\r",
+      "parent_sha": "71b521178156fed5694aad86457446442330ae27"
+    }
+  },
+  {
+    "oid": "9eaa2b90eb782113acce5bb1c16100e51d71e404",
+    "message": "fix NPE",
+    "date": "2019-03-06T11:02:56Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/9eaa2b90eb782113acce5bb1c16100e51d71e404",
+    "details": {
+      "sha": "b41820a12fbd7c87e5dde4fb46929f33fa4c855e",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Dictionary.java",
+      "status": "modified",
+      "additions": 42,
+      "deletions": 46,
+      "changes": 88,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/9eaa2b90eb782113acce5bb1c16100e51d71e404/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/9eaa2b90eb782113acce5bb1c16100e51d71e404/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java?ref=9eaa2b90eb782113acce5bb1c16100e51d71e404",
+      "patch": "@@ -43,6 +43,8 @@\n import java.util.concurrent.ScheduledExecutorService;\r\n import java.util.concurrent.TimeUnit;\r\n \r\n+import org.apache.http.Header;\r\n+import org.apache.http.HttpEntity;\r\n import org.apache.http.client.ClientProtocolException;\r\n import org.apache.http.client.config.RequestConfig;\r\n import org.apache.http.client.methods.CloseableHttpResponse;\r\n@@ -69,14 +71,8 @@ public class Dictionary {\n \r\n \tprivate DictSegment _MainDict;\r\n \r\n-\tprivate DictSegment _SurnameDict;\r\n-\r\n \tprivate DictSegment _QuantifierDict;\r\n \r\n-\tprivate DictSegment _SuffixDict;\r\n-\r\n-\tprivate DictSegment _PrepDict;\r\n-\r\n \tprivate DictSegment _StopWords;\r\n \r\n \t/**\r\n@@ -88,12 +84,12 @@ public class Dictionary {\n \r\n \tprivate static ScheduledExecutorService pool = Executors.newScheduledThreadPool(1);\r\n \r\n-\tpublic static final String PATH_DIC_MAIN = \"main.dic\";\r\n-\tpublic static final String PATH_DIC_SURNAME = \"surname.dic\";\r\n-\tpublic static final String PATH_DIC_QUANTIFIER = \"quantifier.dic\";\r\n-\tpublic static final String PATH_DIC_SUFFIX = \"suffix.dic\";\r\n-\tpublic static final String PATH_DIC_PREP = \"preposition.dic\";\r\n-\tpublic static final String PATH_DIC_STOP = \"stopword.dic\";\r\n+\tprivate static final String PATH_DIC_MAIN = \"main.dic\";\r\n+\tprivate static final String PATH_DIC_SURNAME = \"surname.dic\";\r\n+\tprivate static final String PATH_DIC_QUANTIFIER = \"quantifier.dic\";\r\n+\tprivate static final String PATH_DIC_SUFFIX = \"suffix.dic\";\r\n+\tprivate static final String PATH_DIC_PREP = \"preposition.dic\";\r\n+\tprivate static final String PATH_DIC_STOP = \"stopword.dic\";\r\n \r\n \tprivate final static  String FILE_NAME = \"IKAnalyzer.cfg.xml\";\r\n \tprivate final static  String EXT_DICT = \"ext_dict\";\r\n@@ -128,15 +124,13 @@ private Dictionary(Configuration cfg) {\n \t\tif (input != null) {\r\n \t\t\ttry {\r\n \t\t\t\tprops.loadFromXML(input);\r\n-\t\t\t} catch (InvalidPropertiesFormatException e) {\r\n-\t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n \t\t\t} catch (IOException e) {\r\n \t\t\t\tlogger.error(\"ik-analyzer\", e);\r\n \t\t\t}\r\n \t\t}\r\n \t}\r\n \r\n-\tpublic String getProperty(String key){\r\n+\tprivate String getProperty(String key){\r\n \t\tif(props!=null){\r\n \t\t\treturn props.getProperty(key);\r\n \t\t}\r\n@@ -148,7 +142,7 @@ public String getProperty(String key){\n \t * \r\n \t * @return Dictionary\r\n \t */\r\n-\tpublic static synchronized Dictionary initial(Configuration cfg) {\r\n+\tpublic static synchronized void initial(Configuration cfg) {\r\n \t\tif (singleton == null) {\r\n \t\t\tsynchronized (Dictionary.class) {\r\n \t\t\t\tif (singleton == null) {\r\n@@ -172,14 +166,12 @@ public static synchronized Dictionary initial(Configuration cfg) {\n \t\t\t\t\t\t}\r\n \t\t\t\t\t}\r\n \r\n-\t\t\t\t\treturn singleton;\r\n \t\t\t\t}\r\n \t\t\t}\r\n \t\t}\r\n-\t\treturn singleton;\r\n \t}\r\n \r\n-\tprivate List<String> walkFileTree(List<String> files, Path path) {\r\n+\tprivate void walkFileTree(List<String> files, Path path) {\r\n \t\tif (Files.isRegularFile(path)) {\r\n \t\t\tfiles.add(path.toString());\r\n \t\t} else if (Files.isDirectory(path)) try {\r\n@@ -200,7 +192,6 @@ public FileVisitResult visitFileFailed(Path file, IOException e) {\n \t\t} else {\r\n \t\t\tlogger.warn(\"[Ext Loading] file not found: \" + path);\r\n \t\t}\r\n-\t\treturn files;\r\n \t}\r\n \r\n \tprivate void loadDictFile(DictSegment dict, Path file, boolean critical, String name) {\r\n@@ -225,7 +216,7 @@ private void loadDictFile(DictSegment dict, Path file, boolean critical, String\n \t\t}\r\n \t}\r\n \r\n-\tpublic List<String> getExtDictionarys() {\r\n+\tprivate List<String> getExtDictionarys() {\r\n \t\tList<String> extDictFiles = new ArrayList<String>(2);\r\n \t\tString extDictCfg = getProperty(EXT_DICT);\r\n \t\tif (extDictCfg != null) {\r\n@@ -242,7 +233,7 @@ public List<String> getExtDictionarys() {\n \t\treturn extDictFiles;\r\n \t}\r\n \r\n-\tpublic List<String> getRemoteExtDictionarys() {\r\n+\tprivate List<String> getRemoteExtDictionarys() {\r\n \t\tList<String> remoteExtDictFiles = new ArrayList<String>(2);\r\n \t\tString remoteExtDictCfg = getProperty(REMOTE_EXT_DICT);\r\n \t\tif (remoteExtDictCfg != null) {\r\n@@ -258,7 +249,7 @@ public List<String> getRemoteExtDictionarys() {\n \t\treturn remoteExtDictFiles;\r\n \t}\r\n \r\n-\tpublic List<String> getExtStopWordDictionarys() {\r\n+\tprivate List<String> getExtStopWordDictionarys() {\r\n \t\tList<String> extStopWordDictFiles = new ArrayList<String>(2);\r\n \t\tString extStopWordDictCfg = getProperty(EXT_STOP);\r\n \t\tif (extStopWordDictCfg != null) {\r\n@@ -275,7 +266,7 @@ public List<String> getExtStopWordDictionarys() {\n \t\treturn extStopWordDictFiles;\r\n \t}\r\n \r\n-\tpublic List<String> getRemoteExtStopWordDictionarys() {\r\n+\tprivate List<String> getRemoteExtStopWordDictionarys() {\r\n \t\tList<String> remoteExtStopWordDictFiles = new ArrayList<String>(2);\r\n \t\tString remoteExtStopWordDictCfg = getProperty(REMOTE_EXT_STOP);\r\n \t\tif (remoteExtStopWordDictCfg != null) {\r\n@@ -291,7 +282,7 @@ public List<String> getRemoteExtStopWordDictionarys() {\n \t\treturn remoteExtStopWordDictFiles;\r\n \t}\r\n \r\n-\tpublic String getDictRoot() {\r\n+\tprivate String getDictRoot() {\r\n \t\treturn conf_dir.toAbsolutePath().toString();\r\n \t}\r\n \r\n@@ -468,25 +459,30 @@ private static List<String> getRemoteWordsUnprivileged(String location) {\n \r\n \t\t\t\tString charset = \"UTF-8\";\r\n \t\t\t\t// \u83b7\u53d6\u7f16\u7801\uff0c\u9ed8\u8ba4\u4e3autf-8\r\n-\t\t\t\tif (response.getEntity().getContentType().getValue().contains(\"charset=\")) {\r\n-\t\t\t\t\tString contentType = response.getEntity().getContentType().getValue();\r\n-\t\t\t\t\tcharset = contentType.substring(contentType.lastIndexOf(\"=\") + 1);\r\n-\t\t\t\t}\r\n-\t\t\t\tin = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), charset));\r\n-\t\t\t\tString line;\r\n-\t\t\t\twhile ((line = in.readLine()) != null) {\r\n-\t\t\t\t\tbuffer.add(line);\r\n-\t\t\t\t}\r\n-\t\t\t\tin.close();\r\n-\t\t\t\tresponse.close();\r\n-\t\t\t\treturn buffer;\r\n+\t\t\t\tHttpEntity entity = response.getEntity();\r\n+\t\t\t\tif(entity!=null){\r\n+\t\t\t\t\tHeader contentType = entity.getContentType();\r\n+\t\t\t\t\tif(contentType!=null&&contentType.getValue()!=null){\r\n+\t\t\t\t\t\tString typeValue = contentType.getValue();\r\n+\t\t\t\t\t\tif(typeValue!=null&&typeValue.contains(\"charset=\")){\r\n+\t\t\t\t\t\t\tcharset = typeValue.substring(typeValue.lastIndexOf(\"=\") + 1);\r\n+\t\t\t\t\t\t}\r\n+\t\t\t\t\t}\r\n+\r\n+\t\t\t\t\tif (entity.getContentLength() > 0) {\r\n+\t\t\t\t\t\tin = new BufferedReader(new InputStreamReader(entity.getContent(), charset));\r\n+\t\t\t\t\t\tString line;\r\n+\t\t\t\t\t\twhile ((line = in.readLine()) != null) {\r\n+\t\t\t\t\t\t\tbuffer.add(line);\r\n+\t\t\t\t\t\t}\r\n+\t\t\t\t\t\tin.close();\r\n+\t\t\t\t\t\tresponse.close();\r\n+\t\t\t\t\t\treturn buffer;\r\n+\t\t\t\t\t}\r\n+\t\t\t}\r\n \t\t\t}\r\n \t\t\tresponse.close();\r\n-\t\t} catch (ClientProtocolException e) {\r\n-\t\t\tlogger.error(\"getRemoteWords {} error\", e, location);\r\n-\t\t} catch (IllegalStateException e) {\r\n-\t\t\tlogger.error(\"getRemoteWords {} error\", e, location);\r\n-\t\t} catch (IOException e) {\r\n+\t\t} catch (IllegalStateException | IOException e) {\r\n \t\t\tlogger.error(\"getRemoteWords {} error\", e, location);\r\n \t\t}\r\n \t\treturn buffer;\r\n@@ -548,24 +544,24 @@ private void loadQuantifierDict() {\n \t}\r\n \r\n \tprivate void loadSurnameDict() {\r\n-\t\t_SurnameDict = new DictSegment((char) 0);\r\n+\t\tDictSegment _SurnameDict = new DictSegment((char) 0);\r\n \t\tPath file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_SURNAME);\r\n \t\tloadDictFile(_SurnameDict, file, true, \"Surname\");\r\n \t}\r\n \r\n \tprivate void loadSuffixDict() {\r\n-\t\t_SuffixDict = new DictSegment((char) 0);\r\n+\t\tDictSegment _SuffixDict = new DictSegment((char) 0);\r\n \t\tPath file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_SUFFIX);\r\n \t\tloadDictFile(_SuffixDict, file, true, \"Suffix\");\r\n \t}\r\n \r\n \tprivate void loadPrepDict() {\r\n-\t\t_PrepDict = new DictSegment((char) 0);\r\n+\t\tDictSegment _PrepDict = new DictSegment((char) 0);\r\n \t\tPath file = PathUtils.get(getDictRoot(), Dictionary.PATH_DIC_PREP);\r\n \t\tloadDictFile(_PrepDict, file, true, \"Preposition\");\r\n \t}\r\n \r\n-\tpublic void reLoadMainDict() {\r\n+\tvoid reLoadMainDict() {\r\n \t\tlogger.info(\"\u91cd\u65b0\u52a0\u8f7d\u8bcd\u5178...\");\r\n \t\t// \u65b0\u5f00\u4e00\u4e2a\u5b9e\u4f8b\u52a0\u8f7d\u8bcd\u5178\uff0c\u51cf\u5c11\u52a0\u8f7d\u8fc7\u7a0b\u5bf9\u5f53\u524d\u8bcd\u5178\u4f7f\u7528\u7684\u5f71\u54cd\r\n \t\tDictionary tmpDict = new Dictionary(configuration);\r",
+      "parent_sha": "1d750a9bdd9f9c62c89fbe9493cf1e88f49c69b1"
+    }
+  },
+  {
+    "oid": "86813f5be9bf52375f5fb58d468737d7b165e667",
+    "message": "\u53bb\u6389304\u7684\u5904\u7406\n\n304\u4e0d\u5e94\u8be5\u548c200\u505a\u76f8\u540c\u5904\u7406\uff0c\u5426\u5219\u5c31\u5931\u53bb\u70ed\u8bcd\u66f4\u65b0\u7684\u610f\u4e49\u4e86\u3002",
+    "date": "2015-08-07T07:10:27Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/86813f5be9bf52375f5fb58d468737d7b165e667",
+    "details": {
+      "sha": "c41aa7c300a91f3ef0469ef282d0eba479c37af8",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Monitor.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/86813f5be9bf52375f5fb58d468737d7b165e667/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/86813f5be9bf52375f5fb58d468737d7b165e667/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java?ref=86813f5be9bf52375f5fb58d468737d7b165e667",
+      "patch": "@@ -62,7 +62,7 @@ public void run() {\n \t\t\tresponse = httpclient.execute(head);\n \t\t\t\n \t\t\t//\u8fd4\u56de200 \u624d\u505a\u64cd\u4f5c\n-\t\t\tif(response.getStatusLine().getStatusCode()==200 || response.getStatusLine().getStatusCode()==304){\n+\t\t\tif(response.getStatusLine().getStatusCode()==200){\n \t\t\t\n \t\t\t\tif (!response.getLastHeader(\"Last-Modified\").getValue().equalsIgnoreCase(last_modified)\n \t\t\t\t\t||!response.getLastHeader(\"ETag\").getValue().equalsIgnoreCase(eTags)) {",
+      "parent_sha": "44fdf68188eafd43f5f77e97a7500f808378d23b"
+    }
+  },
+  {
+    "oid": "5a1b8c8da629a05bd7c16245da5cbe0d3a0dad1c",
+    "message": "Read chunked remote words (#817)\n\nFix chunked content could not be read as it will not get content length\r\nI see there is an issue #780 and this fix it",
+    "date": "2020-09-06T08:34:40Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/5a1b8c8da629a05bd7c16245da5cbe0d3a0dad1c",
+    "details": {
+      "sha": "2e72ed02fc8031731ca09ec633118fafb050d750",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Dictionary.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/5a1b8c8da629a05bd7c16245da5cbe0d3a0dad1c/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/5a1b8c8da629a05bd7c16245da5cbe0d3a0dad1c/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FDictionary.java?ref=5a1b8c8da629a05bd7c16245da5cbe0d3a0dad1c",
+      "patch": "@@ -469,7 +469,7 @@ private static List<String> getRemoteWordsUnprivileged(String location) {\n \t\t\t\t\t\t}\r\n \t\t\t\t\t}\r\n \r\n-\t\t\t\t\tif (entity.getContentLength() > 0) {\r\n+\t\t\t\t\tif (entity.getContentLength() > 0 || entity.isChunked()) {\r\n \t\t\t\t\t\tin = new BufferedReader(new InputStreamReader(entity.getContent(), charset));\r\n \t\t\t\t\t\tString line;\r\n \t\t\t\t\t\twhile ((line = in.readLine()) != null) {\r",
+      "parent_sha": "1375ca6d39c53c85542ee4e8c147bfff8131e420"
+    }
+  },
+  {
+    "oid": "06e8a23d1828ae993aef21b81829a7729d06f224",
+    "message": "Update AnalyzeContext.java (#673)",
+    "date": "2019-05-01T08:57:44Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/06e8a23d1828ae993aef21b81829a7729d06f224",
+    "details": {
+      "sha": "890d9080c1826fb0d3b09b63d3beafe3519e259f",
+      "filename": "src/main/java/org/wltea/analyzer/core/AnalyzeContext.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/06e8a23d1828ae993aef21b81829a7729d06f224/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcore%2FAnalyzeContext.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/06e8a23d1828ae993aef21b81829a7729d06f224/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcore%2FAnalyzeContext.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcore%2FAnalyzeContext.java?ref=06e8a23d1828ae993aef21b81829a7729d06f224",
+      "patch": "@@ -268,13 +268,13 @@ void outputToResult(){\n \t\t\t\twhile(l != null){\r\n \t\t\t\t\tthis.results.add(l);\r\n \t\t\t\t\t//\u5b57\u5178\u4e2d\u65e0\u5355\u5b57\uff0c\u4f46\u662f\u8bcd\u5143\u51b2\u7a81\u4e86\uff0c\u5207\u5206\u51fa\u76f8\u4ea4\u8bcd\u5143\u7684\u524d\u4e00\u4e2a\u8bcd\u5143\u4e2d\u7684\u5355\u5b57\r\n-\t\t\t\t\tint innerIndex = index + 1;\r\n+\t\t\t\t\t/*int innerIndex = index + 1;\r\n \t\t\t\t\tfor (; innerIndex < index + l.getLength(); innerIndex++) {\r\n \t\t\t\t\t\tLexeme innerL = path.peekFirst();\r\n \t\t\t\t\t\tif (innerL != null && innerIndex == innerL.getBegin()) {\r\n \t\t\t\t\t\t\tthis.outputSingleCJK(innerIndex - 1);\r\n \t\t\t\t\t\t}\r\n-\t\t\t\t\t}\r\n+\t\t\t\t\t}*/\r\n \t\t\t\t\t\r\n \t\t\t\t\t//\u5c06index\u79fb\u81f3lexeme\u540e\r\n \t\t\t\t\tindex = l.getBegin() + l.getLength();\t\t\t\t\t\r",
+      "parent_sha": "a1d6ba8ca206d750e68bbf3e53a25284100174bd"
+    }
+  },
+  {
+    "oid": "a115eb75c154fba5c1a31d22588934213059765b",
+    "message": "wrong cased name fixed",
+    "date": "2011-12-21T03:31:31Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/a115eb75c154fba5c1a31d22588934213059765b",
+    "details": {
+      "sha": "e4456d246abcc7ec052b8d4c8f8a255f384a2761",
+      "filename": "src/main/java/org/wltea/analyzer/cfg/Configuration.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/a115eb75c154fba5c1a31d22588934213059765b/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcfg%2FConfiguration.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/a115eb75c154fba5c1a31d22588934213059765b/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcfg%2FConfiguration.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fcfg%2FConfiguration.java?ref=a115eb75c154fba5c1a31d22588934213059765b",
+      "patch": "@@ -27,7 +27,7 @@\n \n public class Configuration {\n \n-\tprivate static String FILE_NAME = \"ik/IkAnalyzer.cfg.xml\";\n+\tprivate static String FILE_NAME = \"ik/IKAnalyzer.cfg.xml\";\n \tprivate static final String EXT_DICT = \"ext_dict\";\n \tprivate static final String EXT_STOP = \"ext_stopwords\";\n     private static ESLogger logger = null;",
+      "parent_sha": "942e9957fbd032f8ccd95edbff8182b86fbe8e64"
+    }
+  },
+  {
+    "oid": "82432f1059e58138b2d05e43fec94a834bf53cef",
+    "message": "fix: Header ETag not exists will throw error: java.lang.NullPointerException #223 (#224)",
+    "date": "2016-06-29T02:30:31Z",
+    "url": "https://github.com/infinilabs/analysis-ik/commit/82432f1059e58138b2d05e43fec94a834bf53cef",
+    "details": {
+      "sha": "be18e06b87bf1affd758d9a25e48da3e2dd2d47a",
+      "filename": "src/main/java/org/wltea/analyzer/dic/Monitor.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/infinilabs/analysis-ik/blob/82432f1059e58138b2d05e43fec94a834bf53cef/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java",
+      "raw_url": "https://github.com/infinilabs/analysis-ik/raw/82432f1059e58138b2d05e43fec94a834bf53cef/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java",
+      "contents_url": "https://api.github.com/repos/infinilabs/analysis-ik/contents/src%2Fmain%2Fjava%2Forg%2Fwltea%2Fanalyzer%2Fdic%2FMonitor.java?ref=82432f1059e58138b2d05e43fec94a834bf53cef",
+      "patch": "@@ -68,8 +68,8 @@ public void run() {\n \t\t\t//\u8fd4\u56de200 \u624d\u505a\u64cd\u4f5c\n \t\t\tif(response.getStatusLine().getStatusCode()==200){\n \n-\t\t\t\tif (!response.getLastHeader(\"Last-Modified\").getValue().equalsIgnoreCase(last_modified)\n-\t\t\t\t\t\t||!response.getLastHeader(\"ETag\").getValue().equalsIgnoreCase(eTags)) {\n+\t\t\t\tif (((response.getLastHeader(\"Last-Modified\")!=null) && !response.getLastHeader(\"Last-Modified\").getValue().equalsIgnoreCase(last_modified))\n+\t\t\t\t\t\t||((response.getLastHeader(\"ETag\")!=null) && !response.getLastHeader(\"ETag\").getValue().equalsIgnoreCase(eTags))) {\n \n \t\t\t\t\t// \u8fdc\u7a0b\u8bcd\u5e93\u6709\u66f4\u65b0,\u9700\u8981\u91cd\u65b0\u52a0\u8f7d\u8bcd\u5178\uff0c\u5e76\u4fee\u6539last_modified,eTags\n \t\t\t\t\tDictionary.getSingleton().reLoadMainDict();",
+      "parent_sha": "4373cf7c94e355cbee7e5636114337dc3af36ba1"
+    }
+  }
+]

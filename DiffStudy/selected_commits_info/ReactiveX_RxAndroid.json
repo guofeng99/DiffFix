@@ -1,0 +1,877 @@
+[
+  {
+    "oid": "fa5abdc0bca628bd13dacac1c924779f40fe003f",
+    "message": "AtomicObservableSubscription to SafeObservableSubscription",
+    "date": "2013-08-24T04:00:24Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/fa5abdc0bca628bd13dacac1c924779f40fe003f",
+    "details": {
+      "sha": "a9cfb55fc927914598834aa238b6a2e3e885b53a",
+      "filename": "src/main/java/rx/android/concurrency/HandlerThreadScheduler.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/fa5abdc0bca628bd13dacac1c924779f40fe003f/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fconcurrency%2FHandlerThreadScheduler.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/fa5abdc0bca628bd13dacac1c924779f40fe003f/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fconcurrency%2FHandlerThreadScheduler.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fconcurrency%2FHandlerThreadScheduler.java?ref=fa5abdc0bca628bd13dacac1c924779f40fe003f",
+      "patch": "@@ -8,7 +8,7 @@\n import org.robolectric.annotation.Config;\n import rx.Scheduler;\n import rx.Subscription;\n-import rx.operators.AtomicObservableSubscription;\n+import rx.operators.SafeObservableSubscription;\n import rx.util.functions.Func2;\n \n import java.util.concurrent.TimeUnit;\n@@ -57,7 +57,7 @@ public <T> Subscription schedule(final T state, final Func2<Scheduler, T, Subscr\n      */\n     @Override\n     public <T> Subscription schedule(final T state, final Func2<Scheduler, T, Subscription> action, long delayTime, TimeUnit unit) {\n-        final AtomicObservableSubscription subscription = new AtomicObservableSubscription();\n+        final SafeObservableSubscription subscription = new SafeObservableSubscription();\n         final Scheduler _scheduler = this;\n         handler.postDelayed(new Runnable() {\n             @Override",
+      "parent_sha": "00a94c3530783bf15d2f30fa26744ca032762c94"
+    }
+  },
+  {
+    "oid": "fbf380f03693e9b670b3ec9ecd82bf798d3138a8",
+    "message": "Remove redundant documentation.",
+    "date": "2014-11-29T08:27:45Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/fbf380f03693e9b670b3ec9ecd82bf798d3138a8",
+    "details": {
+      "sha": "ddbff2bf1170173db87de5fddf77b95457b517ea",
+      "filename": "rxandroid/src/main/java/rx/android/AndroidSubscriptions.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 4,
+      "changes": 6,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/fbf380f03693e9b670b3ec9ecd82bf798d3138a8/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2FAndroidSubscriptions.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/fbf380f03693e9b670b3ec9ecd82bf798d3138a8/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2FAndroidSubscriptions.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2FAndroidSubscriptions.java?ref=fbf380f03693e9b670b3ec9ecd82bf798d3138a8",
+      "patch": "@@ -27,10 +27,8 @@ private AndroidSubscriptions() {\n     }\n \n     /**\n-     * Create a {@link Subscription} that always runs <code>unsubscribe</code> in the UI thread.\n-     * \n-     * @param unsubscribe\n-     * @return a {@link Subscription} that always runs <code>unsubscribe</code> in the UI thread.\n+     * Create a {@link Subscription} that always runs the specified {@code unsubscribe} on the\n+     * UI thread.\n      */\n     public static Subscription unsubscribeInUiThread(final Action0 unsubscribe) {\n         return Subscriptions.create(new Action0() {",
+      "parent_sha": "e6b0b6fafd706164e127f85fa8aec609be451a49"
+    }
+  },
+  {
+    "oid": "11b1452ffba156d35e83c9c35c77b70f38ee60cb",
+    "message": "added variance to Func2, too",
+    "date": "2013-08-31T13:56:14Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/11b1452ffba156d35e83c9c35c77b70f38ee60cb",
+    "details": {
+      "sha": "cd1af987aee21b19bfae7a90ebae597b34895439",
+      "filename": "src/main/java/rx/android/concurrency/HandlerThreadScheduler.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 2,
+      "changes": 8,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/11b1452ffba156d35e83c9c35c77b70f38ee60cb/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fconcurrency%2FHandlerThreadScheduler.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/11b1452ffba156d35e83c9c35c77b70f38ee60cb/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fconcurrency%2FHandlerThreadScheduler.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fconcurrency%2FHandlerThreadScheduler.java?ref=11b1452ffba156d35e83c9c35c77b70f38ee60cb",
+      "patch": "@@ -1,11 +1,13 @@\n package rx.android.concurrency;\n \n import android.os.Handler;\n+\n import org.junit.Test;\n import org.junit.runner.RunWith;\n import org.mockito.ArgumentCaptor;\n import org.robolectric.RobolectricTestRunner;\n import org.robolectric.annotation.Config;\n+\n import rx.Scheduler;\n import rx.Subscription;\n import rx.operators.SafeObservableSubscription;\n@@ -39,7 +41,7 @@ public HandlerThreadScheduler(Handler handler) {\n      * See {@link #schedule(Object, rx.util.functions.Func2, long, java.util.concurrent.TimeUnit)}\n      */\n     @Override\n-    public <T> Subscription schedule(final T state, final Func2<Scheduler, T, Subscription> action) {\n+    public <T> Subscription schedule(final T state, final Func2<? super Scheduler, ? super T, ? extends Subscription> action) {\n         return schedule(state, action, 0L, TimeUnit.MILLISECONDS);\n     }\n \n@@ -56,7 +58,7 @@ public <T> Subscription schedule(final T state, final Func2<Scheduler, T, Subscr\n      * @return A Subscription from which one can unsubscribe from.\n      */\n     @Override\n-    public <T> Subscription schedule(final T state, final Func2<Scheduler, T, Subscription> action, long delayTime, TimeUnit unit) {\n+    public <T> Subscription schedule(final T state, final Func2<? super Scheduler, ? super T, ? extends Subscription> action, long delayTime, TimeUnit unit) {\n         final SafeObservableSubscription subscription = new SafeObservableSubscription();\n         final Scheduler _scheduler = this;\n         handler.postDelayed(new Runnable() {\n@@ -76,6 +78,7 @@ public static final class UnitTest {\n         public void shouldScheduleImmediateActionOnHandlerThread() {\n             final Handler handler = mock(Handler.class);\n             final Object state = new Object();\n+            @SuppressWarnings(\"unchecked\")\n             final Func2<Scheduler, Object, Subscription> action = mock(Func2.class);\n \n             Scheduler scheduler = new HandlerThreadScheduler(handler);\n@@ -94,6 +97,7 @@ public void shouldScheduleImmediateActionOnHandlerThread() {\n         public void shouldScheduleDelayedActionOnHandlerThread() {\n             final Handler handler = mock(Handler.class);\n             final Object state = new Object();\n+            @SuppressWarnings(\"unchecked\")\n             final Func2<Scheduler, Object, Subscription> action = mock(Func2.class);\n \n             Scheduler scheduler = new HandlerThreadScheduler(handler);",
+      "parent_sha": "21bae9b1591b3e0abc8d42e972134448bf9d110c"
+    }
+  },
+  {
+    "oid": "9bdef2f101675e600b8ae9306e1179e3bbc6518e",
+    "message": "Use the same path, which has the correct guard to check for old Android version",
+    "date": "2021-02-04T19:46:33Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/9bdef2f101675e600b8ae9306e1179e3bbc6518e",
+    "details": {
+      "sha": "012437e743256118af27d227cda6c8b901ac3c6e",
+      "filename": "rxandroid/src/main/java/io/reactivex/rxjava3/android/schedulers/AndroidSchedulers.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/9bdef2f101675e600b8ae9306e1179e3bbc6518e/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Frxjava3%2Fandroid%2Fschedulers%2FAndroidSchedulers.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/9bdef2f101675e600b8ae9306e1179e3bbc6518e/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Frxjava3%2Fandroid%2Fschedulers%2FAndroidSchedulers.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Frxjava3%2Fandroid%2Fschedulers%2FAndroidSchedulers.java?ref=9bdef2f101675e600b8ae9306e1179e3bbc6518e",
+      "patch": "@@ -26,7 +26,7 @@ public final class AndroidSchedulers {\n \n     private static final class MainHolder {\n         static final Scheduler DEFAULT\n-            = new HandlerScheduler(new Handler(Looper.getMainLooper()), true);\n+            = from(Looper.getMainLooper());\n     }\n \n     private static final Scheduler MAIN_THREAD =",
+      "parent_sha": "f1ddbcb637a2bc3f873db204f3af9d8b01688550"
+    }
+  },
+  {
+    "oid": "188277cc3dce2a059e0ee737abbacbee16d5d781",
+    "message": "Fix a typo in the docs\n\nAnd a bit of formatting",
+    "date": "2014-10-13T20:51:22Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/188277cc3dce2a059e0ee737abbacbee16d5d781",
+    "details": {
+      "sha": "403d0d79d1bce3f55e9171c0a94fe306b297d1b9",
+      "filename": "src/main/java/rx/android/subscriptions/AndroidSubscriptions.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/188277cc3dce2a059e0ee737abbacbee16d5d781/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fsubscriptions%2FAndroidSubscriptions.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/188277cc3dce2a059e0ee737abbacbee16d5d781/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fsubscriptions%2FAndroidSubscriptions.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fsubscriptions%2FAndroidSubscriptions.java?ref=188277cc3dce2a059e0ee737abbacbee16d5d781",
+      "patch": "@@ -30,10 +30,10 @@ private AndroidSubscriptions() {\n     }\n \n     /**\n-     * Create an Subscription that always runs <code>unsubscribe</code> in the UI thread.\n+     * Create a {@link Subscription} that always runs <code>unsubscribe</code> in the UI thread.\n      * \n      * @param unsubscribe\n-     * @return an Subscription that always runs <code>unsubscribe</code> in the UI thread.\n+     * @return a {@link Subscription} that always runs <code>unsubscribe</code> in the UI thread.\n      */\n     public static Subscription unsubscribeInUiThread(final Action0 unsubscribe) {\n         return Subscriptions.create(new Action0() {",
+      "parent_sha": "837620c51bc3b37f3696e17021eb0849346c70cb"
+    }
+  },
+  {
+    "oid": "ce9c29ac789687188ab5aad9967770cf5adcf88c",
+    "message": "Fix AndroidSchedulers to create an instance using hook only once.\n\nPreviously we were asking the hook for an instance every time `mainThread()` was called. This not only impacted performance, but also broke the contract the that hook was a factory\u2013instead requiring that it behave like a thread-safe, lazily-initialized instance cache.\n\nIf for whatever reason you do need to change the instance over time, return a scheduler instance which delegates to another and allows swapping out the delegate.",
+    "date": "2016-05-02T18:33:10Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/ce9c29ac789687188ab5aad9967770cf5adcf88c",
+    "details": {
+      "sha": "b94594d213a22d52935d9afdbade780ae1349b11",
+      "filename": "rxandroid/src/main/java/rx/android/schedulers/AndroidSchedulers.java",
+      "status": "modified",
+      "additions": 13,
+      "deletions": 9,
+      "changes": 22,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/ce9c29ac789687188ab5aad9967770cf5adcf88c/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FAndroidSchedulers.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/ce9c29ac789687188ab5aad9967770cf5adcf88c/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FAndroidSchedulers.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FAndroidSchedulers.java?ref=ce9c29ac789687188ab5aad9967770cf5adcf88c",
+      "patch": "@@ -16,24 +16,28 @@\n import android.os.Looper;\n import rx.Scheduler;\n import rx.android.plugins.RxAndroidPlugins;\n+import rx.android.plugins.RxAndroidSchedulersHook;\n \n /** Android-specific Schedulers. */\n public final class AndroidSchedulers {\n+    private static final AndroidSchedulers INSTANCE = new AndroidSchedulers();\n+\n+    private final Scheduler mainThreadScheduler;\n+\n     private AndroidSchedulers() {\n-        throw new AssertionError(\"No instances\");\n-    }\n+        RxAndroidSchedulersHook hook = RxAndroidPlugins.getInstance().getSchedulersHook();\n \n-    // See https://github.com/ReactiveX/RxAndroid/issues/238\n-    // https://en.wikipedia.org/wiki/Initialization-on-demand_holder_idiom\n-    private static class MainThreadSchedulerHolder {\n-        static final Scheduler MAIN_THREAD_SCHEDULER = new LooperScheduler(Looper.getMainLooper());\n+        Scheduler main = hook.getMainThreadScheduler();\n+        if (main != null) {\n+            mainThreadScheduler = main;\n+        } else {\n+            mainThreadScheduler = new LooperScheduler(Looper.getMainLooper());\n+        }\n     }\n \n     /** A {@link Scheduler} which executes actions on the Android UI thread. */\n     public static Scheduler mainThread() {\n-        Scheduler scheduler =\n-                RxAndroidPlugins.getInstance().getSchedulersHook().getMainThreadScheduler();\n-        return scheduler != null ? scheduler : MainThreadSchedulerHolder.MAIN_THREAD_SCHEDULER;\n+        return INSTANCE.mainThreadScheduler;\n     }\n \n     /** A {@link Scheduler} which executes actions on {@code looper}. */",
+      "parent_sha": "aeb3ae5f98b21d18a07475582766a34ecceedf18"
+    }
+  },
+  {
+    "oid": "8c023a762b306e81bc2befc356bb7c952e834f76",
+    "message": "Lowercase Androidx\n\nAmphasis",
+    "date": "2019-09-23T01:37:08Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/8c023a762b306e81bc2befc356bb7c952e834f76",
+    "details": {
+      "sha": "f76346b49b1c500f5f5b900141963fff5e64b2fc",
+      "filename": "rxandroid/src/main/java/io/reactivex/rxjava3/android/schedulers/AndroidSchedulers.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/8c023a762b306e81bc2befc356bb7c952e834f76/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Frxjava3%2Fandroid%2Fschedulers%2FAndroidSchedulers.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/8c023a762b306e81bc2befc356bb7c952e834f76/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Frxjava3%2Fandroid%2Fschedulers%2FAndroidSchedulers.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Frxjava3%2Fandroid%2Fschedulers%2FAndroidSchedulers.java?ref=8c023a762b306e81bc2befc356bb7c952e834f76",
+      "patch": "@@ -70,7 +70,7 @@ public static Scheduler from(Looper looper) {\n     public static Scheduler from(Looper looper, boolean async) {\n         if (looper == null) throw new NullPointerException(\"looper == null\");\n \n-        // Below code exists in Androidx-core as well, but is left here rather than include an\n+        // Below code exists in androidx-core as well, but is left here rather than include an\n         // entire extra dependency.\n         // https://developer.android.com/reference/kotlin/androidx/core/os/MessageCompat?hl=en#setAsynchronous(android.os.Message,%20kotlin.Boolean)\n         if (Build.VERSION.SDK_INT < 16) {",
+      "parent_sha": "b72ab928f3c3dfb78bc8e8c0aed7bd885ebb1d93"
+    }
+  },
+  {
+    "oid": "14e6bc66061ba323b264ab96900af3b6305ee9b5",
+    "message": "Switch reset() to @Experimental to match RxJava.",
+    "date": "2016-05-02T18:21:21Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/14e6bc66061ba323b264ab96900af3b6305ee9b5",
+    "details": {
+      "sha": "7df28b5979c1433875a01be93209c4306875fa79",
+      "filename": "rxandroid/src/main/java/rx/android/plugins/RxAndroidPlugins.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/14e6bc66061ba323b264ab96900af3b6305ee9b5/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fplugins%2FRxAndroidPlugins.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/14e6bc66061ba323b264ab96900af3b6305ee9b5/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fplugins%2FRxAndroidPlugins.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fplugins%2FRxAndroidPlugins.java?ref=14e6bc66061ba323b264ab96900af3b6305ee9b5",
+      "patch": "@@ -13,8 +13,8 @@\n  */\n package rx.android.plugins;\n \n-import rx.annotations.Beta;\n import java.util.concurrent.atomic.AtomicReference;\n+import rx.annotations.Experimental;\n \n /**\n  * Registry for plugin implementations that allows global override and handles the retrieval of\n@@ -42,7 +42,7 @@ public static RxAndroidPlugins getInstance() {\n      * <p>\n      * Note: This should only be used for testing purposes.\n      */\n-    @Beta\n+    @Experimental\n     public void reset() {\n         schedulersHook.set(null);\n     }",
+      "parent_sha": "aeb3ae5f98b21d18a07475582766a34ecceedf18"
+    }
+  },
+  {
+    "oid": "085d3790d35a2f3992fb59a0d711741eecfdc101",
+    "message": "Singularize AndroidObservables, move to observables package",
+    "date": "2013-10-29T10:37:06Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/085d3790d35a2f3992fb59a0d711741eecfdc101",
+    "details": {
+      "sha": "e411074be3c2c60d4ea475bbe7ceb0e1051ec8a3",
+      "filename": "src/main/java/rx/android/observables/AndroidObservable.java",
+      "status": "renamed",
+      "additions": 4,
+      "deletions": 2,
+      "changes": 6,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/085d3790d35a2f3992fb59a0d711741eecfdc101/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FAndroidObservable.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/085d3790d35a2f3992fb59a0d711741eecfdc101/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FAndroidObservable.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FAndroidObservable.java?ref=085d3790d35a2f3992fb59a0d711741eecfdc101",
+      "patch": "@@ -1,12 +1,14 @@\n-package rx.android;\n+package rx.android.observables;\n \n import rx.Observable;\n import rx.operators.OperationObserveFromAndroidComponent;\n \n import android.app.Activity;\n import android.app.Fragment;\n \n-public class AndroidObservables {\n+public final class AndroidObservable {\n+\n+    private AndroidObservable() {}\n \n     public static <T> Observable<T> fromActivity(Activity activity, Observable<T> sourceObservable) {\n         return OperationObserveFromAndroidComponent.observeFromAndroidComponent(sourceObservable, activity);",
+      "previous_filename": "src/main/java/rx/android/AndroidObservables.java",
+      "parent_sha": "8ab3ac147b4ad0c85c91459b20cbb52a8ca07650"
+    }
+  },
+  {
+    "oid": "ecbaa4dbe54a55d69d6af65de1cbed00eb3dd720",
+    "message": "Use Object as argument type for fromFragment helper\n\nThis is to prevent compilation failures in projects that do not link the support-v4 library. The only other option I saw to fix this would have been to split up the android module into one for native fragments and one for support fragments, which I found would come with unjustified overhead. Hence I settled for the cheap way, which is to sacrifice type safety here.\n\nRefs https://github.com/soundcloud/RxJava/issues/2",
+    "date": "2013-11-27T12:04:29Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/ecbaa4dbe54a55d69d6af65de1cbed00eb3dd720",
+    "details": {
+      "sha": "5ae8a11a743d0dd4f3a3bdf6327523d532906934",
+      "filename": "src/main/java/rx/android/observables/AndroidObservable.java",
+      "status": "modified",
+      "additions": 123,
+      "deletions": 4,
+      "changes": 127,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/ecbaa4dbe54a55d69d6af65de1cbed00eb3dd720/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FAndroidObservable.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/ecbaa4dbe54a55d69d6af65de1cbed00eb3dd720/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FAndroidObservable.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FAndroidObservable.java?ref=ecbaa4dbe54a55d69d6af65de1cbed00eb3dd720",
+      "patch": "@@ -15,26 +15,145 @@\n  */\n package rx.android.observables;\n \n+import static org.mockito.Mockito.verify;\n+\n+import org.junit.Before;\n+import org.junit.Test;\n+import org.junit.runner.RunWith;\n+import org.mockito.Mock;\n+import org.mockito.MockitoAnnotations;\n+import org.robolectric.Robolectric;\n+import org.robolectric.RobolectricTestRunner;\n+import org.robolectric.annotation.Config;\n import rx.Observable;\n+import rx.Observer;\n import rx.operators.OperationObserveFromAndroidComponent;\n \n import android.app.Activity;\n import android.app.Fragment;\n+import android.os.Build;\n+import android.support.v4.app.FragmentActivity;\n+\n \n public final class AndroidObservable {\n \n+    private static final boolean USES_SUPPORT_FRAGMENTS;\n+\n+    static {\n+        boolean supportFragmentsAvailable = false;\n+        try {\n+            Class.forName(\"android.support.v4.app.Fragment\");\n+            supportFragmentsAvailable = true;\n+        } catch (ClassNotFoundException e) {\n+        }\n+        USES_SUPPORT_FRAGMENTS = supportFragmentsAvailable;\n+    }\n+\n     private AndroidObservable() {}\n \n+    /**\n+     * Transforms a source observable to be attached to the given Activity, in such a way that notifications will always\n+     * arrive on the main UI thread. Currently, this is equivalent to calling <code>observeOn(AndroidSchedulers.mainThread())</code>,\n+     * but this behavior may change in the future, so it is encouraged to use this wrapper instead.\n+     * <p/>\n+     * You must unsubscribe from the returned observable in <code>onDestroy</code> to not leak the given Activity.\n+     * <p/>\n+     * Ex.:\n+     * <pre>\n+     *     // in any Activity\n+     *     mSubscription = fromActivity(this, Observable.just(\"value\")).subscribe(...);\n+     *     // in onDestroy\n+     *     mSubscription.unsubscribe();\n+     * </pre>\n+     *\n+     * @param activity         the activity in which the source observable will be observed\n+     * @param sourceObservable the observable sequence to observe from the given Activity\n+     * @param <T>\n+     * @return a new observable sequence that will emit notifications on the main UI thread\n+     */\n     public static <T> Observable<T> fromActivity(Activity activity, Observable<T> sourceObservable) {\n         return OperationObserveFromAndroidComponent.observeFromAndroidComponent(sourceObservable, activity);\n     }\n \n-    public static <T> Observable<T> fromFragment(Fragment fragment, Observable<T> sourceObservable) {\n-        return OperationObserveFromAndroidComponent.observeFromAndroidComponent(sourceObservable, fragment);\n+    /**\n+     * Transforms a source observable to be attached to the given fragment, in such a way that notifications will always\n+     * arrive on the main UI thread. Moreover, it will be guaranteed that no notifications will be delivered to the\n+     * fragment while it's in detached state (i.e. its host Activity was destroyed.) In other words, during calls\n+     * to onNext, you may assume that fragment.getActivity() will never return null.\n+     * <p/>\n+     * This method accepts both native fragments and support library fragments in its first parameter. It will throw\n+     * for unsupported types.\n+     * <p/>\n+     * You must unsubscribe from the returned observable in <code>onDestroy</code> to not leak the given fragment.\n+     * <p/>\n+     * Ex.:\n+     * <pre>\n+     *     // in any Fragment\n+     *     mSubscription = fromFragment(this, Observable.just(\"value\")).subscribe(...);\n+     *     // in onDestroy\n+     *     mSubscription.unsubscribe();\n+     * </pre>\n+     *\n+     * @param fragment         the fragment in which the source observable will be observed\n+     * @param sourceObservable the observable sequence to observe from the given fragment\n+     * @param <T>\n+     * @return a new observable sequence that will emit notifications on the main UI thread\n+     */\n+    public static <T> Observable<T> fromFragment(Object fragment, Observable<T> sourceObservable) {\n+        if (USES_SUPPORT_FRAGMENTS && fragment instanceof android.support.v4.app.Fragment) {\n+            return OperationObserveFromAndroidComponent.observeFromAndroidComponent(sourceObservable, (android.support.v4.app.Fragment) fragment);\n+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && fragment instanceof Fragment) {\n+            return OperationObserveFromAndroidComponent.observeFromAndroidComponent(sourceObservable, (Fragment) fragment);\n+        } else {\n+            throw new IllegalArgumentException(\"Target fragment is neither a native nor support library Fragment\");\n+        }\n     }\n \n-    public static <T> Observable<T> fromFragment(android.support.v4.app.Fragment fragment, Observable<T> sourceObservable) {\n-        return OperationObserveFromAndroidComponent.observeFromAndroidComponent(sourceObservable, fragment);\n+    @RunWith(RobolectricTestRunner.class)\n+    @Config(manifest = Config.NONE)\n+    public static final class AndroidObservableTest {\n+\n+        // support library fragments\n+        private FragmentActivity fragmentActivity;\n+        private android.support.v4.app.Fragment supportFragment;\n+\n+        // native fragments\n+        private Activity activity;\n+        private Fragment fragment;\n+\n+        @Mock\n+        private Observer<String> observer;\n+\n+        @Before\n+        public void setup() {\n+            MockitoAnnotations.initMocks(this);\n+            supportFragment = new android.support.v4.app.Fragment();\n+            fragmentActivity = Robolectric.buildActivity(FragmentActivity.class).create().get();\n+            fragmentActivity.getSupportFragmentManager().beginTransaction().add(supportFragment, null).commit();\n+\n+            fragment = new Fragment();\n+            activity = Robolectric.buildActivity(Activity.class).create().get();\n+            activity.getFragmentManager().beginTransaction().add(fragment, null).commit();\n+        }\n+\n+        @Test\n+        public void itSupportsFragmentsFromTheSupportV4Library() {\n+            fromFragment(supportFragment, Observable.just(\"success\")).subscribe(observer);\n+            verify(observer).onNext(\"success\");\n+            verify(observer).onCompleted();\n+        }\n+\n+        @Test\n+        public void itSupportsNativeFragments() {\n+            fromFragment(fragment, Observable.just(\"success\")).subscribe(observer);\n+            verify(observer).onNext(\"success\");\n+            verify(observer).onCompleted();\n+        }\n+\n+        @Test(expected = IllegalArgumentException.class)\n+        public void itThrowsIfObjectPassedIsNotAFragment() {\n+            fromFragment(\"not a fragment\", Observable.never());\n+        }\n     }\n \n }",
+      "parent_sha": "45af94fdcf9009f741c4176d76fd4170098bf760"
+    }
+  },
+  {
+    "oid": "3e29ac8b47cf971fe8b07d4e38e786feedb51a41",
+    "message": "Add Subscription.isUnsubscribed()",
+    "date": "2014-02-01T00:47:07Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/3e29ac8b47cf971fe8b07d4e38e786feedb51a41",
+    "details": {
+      "sha": "169c99e9af208cc548a58dbdd5957e537c3897dc",
+      "filename": "src/main/java/rx/operators/OperationObserveFromAndroidComponent.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 3,
+      "changes": 8,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/3e29ac8b47cf971fe8b07d4e38e786feedb51a41/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/3e29ac8b47cf971fe8b07d4e38e786feedb51a41/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java?ref=3e29ac8b47cf971fe8b07d4e38e786feedb51a41",
+      "patch": "@@ -19,6 +19,8 @@\n import rx.Observer;\n import rx.Subscription;\n import rx.android.schedulers.AndroidSchedulers;\n+import rx.subscriptions.Subscriptions;\n+import rx.util.functions.Action0;\n import android.app.Activity;\n import android.os.Looper;\n import android.util.Log;\n@@ -94,14 +96,14 @@ public void onNext(T args) {\n                     }\n                 }\n             });\n-            return new Subscription() {\n+            return Subscriptions.create(new Action0() {\n                 @Override\n-                public void unsubscribe() {\n+                public void call() {\n                     log(\"unsubscribing from source sequence\");\n                     releaseReferences();\n                     sourceSub.unsubscribe();\n                 }\n-            };\n+            });\n         }\n \n         private void releaseReferences() {",
+      "parent_sha": "897ef2654d53d115b7d99f44b2753b2915fc0e45"
+    }
+  },
+  {
+    "oid": "9d3690518a119ccab0617d69a77e5db9da350b5c",
+    "message": "bindActivity(): Move observeOn() rightside.\n\nTo make it conventional.",
+    "date": "2014-11-20T06:24:42Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/9d3690518a119ccab0617d69a77e5db9da350b5c",
+    "details": {
+      "sha": "4deb21dd74ca7795ef22d7d594f924c780005f17",
+      "filename": "rxandroid/src/main/java/rx/android/observables/AndroidObservable.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/9d3690518a119ccab0617d69a77e5db9da350b5c/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FAndroidObservable.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/9d3690518a119ccab0617d69a77e5db9da350b5c/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FAndroidObservable.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FAndroidObservable.java?ref=9d3690518a119ccab0617d69a77e5db9da350b5c",
+      "patch": "@@ -87,7 +87,7 @@ private AndroidObservable() {\n      */\n     public static <T> Observable<T> bindActivity(Activity activity, Observable<T> source) {\n         Assertions.assertUiThread();\n-        return source.observeOn(mainThread()).lift(new OperatorConditionalBinding<T, Activity>(activity, ACTIVITY_VALIDATOR));\n+        return source.lift(new OperatorConditionalBinding<T, Activity>(activity, ACTIVITY_VALIDATOR)).observeOn(mainThread());\n     }\n \n     /**",
+      "parent_sha": "234fe10f0d9522192d8c1c8579245b13a9c035aa"
+    }
+  },
+  {
+    "oid": "d7cc2149114f0d66466b7886fd7351f68ace512b",
+    "message": "Some cleaning up",
+    "date": "2014-03-12T17:29:41Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/d7cc2149114f0d66466b7886fd7351f68ace512b",
+    "details": {
+      "sha": "b1adb3d34d69cd80929223410774f7dd56d72587",
+      "filename": "src/main/java/rx/operators/OperatorWeakBinding.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 4,
+      "changes": 9,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/d7cc2149114f0d66466b7886fd7351f68ace512b/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperatorWeakBinding.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/d7cc2149114f0d66466b7886fd7351f68ace512b/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperatorWeakBinding.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperatorWeakBinding.java?ref=d7cc2149114f0d66466b7886fd7351f68ace512b",
+      "patch": "@@ -52,7 +52,7 @@ private WeakSubscriber(Subscriber<? super T> source) {\n \n         @Override\n         public void onCompleted() {\n-            Subscriber<? super T> sub = subscriberRef.get();\n+            final Subscriber<? super T> sub = subscriberRef.get();\n             if (shouldForwardNotification(sub)) {\n                 sub.onCompleted();\n             } else {\n@@ -62,7 +62,7 @@ public void onCompleted() {\n \n         @Override\n         public void onError(Throwable e) {\n-            Subscriber<? super T> sub = subscriberRef.get();\n+            final Subscriber<? super T> sub = subscriberRef.get();\n             if (shouldForwardNotification(sub)) {\n                 sub.onError(e);\n             } else {\n@@ -72,7 +72,7 @@ public void onError(Throwable e) {\n \n         @Override\n         public void onNext(T t) {\n-            Subscriber<? super T> sub = subscriberRef.get();\n+            final Subscriber<? super T> sub = subscriberRef.get();\n             if (shouldForwardNotification(sub)) {\n                 sub.onNext(t);\n             } else {\n@@ -90,7 +90,8 @@ private void handleLostBinding(Subscriber<? super T> sub, String context) {\n                 Log.d(LOG_TAG, \"subscriber gone; skipping \" + context);\n             } else {\n                 final R r = boundRef.get();\n-                if (r != null) { // the predicate failed to validate\n+                if (r != null) {\n+                    // the predicate failed to validate\n                     Log.d(LOG_TAG, \"bound component has become invalid; skipping \" + context);\n                 } else {\n                     Log.d(LOG_TAG, \"bound component gone; skipping \" + context);",
+      "parent_sha": "0fba81c87e979f530e2afe94eb56e8e800faddc4"
+    }
+  },
+  {
+    "oid": "6b7cfe2a0acb8903ea10014d2f66386954a37813",
+    "message": "Break up tests from OperatorAdapterViewOnItemClickTest into separated scenarios",
+    "date": "2014-10-11T10:18:04Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/6b7cfe2a0acb8903ea10014d2f66386954a37813",
+    "details": {
+      "sha": "1f7707ff689a62223dba16240ac55da2b986d300",
+      "filename": "src/test/java/rx/android/operators/OperatorAdapterViewOnItemClickTest.java",
+      "status": "modified",
+      "additions": 261,
+      "deletions": 11,
+      "changes": 272,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/6b7cfe2a0acb8903ea10014d2f66386954a37813/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperatorAdapterViewOnItemClickTest.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/6b7cfe2a0acb8903ea10014d2f66386954a37813/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperatorAdapterViewOnItemClickTest.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperatorAdapterViewOnItemClickTest.java?ref=6b7cfe2a0acb8903ea10014d2f66386954a37813",
+      "patch": "@@ -76,31 +76,139 @@ private static List<String> createValues(int count) {\n     }\n \n     @Test\n-    public void testListView() {\n+    public void testListViewNeverEmitEventBeforeSubscribed() {\n         final ListView listView = createListView(createValues(10));\n-        performTestAdapterView(listView);\n+        performTestAdapterViewNeverEmitEventBeforeSubscribed(listView);\n     }\n \n     @Test\n-    public void testGridView() {\n+    public void testGridViewNeverEmitEventBeforeSubscribed() {\n         final GridView gridView = createGridView(createValues(10));\n-        performTestAdapterView(gridView);\n+        performTestAdapterViewNeverEmitEventBeforeSubscribed(gridView);\n     }\n \n     @Test\n-    public void testMultipleSubscriptionsListView() {\n+    public void testListViewClickAllViewsEmitAllEvents() {\n         final ListView listView = createListView(createValues(10));\n-        performTestAdapterViewMultipleSubscriptions(listView);\n+        performTestAdapterViewClickAllViewsEmitAllEvents(listView);\n     }\n \n     @Test\n-    public void testMultipleSubscriptionsGridView() {\n+    public void testGridViewClickAllViewsEmitAllEvents() {\n         final GridView gridView = createGridView(createValues(10));\n-        performTestAdapterViewMultipleSubscriptions(gridView);\n+        performTestAdapterViewClickAllViewsEmitAllEvents(gridView);\n+    }\n+\n+    @Test\n+    public void testListViewNeverEmitEventAfterUnsubscribed() {\n+        final ListView listView = createListView(createValues(10));\n+        performTestAdapterViewNeverEmitEventAfterUnsubscribed(listView);\n+    }\n+\n+    @Test\n+    public void testGridViewNeverEmitEventAfterUnsubscribed() {\n+        final GridView gridView = createGridView(createValues(10));\n+        performTestAdapterViewClickAllViewsEmitAllEvents(gridView);\n+    }\n+\n+    @Test\n+    public void testListViewNeverEmitAnyThrowableAfterUnsubscribed() {\n+        final ListView listView = createListView(createValues(10));\n+        performTestAdapterViewNeverEmitAnyThrowableAfterUnsubscribed(listView);\n+    }\n+\n+    @Test\n+    public void testGridViewNeverEmitAnyThrowableAfterUnsubscribed() {\n+        final GridView gridView = createGridView(createValues(10));\n+        performTestAdapterViewNeverEmitAnyThrowableAfterUnsubscribed(gridView);\n+    }\n+\n+    @Test\n+    public void testListViewNeverEmitOnCompletedAfterUnsubscribed() {\n+        final ListView listView = createListView(createValues(10));\n+        performTestAdapterViewNeverEmitOnCompletedAfterUnsubscribed(listView);\n+    }\n+\n+    @Test\n+    public void testGridViewNeverEmitOnCompletedAfterUnsubscribed() {\n+        final GridView gridView = createGridView(createValues(10));\n+        performTestAdapterViewNeverEmitOnCompletedAfterUnsubscribed(gridView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsListViewNeverEmitEventBeforeSubscribed() {\n+        final ListView listView = createListView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsNeverEmitEventBeforeSubscribed(listView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsGridViewNeverEmitEventBeforeSubscribed() {\n+        final GridView gridView = createGridView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsNeverEmitEventBeforeSubscribed(gridView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsListViewClickAllViewsEmitAllEvents() {\n+        final ListView listView = createListView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsClickAllViewsEmitAllEvents(listView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsGridViewClickAllViewsEmitAllEvents() {\n+        final GridView gridView = createGridView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsClickAllViewsEmitAllEvents(gridView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsListViewClickAllViewsEmitAllEventsForOneSubscriber() {\n+        final ListView listView = createListView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsClickAllViewsEmitAllEventsForOneSubscriber(listView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsGridViewClickAllViewsEmitAllEventsForOneSubscriber() {\n+        final GridView gridView = createGridView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsClickAllViewsEmitAllEventsForOneSubscriber(gridView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsListViewNeverEmitEventAfterUnsubscribed() {\n+        final ListView listView = createListView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsNeverEmitEventAfterUnsubscribed(listView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsGridViewNeverEmitEventAfrerUnsubscribed() {\n+        final GridView gridView = createGridView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsNeverEmitEventAfterUnsubscribed(gridView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsListViewNeverEmitAnyThrowableAfterUnsubscribed() {\n+        final ListView listView = createListView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsNeverEmitAnyThrowableAfterUnsubscribed(listView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsGridViewNeverEmitAnyThrowableAfterUnsubscribed() {\n+        final GridView gridView = createGridView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsNeverEmitAnyThrowableAfterUnsubscribed(gridView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsListViewNeverEmitOnCompletedAfterUnsubscribed() {\n+        final ListView listView = createListView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsNeverEmitOnCompletedAfterUnsubscribed(listView);\n+    }\n+\n+    @Test\n+    public void testMultipleSubscriptionsGridViewNeverEmitOnCompletedAfterUnsubscribed() {\n+        final GridView gridView = createGridView(createValues(10));\n+        performTestAdapterViewMultipleSubscriptionsNeverEmitOnCompletedAfterUnsubscribed(gridView);\n     }\n \n     @SuppressWarnings(\"unchecked\")\n-    private void performTestAdapterView(AdapterView<? extends Adapter> adapterView) {\n+    private void performTestAdapterViewNeverEmitEventBeforeSubscribed(AdapterView<? extends Adapter> adapterView) {\n         Adapter adapter = adapterView.getAdapter();\n         Assert.assertNotNull(adapter);\n         final Observable<OnItemClickEvent> observable = ViewObservable.itemClicks(adapterView);\n@@ -110,21 +218,72 @@ private void performTestAdapterView(AdapterView<? extends Adapter> adapterView)\n         final InOrder inOrder = inOrder(observer);\n         inOrder.verify(observer, never()).onNext(any(OnItemClickEvent.class));\n \n+        subscription.unsubscribe();\n+    }\n+\n+    @SuppressWarnings(\"unchecked\")\n+    private void performTestAdapterViewClickAllViewsEmitAllEvents(AdapterView<? extends Adapter> adapterView) {\n+        Adapter adapter = adapterView.getAdapter();\n+        Assert.assertNotNull(adapter);\n+        final Observable<OnItemClickEvent> observable = ViewObservable.itemClicks(adapterView);\n+        final Observer<OnItemClickEvent> observer = mock(Observer.class);\n+        final Subscription subscription = observable.subscribe(new TestObserver<OnItemClickEvent>(observer));\n+\n+        final InOrder inOrder = inOrder(observer);\n+\n         for (int i = 0; i < adapter.getCount(); i++) {\n             adapterView.performItemClick(any(View.class), i, i);\n             inOrder.verify(observer, times(1)).onNext(new OnItemClickEvent(adapterView, any(View.class), i, i));\n         }\n \n         subscription.unsubscribe();\n+    }\n+\n+    @SuppressWarnings(\"unchecked\")\n+    private void performTestAdapterViewNeverEmitEventAfterUnsubscribed(AdapterView<? extends Adapter> adapterView) {\n+        Adapter adapter = adapterView.getAdapter();\n+        Assert.assertNotNull(adapter);\n+        final Observable<OnItemClickEvent> observable = ViewObservable.itemClicks(adapterView);\n+        final Observer<OnItemClickEvent> observer = mock(Observer.class);\n+        final Subscription subscription = observable.subscribe(new TestObserver<OnItemClickEvent>(observer));\n+\n+        final InOrder inOrder = inOrder(observer);\n+\n+        subscription.unsubscribe();\n \n         inOrder.verify(observer, never()).onNext(any(OnItemClickEvent.class));\n+    }\n+\n+    @SuppressWarnings(\"unchecked\")\n+    private void performTestAdapterViewNeverEmitAnyThrowableAfterUnsubscribed(AdapterView<? extends Adapter> adapterView) {\n+        Adapter adapter = adapterView.getAdapter();\n+        Assert.assertNotNull(adapter);\n+        final Observable<OnItemClickEvent> observable = ViewObservable.itemClicks(adapterView);\n+        final Observer<OnItemClickEvent> observer = mock(Observer.class);\n+        final Subscription subscription = observable.subscribe(new TestObserver<OnItemClickEvent>(observer));\n+\n+        final InOrder inOrder = inOrder(observer);\n+        subscription.unsubscribe();\n \n         inOrder.verify(observer, never()).onError(any(Throwable.class));\n+    }\n+\n+    @SuppressWarnings(\"unchecked\")\n+    private void performTestAdapterViewNeverEmitOnCompletedAfterUnsubscribed(AdapterView<? extends Adapter> adapterView) {\n+        Adapter adapter = adapterView.getAdapter();\n+        Assert.assertNotNull(adapter);\n+        final Observable<OnItemClickEvent> observable = ViewObservable.itemClicks(adapterView);\n+        final Observer<OnItemClickEvent> observer = mock(Observer.class);\n+        final Subscription subscription = observable.subscribe(new TestObserver<OnItemClickEvent>(observer));\n+\n+        final InOrder inOrder = inOrder(observer);\n+        subscription.unsubscribe();\n+\n         inOrder.verify(observer, never()).onCompleted();\n     }\n \n     @SuppressWarnings(\"unchecked\")\n-    private void performTestAdapterViewMultipleSubscriptions(AdapterView<? extends Adapter> adapterView) {\n+    private void performTestAdapterViewMultipleSubscriptionsNeverEmitEventBeforeSubscribed(AdapterView<? extends Adapter> adapterView) {\n         Adapter adapter = adapterView.getAdapter();\n         Assert.assertNotNull(adapter);\n         final Observable<OnItemClickEvent> observable = ViewObservable.itemClicks(adapterView);\n@@ -139,26 +298,117 @@ private void performTestAdapterViewMultipleSubscriptions(AdapterView<? extends A\n         inOrder1.verify(observer1, never()).onNext(any(OnItemClickEvent.class));\n         inOrder2.verify(observer2, never()).onNext(any(OnItemClickEvent.class));\n \n+        subscription1.unsubscribe();\n+        subscription2.unsubscribe();\n+    }\n+\n+    @SuppressWarnings(\"unchecked\")\n+    private void performTestAdapterViewMultipleSubscriptionsClickAllViewsEmitAllEvents(AdapterView<? extends Adapter> adapterView) {\n+        Adapter adapter = adapterView.getAdapter();\n+        Assert.assertNotNull(adapter);\n+        final Observable<OnItemClickEvent> observable = ViewObservable.itemClicks(adapterView);\n+        final Observer<OnItemClickEvent> observer1 = mock(Observer.class);\n+        final Observer<OnItemClickEvent> observer2 = mock(Observer.class);\n+        final Subscription subscription1 = observable.subscribe(new TestObserver<OnItemClickEvent>(observer1));\n+        final Subscription subscription2 = observable.subscribe(new TestObserver<OnItemClickEvent>(observer2));\n+\n+        final InOrder inOrder1 = inOrder(observer1);\n+        final InOrder inOrder2 = inOrder(observer2);\n+\n         final int count = adapter.getCount();\n         for (int i = 0; i < count; i++) {\n             adapterView.performItemClick(any(View.class), i, i);\n             inOrder1.verify(observer1, times(1)).onNext(new OnItemClickEvent(adapterView, any(View.class), i, i));\n             inOrder2.verify(observer2, times(1)).onNext(new OnItemClickEvent(adapterView, any(View.class), i, i));\n         }\n+\n+        subscription1.unsubscribe();\n+        subscription2.unsubscribe();\n+    }\n+\n+    @SuppressWarnings(\"unchecked\")\n+    private void performTestAdapterViewMultipleSubscriptionsClickAllViewsEmitAllEventsForOneSubscriber(AdapterView<? extends Adapter> adapterView) {\n+        Adapter adapter = adapterView.getAdapter();\n+        Assert.assertNotNull(adapter);\n+        final Observable<OnItemClickEvent> observable = ViewObservable.itemClicks(adapterView);\n+        final Observer<OnItemClickEvent> observer1 = mock(Observer.class);\n+        final Observer<OnItemClickEvent> observer2 = mock(Observer.class);\n+        final Subscription subscription1 = observable.subscribe(new TestObserver<OnItemClickEvent>(observer1));\n+        final Subscription subscription2 = observable.subscribe(new TestObserver<OnItemClickEvent>(observer2));\n+\n+        final InOrder inOrder1 = inOrder(observer1);\n+        final InOrder inOrder2 = inOrder(observer2);\n+\n+        inOrder1.verify(observer1, never()).onNext(any(OnItemClickEvent.class));\n+        inOrder2.verify(observer2, never()).onNext(any(OnItemClickEvent.class));\n+\n         subscription1.unsubscribe();\n \n+        final int count = adapter.getCount();\n         for (int i = 0; i < count; i++) {\n             adapterView.performItemClick(any(View.class), i, i);\n             inOrder1.verify(observer1, never()).onNext(any(OnItemClickEvent.class));\n             inOrder2.verify(observer2, times(1)).onNext(new OnItemClickEvent(adapterView, any(View.class), i, i));\n         }\n         subscription2.unsubscribe();\n+    }\n+\n+    @SuppressWarnings(\"unchecked\")\n+    private void performTestAdapterViewMultipleSubscriptionsNeverEmitEventAfterUnsubscribed(AdapterView<? extends Adapter> adapterView) {\n+        Adapter adapter = adapterView.getAdapter();\n+        Assert.assertNotNull(adapter);\n+        final Observable<OnItemClickEvent> observable = ViewObservable.itemClicks(adapterView);\n+        final Observer<OnItemClickEvent> observer1 = mock(Observer.class);\n+        final Observer<OnItemClickEvent> observer2 = mock(Observer.class);\n+        final Subscription subscription1 = observable.subscribe(new TestObserver<OnItemClickEvent>(observer1));\n+        final Subscription subscription2 = observable.subscribe(new TestObserver<OnItemClickEvent>(observer2));\n+\n+        final InOrder inOrder1 = inOrder(observer1);\n+        final InOrder inOrder2 = inOrder(observer2);\n+\n+        subscription1.unsubscribe();\n+        subscription2.unsubscribe();\n \n         inOrder1.verify(observer1, never()).onNext(any(OnItemClickEvent.class));\n         inOrder2.verify(observer2, never()).onNext(any(OnItemClickEvent.class));\n+    }\n+\n+    @SuppressWarnings(\"unchecked\")\n+    private void performTestAdapterViewMultipleSubscriptionsNeverEmitAnyThrowableAfterUnsubscribed(AdapterView<? extends Adapter> adapterView) {\n+        Adapter adapter = adapterView.getAdapter();\n+        Assert.assertNotNull(adapter);\n+        final Observable<OnItemClickEvent> observable = ViewObservable.itemClicks(adapterView);\n+        final Observer<OnItemClickEvent> observer1 = mock(Observer.class);\n+        final Observer<OnItemClickEvent> observer2 = mock(Observer.class);\n+        final Subscription subscription1 = observable.subscribe(new TestObserver<OnItemClickEvent>(observer1));\n+        final Subscription subscription2 = observable.subscribe(new TestObserver<OnItemClickEvent>(observer2));\n+\n+        final InOrder inOrder1 = inOrder(observer1);\n+        final InOrder inOrder2 = inOrder(observer2);\n+\n+        subscription1.unsubscribe();\n+        subscription2.unsubscribe();\n \n         inOrder1.verify(observer1, never()).onError(any(Throwable.class));\n-        inOrder2.verify(observer2, never()).onNext(any(OnItemClickEvent.class));\n+        inOrder2.verify(observer2, never()).onError(any(Throwable.class));\n+    }\n+\n+    @SuppressWarnings(\"unchecked\")\n+    private void performTestAdapterViewMultipleSubscriptionsNeverEmitOnCompletedAfterUnsubscribed(AdapterView<? extends Adapter> adapterView) {\n+        Adapter adapter = adapterView.getAdapter();\n+        Assert.assertNotNull(adapter);\n+        final Observable<OnItemClickEvent> observable = ViewObservable.itemClicks(adapterView);\n+        final Observer<OnItemClickEvent> observer1 = mock(Observer.class);\n+        final Observer<OnItemClickEvent> observer2 = mock(Observer.class);\n+        final Subscription subscription1 = observable.subscribe(new TestObserver<OnItemClickEvent>(observer1));\n+        final Subscription subscription2 = observable.subscribe(new TestObserver<OnItemClickEvent>(observer2));\n+\n+        final InOrder inOrder1 = inOrder(observer1);\n+        final InOrder inOrder2 = inOrder(observer2);\n+\n+        subscription1.unsubscribe();\n+        subscription2.unsubscribe();\n+\n         inOrder1.verify(observer1, never()).onCompleted();\n         inOrder2.verify(observer2, never()).onCompleted();\n     }",
+      "parent_sha": "46ea1a046735fd49ad7632542d8eb780fca21d8c"
+    }
+  },
+  {
+    "oid": "4299cccd78c7537b86870b1c99cb19af3578bed7",
+    "message": "Use ViewAction1 in ViewAction.setText and setTextResource.",
+    "date": "2014-11-25T22:56:24Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/4299cccd78c7537b86870b1c99cb19af3578bed7",
+    "details": {
+      "sha": "280747b38bc45a70a1d7b5be0a46a9f1999b7a98",
+      "filename": "rxandroid/src/main/java/rx/android/view/ViewActions.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 8,
+      "changes": 16,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/4299cccd78c7537b86870b1c99cb19af3578bed7/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fview%2FViewActions.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/4299cccd78c7537b86870b1c99cb19af3578bed7/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fview%2FViewActions.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fview%2FViewActions.java?ref=4299cccd78c7537b86870b1c99cb19af3578bed7",
+      "patch": "@@ -116,23 +116,23 @@ public static Action1<? super Boolean> setVisibility(View view, int visibilityOn\n     /**\n      * Set the text of a {@link TextView} based on values emitted by an Observable.\n      */\n-    public static Action1<? super CharSequence> setText(final TextView textView) {\n-        return new Action1<CharSequence>() {\n+    public static Action1<? super CharSequence> setText(TextView textView) {\n+        return new ViewAction1<TextView, CharSequence>(textView) {\n             @Override\n-            public void call(CharSequence charSequence) {\n-                textView.setText(charSequence);\n+            public void call(TextView view, CharSequence text) {\n+                view.setText(text);\n             }\n         };\n     }\n \n     /**\n      * Set the text of a {@link TextView} based on values emitted by an Observable.\n      */\n-    public static Action1<? super Integer> setTextResource(final TextView textView) {\n-        return new Action1<Integer>() {\n+    public static Action1<? super Integer> setTextResource(TextView textView) {\n+        return new ViewAction1<TextView, Integer>(textView) {\n             @Override\n-            public void call(Integer integer) {\n-                textView.setText(integer);\n+            public void call(TextView view, Integer resId) {\n+                view.setText(resId);\n             }\n         };\n     }",
+      "parent_sha": "9677ba702e9a4bf7275dc4a0c68020945a7dbfa1"
+    }
+  },
+  {
+    "oid": "025e5ab7dce38b5de751b87230caaa9b59767f82",
+    "message": "Remove useless generics, prodive some helper methods",
+    "date": "2014-10-08T14:05:46Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/025e5ab7dce38b5de751b87230caaa9b59767f82",
+    "details": {
+      "sha": "974c6bbc3575c0feb93c9db29389cb08d7404db3",
+      "filename": "src/main/java/rx/android/observables/ViewObservable.java",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 4,
+      "changes": 16,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/025e5ab7dce38b5de751b87230caaa9b59767f82/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FViewObservable.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/025e5ab7dce38b5de751b87230caaa9b59767f82/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FViewObservable.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fobservables%2FViewObservable.java?ref=025e5ab7dce38b5de751b87230caaa9b59767f82",
+      "patch": "@@ -29,19 +29,27 @@\n \n public class ViewObservable {\n \n-    public static <T extends View> Observable<OnClickEvent> clicks(final T view, final boolean emitInitialValue) {\n+    public static Observable<OnClickEvent> clicks(final View view) {\n+        return clicks(view, false);\n+    }\n+\n+    public static Observable<OnClickEvent> clicks(final View view, final boolean emitInitialValue) {\n         return Observable.create(new OperatorViewClick(view, emitInitialValue));\n     }\n \n-    public static <T extends TextView> Observable<OnTextChangeEvent> text(final T input) {\n+    public static Observable<OnTextChangeEvent> text(final TextView input) {\n         return text(input, false);\n     }\n \n-    public static <T extends TextView> Observable<OnTextChangeEvent> text(final T input, final boolean emitInitialValue) {\n+    public static Observable<OnTextChangeEvent> text(final TextView input, final boolean emitInitialValue) {\n         return Observable.create(new OperatorTextViewInput(input, emitInitialValue));\n     }\n \n-    public static <T extends CompoundButton> Observable<OnCheckedChangeEvent> input(final T button, final boolean emitInitialValue) {\n+    public static Observable<OnCheckedChangeEvent> input(final CompoundButton button) {\n+        return input(button, false);\n+    }\n+\n+    public static Observable<OnCheckedChangeEvent> input(final CompoundButton button, final boolean emitInitialValue) {\n         return Observable.create(new OperatorCompoundButtonInput(button, emitInitialValue));\n     }\n ",
+      "parent_sha": "b768961de7ff3743dc39059ec416317b4bef7346"
+    }
+  },
+  {
+    "oid": "0cb51c08baeace06c7639c4e9c98c78a1b5955a0",
+    "message": "Clarify OperatorTextViewInputTest methods",
+    "date": "2014-08-14T14:57:07Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/0cb51c08baeace06c7639c4e9c98c78a1b5955a0",
+    "details": {
+      "sha": "8d0855974f3185c3574631ca9617dfa416ff3b3b",
+      "filename": "src/test/java/rx/android/operators/OperatorTextViewInputTest.java",
+      "status": "modified",
+      "additions": 22,
+      "deletions": 9,
+      "changes": 31,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/0cb51c08baeace06c7639c4e9c98c78a1b5955a0/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperatorTextViewInputTest.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/0cb51c08baeace06c7639c4e9c98c78a1b5955a0/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperatorTextViewInputTest.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperatorTextViewInputTest.java?ref=0cb51c08baeace06c7639c4e9c98c78a1b5955a0",
+      "patch": "@@ -63,22 +63,35 @@ private static EditText createEditText(final String value) {\n     public void testOverloadedMethodDefaultsWithoutInitialValue() {\n         final TextView input = createTextView(\"initial\");\n         final Observable<TextView> observable = ViewObservable.text(input);\n-        runWithoutInitialValueTest(input, observable);\n+        final Observer<TextView> observer = mock(Observer.class);\n+        final Subscription subscription = observable.subscribe(new TestObserver<TextView>(observer));\n+\n+        final InOrder inOrder = inOrder(observer);\n+\n+        inOrder.verify(observer, never()).onNext(any(TextView.class));\n+\n+        input.setText(\"1\");\n+        inOrder.verify(observer, times(1)).onNext(input);\n+\n+        input.setText(\"2\");\n+        inOrder.verify(observer, times(1)).onNext(input);\n+\n+        input.setText(\"3\");\n+        inOrder.verify(observer, times(1)).onNext(input);\n+\n+        subscription.unsubscribe();\n+        input.setText(\"4\");\n+        inOrder.verify(observer, never()).onNext(any(TextView.class));\n+\n+        inOrder.verify(observer, never()).onError(any(Throwable.class));\n+        inOrder.verify(observer, never()).onCompleted();\n     }\n \n     @Test\n     @SuppressWarnings(\"unchecked\")\n     public void testWithoutInitialValue() {\n         final TextView input = createTextView(\"initial\");\n         final Observable<TextView> observable = ViewObservable.text(input, false);\n-        runWithoutInitialValueTest(input, observable);\n-    }\n-\n-    /**\n-     * Helper method to run {@link #testOverloadedMethodDefaultsWithoutInitialValue} and\n-     * {@link #testWithoutInitialValue} which test the same functionality.\n-     */\n-    private void runWithoutInitialValueTest(final TextView input, final Observable<TextView> observable) {\n         final Observer<TextView> observer = mock(Observer.class);\n         final Subscription subscription = observable.subscribe(new TestObserver<TextView>(observer));\n ",
+      "parent_sha": "c4bff8330c3d3a66ea1deed93f811cfea9470cf2"
+    }
+  },
+  {
+    "oid": "a08e6ef8b41e4cdc48b7ee07a412e665f5b26556",
+    "message": "Update sample to compile with latest RxJava 2.0 APIs.",
+    "date": "2016-08-25T00:35:04Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/a08e6ef8b41e4cdc48b7ee07a412e665f5b26556",
+    "details": {
+      "sha": "af06cc3477b75370767dbd02e06e509eaa664b1c",
+      "filename": "sample-app/src/main/java/io/reactivex/android/samples/MainActivity.java",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 4,
+      "changes": 16,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/a08e6ef8b41e4cdc48b7ee07a412e665f5b26556/sample-app%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fsamples%2FMainActivity.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/a08e6ef8b41e4cdc48b7ee07a412e665f5b26556/sample-app%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fsamples%2FMainActivity.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/sample-app%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fsamples%2FMainActivity.java?ref=a08e6ef8b41e4cdc48b7ee07a412e665f5b26556",
+      "patch": "@@ -21,13 +21,16 @@\n import io.reactivex.Observable;\n import io.reactivex.ObservableSource;\n import io.reactivex.android.schedulers.AndroidSchedulers;\n-import io.reactivex.observers.AsyncObserver;\n+import io.reactivex.disposables.CompositeDisposable;\n+import io.reactivex.observers.DisposableObserver;\n import io.reactivex.schedulers.Schedulers;\n import java.util.concurrent.Callable;\n \n public class MainActivity extends Activity {\n     private static final String TAG = \"RxAndroidSamples\";\n \n+    private final CompositeDisposable disposables = new CompositeDisposable();\n+\n     @Override protected void onCreate(Bundle savedInstanceState) {\n         super.onCreate(savedInstanceState);\n         setContentView(R.layout.main_activity);\n@@ -38,13 +41,18 @@ public class MainActivity extends Activity {\n         });\n     }\n \n+    @Override protected void onDestroy() {\n+        super.onDestroy();\n+        disposables.clear();\n+    }\n+\n     void onRunSchedulerExampleButtonClicked() {\n-      sampleObservable()\n+        disposables.add(sampleObservable()\n             // Run on a background thread\n             .subscribeOn(Schedulers.io())\n             // Be notified on the main thread\n             .observeOn(AndroidSchedulers.mainThread())\n-            .subscribe(new AsyncObserver<String>() {\n+            .subscribeWith(new DisposableObserver<String>() {\n                 @Override public void onComplete() {\n                     Log.d(TAG, \"onComplete()\");\n                 }\n@@ -56,7 +64,7 @@ void onRunSchedulerExampleButtonClicked() {\n                 @Override public void onNext(String string) {\n                     Log.d(TAG, \"onNext(\" + string + \")\");\n                 }\n-            });\n+            }));\n     }\n \n     static Observable<String> sampleObservable() {",
+      "parent_sha": "ff6f7450ab74ad38697072daf139dba40a6af567"
+    }
+  },
+  {
+    "oid": "3d8925c77a700e1d305c183e9bcf1bcecf5ee77b",
+    "message": "Using the correct code style for variable name and removing unused imports.\n\nSigned-off-by: David Marques <dpsmarques@gmail.com>",
+    "date": "2014-06-07T10:38:00Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/3d8925c77a700e1d305c183e9bcf1bcecf5ee77b",
+    "details": {
+      "sha": "4e58087023f15fa96adce2252e5663320b1e544d",
+      "filename": "src/main/java/rx/android/schedulers/HandlerThreadScheduler.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 7,
+      "changes": 12,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/3d8925c77a700e1d305c183e9bcf1bcecf5ee77b/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerThreadScheduler.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/3d8925c77a700e1d305c183e9bcf1bcecf5ee77b/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerThreadScheduler.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerThreadScheduler.java?ref=3d8925c77a700e1d305c183e9bcf1bcecf5ee77b",
+      "patch": "@@ -20,9 +20,7 @@\n import rx.Scheduler;\n import rx.Subscription;\n import rx.functions.Action0;\n-import rx.functions.Action1;\n import rx.internal.schedulers.ScheduledAction;\n-import rx.subscriptions.BooleanSubscription;\n import rx.subscriptions.CompositeSubscription;\n import rx.subscriptions.Subscriptions;\n import android.os.Handler;\n@@ -53,20 +51,20 @@ private static class InnerHandlerThreadScheduler extends Worker {\n \n         private final Handler handler;\n \n-        private final CompositeSubscription mCompositeSubscription = new CompositeSubscription();\n+        private final CompositeSubscription compositeSubscription = new CompositeSubscription();\n \n         public InnerHandlerThreadScheduler(Handler handler) {\n             this.handler = handler;\n         }\n \n         @Override\n         public void unsubscribe() {\n-            mCompositeSubscription.unsubscribe();\n+            compositeSubscription.unsubscribe();\n         }\n \n         @Override\n         public boolean isUnsubscribed() {\n-            return mCompositeSubscription.isUnsubscribed();\n+            return compositeSubscription.isUnsubscribed();\n         }\n \n         @Override\n@@ -78,8 +76,8 @@ public void call() {\n                     handler.removeCallbacks(scheduledAction);\n                 }\n             }));\n-            scheduledAction.addParent(mCompositeSubscription);\n-            mCompositeSubscription.add(scheduledAction);\n+            scheduledAction.addParent(compositeSubscription);\n+            compositeSubscription.add(scheduledAction);\n \n             handler.postDelayed(scheduledAction, unit.toMillis(delayTime));\n ",
+      "parent_sha": "3adab7f134965076987c4e17c947adc1b8c7c82c"
+    }
+  },
+  {
+    "oid": "08133c80de0ecf0f35410e484b59e14ce6862f5b",
+    "message": "Compiling. Unit Tests Failing.\n\nNow that Observer is an abstract class, Mockito is having issues with it so unit tests are a mess.",
+    "date": "2014-01-23T06:33:47Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/08133c80de0ecf0f35410e484b59e14ce6862f5b",
+    "details": {
+      "sha": "1b4e0535322acc9d32f1a988852af28ca52396f1",
+      "filename": "src/test/java/rx/android/operators/OperationObserveFromAndroidComponentTest.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 4,
+      "changes": 8,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/08133c80de0ecf0f35410e484b59e14ce6862f5b/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperationObserveFromAndroidComponentTest.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/08133c80de0ecf0f35410e484b59e14ce6862f5b/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperationObserveFromAndroidComponentTest.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperationObserveFromAndroidComponentTest.java?ref=08133c80de0ecf0f35410e484b59e14ce6862f5b",
+      "patch": "@@ -148,7 +148,7 @@ public void itForwardsOnErrorToTargetObserver() {\n     public void itDropsOnNextOnCompletedSequenceIfTargetComponentIsGone() throws Throwable {\n         PublishSubject<Integer> source = PublishSubject.create();\n \n-        final Observable.OnSubscribeFunc<Integer> operator = newOnSubscribeFragmentInstance(source, mockFragment);\n+        final Observable.OnSubscribeFunc<Integer> operator = newOnSubscribeFragmentInstance(source.toObservable(), mockFragment);\n         operator.onSubscribe(mockObserver);\n \n         source.onNext(1);\n@@ -166,7 +166,7 @@ public void itDropsOnNextOnCompletedSequenceIfTargetComponentIsGone() throws Thr\n     public void itDropsOnErrorIfTargetComponentIsGone() throws Throwable {\n         PublishSubject<Integer> source = PublishSubject.create();\n \n-        final Observable.OnSubscribeFunc<Integer> operator = newOnSubscribeFragmentInstance(source, mockFragment);\n+        final Observable.OnSubscribeFunc<Integer> operator = newOnSubscribeFragmentInstance(source.toObservable(), mockFragment);\n         operator.onSubscribe(mockObserver);\n \n         source.onNext(1);\n@@ -202,7 +202,7 @@ private void releaseComponentRef(Observable.OnSubscribeFunc<Integer> operator) t\n     @Test\n     public void itDoesNotForwardOnNextOnCompletedSequenceIfFragmentIsDetached() {\n         PublishSubject<Integer> source = PublishSubject.create();\n-        OperationObserveFromAndroidComponent.observeFromAndroidComponent(source, mockFragment).subscribe(mockObserver);\n+        OperationObserveFromAndroidComponent.observeFromAndroidComponent(source.toObservable(), mockFragment).subscribe(mockObserver);\n \n         source.onNext(1);\n \n@@ -218,7 +218,7 @@ public void itDoesNotForwardOnNextOnCompletedSequenceIfFragmentIsDetached() {\n     @Test\n     public void itDoesNotForwardOnErrorIfFragmentIsDetached() {\n         PublishSubject<Integer> source = PublishSubject.create();\n-        OperationObserveFromAndroidComponent.observeFromAndroidComponent(source, mockFragment).subscribe(mockObserver);\n+        OperationObserveFromAndroidComponent.observeFromAndroidComponent(source.toObservable(), mockFragment).subscribe(mockObserver);\n \n         source.onNext(1);\n ",
+      "parent_sha": "6797179f2db50bca3440ef9c3350ad64d9b2d012"
+    }
+  },
+  {
+    "oid": "e4eeaca36dd1a749b5aa5d92cbc9a8f2ef47a55d",
+    "message": "DIAMONDS",
+    "date": "2016-05-02T19:05:42Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/e4eeaca36dd1a749b5aa5d92cbc9a8f2ef47a55d",
+    "details": {
+      "sha": "56bcb7689a656f1aeed12d33c29220154da78a97",
+      "filename": "rxandroid/src/main/java/rx/android/plugins/RxAndroidPlugins.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 2,
+      "changes": 3,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/e4eeaca36dd1a749b5aa5d92cbc9a8f2ef47a55d/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fplugins%2FRxAndroidPlugins.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/e4eeaca36dd1a749b5aa5d92cbc9a8f2ef47a55d/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fplugins%2FRxAndroidPlugins.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fplugins%2FRxAndroidPlugins.java?ref=e4eeaca36dd1a749b5aa5d92cbc9a8f2ef47a55d",
+      "patch": "@@ -31,8 +31,7 @@ public static RxAndroidPlugins getInstance() {\n         return INSTANCE;\n     }\n \n-    private final AtomicReference<RxAndroidSchedulersHook> schedulersHook =\n-            new AtomicReference<RxAndroidSchedulersHook>();\n+    private final AtomicReference<RxAndroidSchedulersHook> schedulersHook = new AtomicReference<>();\n \n     RxAndroidPlugins() {\n     }",
+      "parent_sha": "4c6b137e86eba895c20c2e0cbd1c6097c87d2579"
+    }
+  },
+  {
+    "oid": "387214691886664db7ea4bfd4e29d3c82e09e16c",
+    "message": "Fix test compilation (now removed method was being used)",
+    "date": "2014-09-09T11:52:31Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/387214691886664db7ea4bfd4e29d3c82e09e16c",
+    "details": {
+      "sha": "a67a20fea7eb2b8a02599dee8947dcf9d3e52907",
+      "filename": "src/test/java/rx/android/operators/OperatorObserveFromAndroidComponentTest.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 12,
+      "changes": 20,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/387214691886664db7ea4bfd4e29d3c82e09e16c/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperatorObserveFromAndroidComponentTest.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/387214691886664db7ea4bfd4e29d3c82e09e16c/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperatorObserveFromAndroidComponentTest.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperatorObserveFromAndroidComponentTest.java?ref=387214691886664db7ea4bfd4e29d3c82e09e16c",
+      "patch": "@@ -24,16 +24,6 @@\n import static org.mockito.Mockito.verifyNoMoreInteractions;\n import static org.mockito.Mockito.when;\n \n-import java.lang.reflect.Constructor;\n-import java.lang.reflect.Field;\n-import java.lang.reflect.InvocationTargetException;\n-import java.util.Arrays;\n-import java.util.concurrent.Callable;\n-import java.util.concurrent.Executors;\n-import java.util.concurrent.Future;\n-import java.util.concurrent.TimeUnit;\n-import java.util.concurrent.atomic.AtomicReference;\n-\n import org.junit.Before;\n import org.junit.Ignore;\n import org.junit.Test;\n@@ -42,7 +32,6 @@\n import org.mockito.MockitoAnnotations;\n import org.robolectric.RobolectricTestRunner;\n import org.robolectric.annotation.Config;\n-\n import rx.Observable;\n import rx.Observer;\n import rx.android.schedulers.AndroidSchedulers;\n@@ -52,8 +41,15 @@\n import rx.operators.OperatorObserveFromAndroidComponent;\n import rx.schedulers.Schedulers;\n import rx.subjects.PublishSubject;\n+\n import android.app.Fragment;\n \n+import java.lang.reflect.Constructor;\n+import java.lang.reflect.Field;\n+import java.lang.reflect.InvocationTargetException;\n+import java.util.Arrays;\n+import java.util.concurrent.atomic.AtomicReference;\n+\n @RunWith(RobolectricTestRunner.class)\n @Config(manifest = Config.NONE)\n public class OperatorObserveFromAndroidComponentTest {\n@@ -73,7 +69,7 @@ public void setupMocks() {\n     // TODO needs to be fixed, see comments inline below\n     @Ignore\n     public void itObservesTheSourceSequenceOnTheMainUIThread() {\n-        final Observable<Integer> testObservable = Observable.from(1)\n+        final Observable<Integer> testObservable = Observable.just(1)\n                 .observeOn(Schedulers.newThread())\n                 .doOnNext(new Action1<Integer>() {\n ",
+      "parent_sha": "a641e5146b81effed073cb5693ab37f4c8787b77"
+    }
+  },
+  {
+    "oid": "0c3cbe97b9df0ac0de2629a2e7a06d7ebc756c80",
+    "message": "fixup! Added LifecycleObserver and tests",
+    "date": "2014-11-23T19:05:16Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/0c3cbe97b9df0ac0de2629a2e7a06d7ebc756c80",
+    "details": {
+      "sha": "df4e0f0b0261b9097bd8ef8ba9403b687e6d9d77",
+      "filename": "rxandroid/src/main/java/rx/android/lifecycle/LifecycleObservable.java",
+      "status": "modified",
+      "additions": 51,
+      "deletions": 36,
+      "changes": 87,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/0c3cbe97b9df0ac0de2629a2e7a06d7ebc756c80/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Flifecycle%2FLifecycleObservable.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/0c3cbe97b9df0ac0de2629a2e7a06d7ebc756c80/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Flifecycle%2FLifecycleObservable.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Flifecycle%2FLifecycleObservable.java?ref=0c3cbe97b9df0ac0de2629a2e7a06d7ebc756c80",
+      "patch": "@@ -127,22 +127,32 @@ public Boolean call(Boolean shouldComplete) {\n             new Func1<LifecycleEvent, LifecycleEvent>() {\n                 @Override\n                 public LifecycleEvent call(LifecycleEvent lastEvent) {\n-                    if (lastEvent != null) {\n-                        switch (lastEvent) {\n-                            case CREATE:\n-                                return LifecycleEvent.DESTROY;\n-                            case START:\n-                                return LifecycleEvent.STOP;\n-                            case RESUME:\n-                                return LifecycleEvent.PAUSE;\n-                            case PAUSE:\n-                                return LifecycleEvent.STOP;\n-                            case STOP:\n-                                return LifecycleEvent.DESTROY;\n-                        }\n+                    if (lastEvent == null) {\n+                        throw new NullPointerException(\"Cannot bind to null LifecycleEvent.\");\n                     }\n \n-                    throw new IllegalStateException(\"Cannot bind to Activity lifecycle when outside of it.\");\n+                    switch (lastEvent) {\n+                        case CREATE:\n+                            return LifecycleEvent.DESTROY;\n+                        case START:\n+                            return LifecycleEvent.STOP;\n+                        case RESUME:\n+                            return LifecycleEvent.PAUSE;\n+                        case PAUSE:\n+                            return LifecycleEvent.STOP;\n+                        case STOP:\n+                            return LifecycleEvent.DESTROY;\n+                        case DESTROY:\n+                            throw new IllegalStateException(\"Cannot bind to Activity lifecycle when outside of it.\");\n+                        case ATTACH:\n+                        case CREATE_VIEW:\n+                        case DESTROY_VIEW:\n+                        case DETACH:\n+                            throw new IllegalStateException(\"Cannot bind to \" + lastEvent + \" for an Activity.\");\n+                        default:\n+                            throw new UnsupportedOperationException(\"Binding to LifecycleEvent \" + lastEvent\n+                                    + \" not yet implemented\");\n+                    }\n                 }\n             };\n \n@@ -151,30 +161,35 @@ public LifecycleEvent call(LifecycleEvent lastEvent) {\n             new Func1<LifecycleEvent, LifecycleEvent>() {\n                 @Override\n                 public LifecycleEvent call(LifecycleEvent lastEvent) {\n-                    if (lastEvent != null) {\n-                        switch (lastEvent) {\n-                            case ATTACH:\n-                                return LifecycleEvent.DETACH;\n-                            case CREATE:\n-                                return LifecycleEvent.DESTROY;\n-                            case CREATE_VIEW:\n-                                return LifecycleEvent.DESTROY_VIEW;\n-                            case START:\n-                                return LifecycleEvent.STOP;\n-                            case RESUME:\n-                                return LifecycleEvent.PAUSE;\n-                            case PAUSE:\n-                                return LifecycleEvent.STOP;\n-                            case STOP:\n-                                return LifecycleEvent.DESTROY_VIEW;\n-                            case DESTROY_VIEW:\n-                                return LifecycleEvent.DESTROY;\n-                            case DESTROY:\n-                                return LifecycleEvent.DETACH;\n-                        }\n+                    if (lastEvent == null) {\n+                        throw new NullPointerException(\"Cannot bind to null LifecycleEvent.\");\n                     }\n \n-                    throw new IllegalStateException(\"Cannot bind to Fragment lifecycle when outside of it.\");\n+                    switch (lastEvent) {\n+                        case ATTACH:\n+                            return LifecycleEvent.DETACH;\n+                        case CREATE:\n+                            return LifecycleEvent.DESTROY;\n+                        case CREATE_VIEW:\n+                            return LifecycleEvent.DESTROY_VIEW;\n+                        case START:\n+                            return LifecycleEvent.STOP;\n+                        case RESUME:\n+                            return LifecycleEvent.PAUSE;\n+                        case PAUSE:\n+                            return LifecycleEvent.STOP;\n+                        case STOP:\n+                            return LifecycleEvent.DESTROY_VIEW;\n+                        case DESTROY_VIEW:\n+                            return LifecycleEvent.DESTROY;\n+                        case DESTROY:\n+                            return LifecycleEvent.DETACH;\n+                        case DETACH:\n+                            throw new IllegalStateException(\"Cannot bind to Fragment lifecycle when outside of it.\");\n+                        default:\n+                            throw new UnsupportedOperationException(\"Binding to LifecycleEvent \" + lastEvent\n+                                    + \" not yet implemented\");\n+                    }\n                 }\n             };\n }",
+      "parent_sha": "047a7e97ada68f2dafe47fdcc8795f34ac412176"
+    }
+  },
+  {
+    "oid": "8b7c07bfacb48fbf0f02a2f2cadc67a5fb36bb12",
+    "message": "fixup! Added OperatorSubscribeUntil and tests",
+    "date": "2014-11-23T22:55:38Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/8b7c07bfacb48fbf0f02a2f2cadc67a5fb36bb12",
+    "details": {
+      "sha": "b7c1493868c86a9b4d66aae9e96fe6440f99dcf6",
+      "filename": "rxandroid/src/test/java/rx/android/lifecycle/OperatorSubscribeUntilTest.java",
+      "status": "modified",
+      "additions": 27,
+      "deletions": 7,
+      "changes": 34,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/8b7c07bfacb48fbf0f02a2f2cadc67a5fb36bb12/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2Flifecycle%2FOperatorSubscribeUntilTest.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/8b7c07bfacb48fbf0f02a2f2cadc67a5fb36bb12/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2Flifecycle%2FOperatorSubscribeUntilTest.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2Flifecycle%2FOperatorSubscribeUntilTest.java?ref=8b7c07bfacb48fbf0f02a2f2cadc67a5fb36bb12",
+      "patch": "@@ -24,13 +24,13 @@\n import org.robolectric.annotation.Config;\n import rx.Observable;\n import rx.Subscriber;\n+import rx.Subscription;\n import rx.observers.TestSubscriber;\n \n import static org.junit.Assert.assertFalse;\n+import static org.junit.Assert.assertTrue;\n import static org.mockito.Matchers.any;\n-import static org.mockito.Mockito.never;\n-import static org.mockito.Mockito.verify;\n-import static org.mockito.Mockito.verifyZeroInteractions;\n+import static org.mockito.Mockito.*;\n \n @RunWith(RobolectricTestRunner.class)\n @Config(manifest = Config.NONE)\n@@ -45,14 +45,34 @@ public void setup() {\n     }\n \n     @Test\n-    public void testDoesNotComplete() {\n-        Observable.never()\n-                .lift(new OperatorSubscribeUntil<Object, String>(Observable.just(\"Single Item\")))\n+    public void testSourceUnsubscribesOnNext() {\n+        Subscription subscription = Observable.never()\n+                .lift(new OperatorSubscribeUntil<Object, Object>(Observable.just(new Object())))\n                 .subscribe(subscriber);\n \n         verify(subscriber, never()).onNext(any());\n-        verify(subscriber, never()).onError(any(Throwable.class));\n+        assertTrue(subscription.isUnsubscribed());\n+    }\n+\n+    @Test\n+    public void testSourceUnsubscribesOnComplete() {\n+        Subscription subscription = Observable.never()\n+                .lift(new OperatorSubscribeUntil<Object, Object>(Observable.empty()))\n+                .subscribe(subscriber);\n+\n         verify(subscriber, never()).onCompleted();\n+        assertTrue(subscription.isUnsubscribed());\n+    }\n+\n+    @Test\n+    public void testSourceReceivesExceptions() {\n+        Exception exception = new RuntimeException();\n+        Subscription subscription = Observable.never()\n+                .lift(new OperatorSubscribeUntil<Object, String>(Observable.<String>error(exception)))\n+                .subscribe(subscriber);\n+\n+        verify(subscriber, atLeastOnce()).onError(exception);\n+        assertTrue(subscription.isUnsubscribed());\n     }\n \n }",
+      "parent_sha": "0c3cbe97b9df0ac0de2629a2e7a06d7ebc756c80"
+    }
+  },
+  {
+    "oid": "c5504c0ea94bf00c660638628be12e5934eaeddb",
+    "message": "Add Rx utilities to ReactiveDialog",
+    "date": "2014-12-02T18:00:27Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/c5504c0ea94bf00c660638628be12e5934eaeddb",
+    "details": {
+      "sha": "9273383e7875763228bf936f81837b0d6d8f5919",
+      "filename": "rxandroid-framework/src/main/java/rx/android/app/ReactiveDialog.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/c5504c0ea94bf00c660638628be12e5934eaeddb/rxandroid-framework%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fapp%2FReactiveDialog.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/c5504c0ea94bf00c660638628be12e5934eaeddb/rxandroid-framework%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fapp%2FReactiveDialog.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid-framework%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fapp%2FReactiveDialog.java?ref=c5504c0ea94bf00c660638628be12e5934eaeddb",
+      "patch": "@@ -30,7 +30,7 @@\n  * @param <T> The type of data expected as return value from the fragment, can be boolean for confirmation dialogs,\n  *            or more complex for data input dialogs.\n  */\n-public class ReactiveDialog<T> extends DialogFragment {\n+public class ReactiveDialog<T> extends RxDialogFragment {\n \n     private static final String REACTIVE_DIALOG_KEY = \"REACTIVE_DIALOG_KEY\";\n ",
+      "parent_sha": "c22fc9a83ddbd3c53ad785df5e6fdf70ef5bd71d"
+    }
+  },
+  {
+    "oid": "3dc973be7597de5000d307ee9380edb1870989c1",
+    "message": "A style fix following #88",
+    "date": "2014-11-26T14:56:53Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/3dc973be7597de5000d307ee9380edb1870989c1",
+    "details": {
+      "sha": "07cea712b3e3a91feadc4c3d9219102542dd620c",
+      "filename": "rxandroid/src/test/java/rx/android/TestUtil.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/3dc973be7597de5000d307ee9380edb1870989c1/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2FTestUtil.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/3dc973be7597de5000d307ee9380edb1870989c1/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2FTestUtil.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2FTestUtil.java?ref=3dc973be7597de5000d307ee9380edb1870989c1",
+      "patch": "@@ -29,7 +29,7 @@ private TestUtil() {\n         throw new AssertionError(\"No instances\");\n     }\n \n-    static public final String STRING_EXPECTATION = \"Hello\";\n+    public static final String STRING_EXPECTATION = \"Hello\";\n \n     public static View createView() {\n         return new View(Robolectric.application);",
+      "parent_sha": "518b0cc97382fc76f44e55034aeac0a0c04aa3d8"
+    }
+  },
+  {
+    "oid": "047a7e97ada68f2dafe47fdcc8795f34ac412176",
+    "message": "fixup! Added OperatorSubscribeUntil and tests",
+    "date": "2014-11-23T18:57:21Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/047a7e97ada68f2dafe47fdcc8795f34ac412176",
+    "details": {
+      "sha": "b7d9007449e48d8a96269ad6de998b59fafd77cb",
+      "filename": "rxandroid/src/test/java/rx/android/lifecycle/OperatorSubscribeUntilTest.java",
+      "status": "modified",
+      "additions": 17,
+      "deletions": 29,
+      "changes": 46,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/047a7e97ada68f2dafe47fdcc8795f34ac412176/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2Flifecycle%2FOperatorSubscribeUntilTest.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/047a7e97ada68f2dafe47fdcc8795f34ac412176/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2Flifecycle%2FOperatorSubscribeUntilTest.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2Flifecycle%2FOperatorSubscribeUntilTest.java?ref=047a7e97ada68f2dafe47fdcc8795f34ac412176",
+      "patch": "@@ -17,54 +17,42 @@\n import org.junit.Before;\n import org.junit.Test;\n import org.junit.runner.RunWith;\n+import org.mockito.Mock;\n+import org.mockito.MockitoAnnotations;\n+import org.mockito.Spy;\n import org.robolectric.RobolectricTestRunner;\n import org.robolectric.annotation.Config;\n import rx.Observable;\n import rx.Subscriber;\n-import rx.Subscription;\n-import rx.functions.Action1;\n-import rx.subjects.BehaviorSubject;\n+import rx.observers.TestSubscriber;\n \n import static org.junit.Assert.assertFalse;\n-import static org.junit.Assert.assertTrue;\n+import static org.mockito.Matchers.any;\n+import static org.mockito.Mockito.never;\n+import static org.mockito.Mockito.verify;\n+import static org.mockito.Mockito.verifyZeroInteractions;\n \n @RunWith(RobolectricTestRunner.class)\n @Config(manifest = Config.NONE)\n public class OperatorSubscribeUntilTest {\n \n-    private Observable<Object> observable;\n-    private Subscriber<Object> subscriber;\n-\n-    // RxJava tends to swallow fail(); instead just use a subscriber to tell if onComplete was called\n-    boolean onCompleteCalled;\n+    @Spy\n+    private Subscriber<Object> subscriber = new TestSubscriber<Object>();\n \n     @Before\n     public void setup() {\n-        observable = Observable.never();\n-        subscriber = new Subscriber<Object>() {\n-            @Override\n-            public void onCompleted() {\n-                onCompleteCalled = true;\n-            }\n-\n-            @Override\n-            public void onError(Throwable e) {\n-\n-            }\n-\n-            @Override\n-            public void onNext(Object o) {\n-\n-            }\n-        };\n-        onCompleteCalled = false;\n+        MockitoAnnotations.initMocks(this);\n     }\n \n     @Test\n     public void testDoesNotComplete() {\n-        observable.lift(new OperatorSubscribeUntil<Object, String>(Observable.just(\"Single Item\")))\n+        Observable.never()\n+                .lift(new OperatorSubscribeUntil<Object, String>(Observable.just(\"Single Item\")))\n                 .subscribe(subscriber);\n-        assertFalse(onCompleteCalled);\n+\n+        verify(subscriber, never()).onNext(any());\n+        verify(subscriber, never()).onError(any(Throwable.class));\n+        verify(subscriber, never()).onCompleted();\n     }\n \n }",
+      "parent_sha": "0c6b60f3f43f7c47f2e51a1d1b63cfb0d7fa80fd"
+    }
+  },
+  {
+    "oid": "35c7008af19f1cb92abd32c172d75cc07a013496",
+    "message": "Fix javadoc typo",
+    "date": "2015-12-09T21:09:18Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/35c7008af19f1cb92abd32c172d75cc07a013496",
+    "details": {
+      "sha": "c82f7605210f7036280f1d779ca317a24145e6ea",
+      "filename": "rxandroid/src/main/java/rx/android/MainThreadSubscription.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/35c7008af19f1cb92abd32c172d75cc07a013496/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2FMainThreadSubscription.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/35c7008af19f1cb92abd32c172d75cc07a013496/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2FMainThreadSubscription.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2FMainThreadSubscription.java?ref=35c7008af19f1cb92abd32c172d75cc07a013496",
+      "patch": "@@ -36,7 +36,7 @@\n  *\n  *   // TODO set up behavior\n  *\n- *   subscriber.add(new MainThreadSubscriber() {\n+ *   subscriber.add(new MainThreadSubscription() {\n  *     &#064;Override public void onUnsubscribe() {\n  *       // TODO undo behavior\n  *     }",
+      "parent_sha": "468dcee4aa2b0d64156ff62e8a4d31b0169a2048"
+    }
+  },
+  {
+    "oid": "fa2beae0f209cfc97a42ac13f23b5ce4dc80c86c",
+    "message": "Reduce duplication by making \"schedule now\" the special case\n\nForwards to \"schedule later\" with delay of 0 now.",
+    "date": "2013-08-14T10:01:09Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/fa2beae0f209cfc97a42ac13f23b5ce4dc80c86c",
+    "details": {
+      "sha": "bcf2d5066e9a99a1aa0a4dce5597c5831d0bd1df",
+      "filename": "src/main/java/rx/concurrency/HandlerThreadScheduler.java",
+      "status": "modified",
+      "additions": 9,
+      "deletions": 40,
+      "changes": 49,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/fa2beae0f209cfc97a42ac13f23b5ce4dc80c86c/src%2Fmain%2Fjava%2Frx%2Fconcurrency%2FHandlerThreadScheduler.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/fa2beae0f209cfc97a42ac13f23b5ce4dc80c86c/src%2Fmain%2Fjava%2Frx%2Fconcurrency%2FHandlerThreadScheduler.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Fconcurrency%2FHandlerThreadScheduler.java?ref=fa2beae0f209cfc97a42ac13f23b5ce4dc80c86c",
+      "patch": "@@ -12,11 +12,8 @@\n \n import java.util.concurrent.TimeUnit;\n \n-import static org.mockito.Matchers.any;\n-import static org.mockito.Matchers.anyLong;\n import static org.mockito.Matchers.eq;\n import static org.mockito.Mockito.mock;\n-import static org.mockito.Mockito.never;\n import static org.mockito.Mockito.verify;\n \n /**\n@@ -32,40 +29,27 @@ public HandlerThreadScheduler(Handler handler) {\n \n     @Override\n     public <T> Subscription schedule(final T state, final Func2<Scheduler, T, Subscription> action) {\n+        return schedule(state, action, 0L, TimeUnit.MILLISECONDS);\n+    }\n+\n+    @Override\n+    public <T> Subscription schedule(final T state, final Func2<Scheduler, T, Subscription> action, long delayTime, TimeUnit unit) {\n         final AtomicObservableSubscription subscription = new AtomicObservableSubscription();\n         final Scheduler _scheduler = this;\n-\n-        handler.post(new Runnable() {\n+        handler.postDelayed(new Runnable() {\n             @Override\n             public void run() {\n                 subscription.wrap(action.call(_scheduler, state));\n             }\n-        });\n+        }, unit.toMillis(delayTime));\n         return subscription;\n     }\n \n-    @Override\n-    public <T> Subscription schedule(final T state, final Func2<Scheduler, T, Subscription> action, long delayTime, TimeUnit unit) {\n-        if (delayTime == 0) {\n-            return schedule(state, action);\n-        } else {\n-            final AtomicObservableSubscription subscription = new AtomicObservableSubscription();\n-            final Scheduler _scheduler = this;\n-            handler.postDelayed(new Runnable() {\n-                @Override\n-                public void run() {\n-                    subscription.wrap(action.call(_scheduler, state));\n-                }\n-            }, unit.toMillis(delayTime));\n-            return subscription;\n-        }\n-    }\n-\n     @RunWith(AndroidTestRunner.class)\n     public static final class UnitTest {\n \n         @Test\n-        public void shouldScheduleActionOnHandlerThread() {\n+        public void shouldScheduleImmediateActionOnHandlerThread() {\n             final Handler handler = mock(Handler.class);\n             final Object state = new Object();\n             final Func2<Scheduler, Object, Subscription> action = mock(Func2.class);\n@@ -75,7 +59,7 @@ public void shouldScheduleActionOnHandlerThread() {\n \n             // verify that we post to the given Handler\n             ArgumentCaptor<Runnable> runnable = ArgumentCaptor.forClass(Runnable.class);\n-            verify(handler).post(runnable.capture());\n+            verify(handler).postDelayed(runnable.capture(), eq(0L));\n \n             // verify that the given handler delegates to our action\n             runnable.getValue().run();\n@@ -99,21 +83,6 @@ public void shouldScheduleDelayedActionOnHandlerThread() {\n             runnable.getValue().run();\n             verify(action).call(scheduler, state);\n         }\n-\n-        @Test\n-        public void scheduleDelayedActionShouldForwardToNormalPostIfDelayIsZero() {\n-            final Handler handler = mock(Handler.class);\n-            final Object state = new Object();\n-            final Func2<Scheduler, Object, Subscription> action = mock(Func2.class);\n-\n-            Scheduler scheduler = new HandlerThreadScheduler(handler);\n-            scheduler.schedule(state, action, 0L, TimeUnit.SECONDS);\n-\n-            // verify that we post to the given Handler\n-            verify(handler).post(any(Runnable.class));\n-            verify(handler, never()).postDelayed(any(Runnable.class), anyLong());\n-        }\n-\n     }\n }\n ",
+      "parent_sha": "5e5dd4b723d6b75ee16391b854780bfb00f0c71f"
+    }
+  },
+  {
+    "oid": "5dc34ee449081d0ce4626d37a453469a2b9408f2",
+    "message": "Remove superfluous negative check.\n\nHandler does this check already since 2009 when AOSP was imported to git (aka forever).",
+    "date": "2018-01-03T03:09:56Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/5dc34ee449081d0ce4626d37a453469a2b9408f2",
+    "details": {
+      "sha": "c4c20e103c4dffa9622fdcb63375224d70725ee5",
+      "filename": "rxandroid/src/main/java/io/reactivex/android/schedulers/HandlerScheduler.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/5dc34ee449081d0ce4626d37a453469a2b9408f2/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fschedulers%2FHandlerScheduler.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/5dc34ee449081d0ce4626d37a453469a2b9408f2/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fschedulers%2FHandlerScheduler.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fschedulers%2FHandlerScheduler.java?ref=5dc34ee449081d0ce4626d37a453469a2b9408f2",
+      "patch": "@@ -69,7 +69,7 @@ public Disposable schedule(Runnable run, long delay, TimeUnit unit) {\n             Message message = Message.obtain(handler, scheduled);\n             message.obj = this; // Used as token for batch disposal of this worker's runnables.\n \n-            handler.sendMessageDelayed(message, Math.max(0L, unit.toMillis(delay)));\n+            handler.sendMessageDelayed(message, unit.toMillis(delay));\n \n             // Re-check disposed state for removing in case we were racing a call to dispose().\n             if (disposed) {",
+      "parent_sha": "ffac4af4425d76b27406755ad1cc64f57bc5bcdc"
+    }
+  },
+  {
+    "oid": "febe37dcddf068bff3fab9bba68838712411db92",
+    "message": "fixup! Added LifecycleObserver and tests",
+    "date": "2014-11-24T14:38:15Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/febe37dcddf068bff3fab9bba68838712411db92",
+    "details": {
+      "sha": "00951580b74e0c7e29d6cbeafb6f6a3f43a6e9fd",
+      "filename": "rxandroid/src/main/java/rx/android/lifecycle/LifecycleObservable.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 7,
+      "changes": 14,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/febe37dcddf068bff3fab9bba68838712411db92/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Flifecycle%2FLifecycleObservable.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/febe37dcddf068bff3fab9bba68838712411db92/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Flifecycle%2FLifecycleObservable.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Flifecycle%2FLifecycleObservable.java?ref=febe37dcddf068bff3fab9bba68838712411db92",
+      "patch": "@@ -27,11 +27,11 @@ private LifecycleObservable() {\n     /**\n      * Binds the given source to a lifecycle.\n      * <p/>\n-     * When the lifecycle event occurs, the source will cease to receive any notifications.\n+     * When the lifecycle event occurs, the source will cease to emit any notifications.\n      *\n      * @param lifecycle the lifecycle sequence\n      * @param source    the source sequence\n-     * @param event     the event which should conclude notifications to the source\n+     * @param event     the event which should conclude notifications from the source\n      */\n     public static <T> Observable<T> bindUntilLifecycleEvent(Observable<LifecycleEvent> lifecycle,\n                                                             Observable<T> source,\n@@ -55,8 +55,8 @@ public Boolean call(LifecycleEvent lifecycleEvent) {\n     /**\n      * Binds the given source to an Activity lifecycle.\n      * <p/>\n-     * This helper automatically determines (based on the lifecycle sequence itself) when it should\n-     * stop sending notifications to the source. In the case that the lifecycle sequence is in the\n+     * This helper automatically determines (based on the lifecycle sequence itself) when the source\n+     * should stop emitting items. In the case that the lifecycle sequence is in the\n      * creation phase (CREATE, START, etc) it will choose the equivalent destructive phase (DESTROY,\n      * STOP, etc). If used in the destructive phase, the notifications will cease at the next event;\n      * for example, if used in PAUSE, it will unsubscribe in STOP.\n@@ -74,8 +74,8 @@ public static <T> Observable<T> bindActivityLifecycle(Observable<LifecycleEvent>\n     /**\n      * Binds the given source to a Fragment lifecycle.\n      * <p/>\n-     * This helper automatically determines (based on the lifecycle sequence itself) when it should\n-     * stop sending notifications to the source. In the case that the lifecycle sequence is in the\n+     * This helper automatically determines (based on the lifecycle sequence itself) when the source\n+     * should stop emitting items. In the case that the lifecycle sequence is in the\n      * creation phase (CREATE, START, etc) it will choose the equivalent destructive phase (DESTROY,\n      * STOP, etc). If used in the destructive phase, the notifications will cease at the next event;\n      * for example, if used in PAUSE, it will unsubscribe in STOP.\n@@ -108,7 +108,7 @@ private static <T> Observable<T> bindLifecycle(Observable<LifecycleEvent> lifecy\n                                 sharedLifecycle.skip(1),\n                                 new Func2<LifecycleEvent, LifecycleEvent, Boolean>() {\n                                     @Override\n-                                    public Boolean call(LifecycleEvent lifecycleEvent, LifecycleEvent bindUntilEvent) {\n+                                    public Boolean call(LifecycleEvent bindUntilEvent, LifecycleEvent lifecycleEvent) {\n                                         return lifecycleEvent == bindUntilEvent;\n                                     }\n                                 })",
+      "parent_sha": "8b7c07bfacb48fbf0f02a2f2cadc67a5fb36bb12"
+    }
+  },
+  {
+    "oid": "4ee7528efcdb58c5f28cea2907afe4b63928ae2a",
+    "message": "Fix javadoc typos. emmit -> emit(s)\n\nSigned-off-by: Eddie Ringle <eddie@ringle.io>",
+    "date": "2014-12-13T00:31:36Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/4ee7528efcdb58c5f28cea2907afe4b63928ae2a",
+    "details": {
+      "sha": "747354b3ebce347b19eeabd4d38160db00f3ca75",
+      "filename": "rxandroid/src/main/java/rx/android/content/ContentObservable.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 3,
+      "changes": 6,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/4ee7528efcdb58c5f28cea2907afe4b63928ae2a/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fcontent%2FContentObservable.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/4ee7528efcdb58c5f28cea2907afe4b63928ae2a/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fcontent%2FContentObservable.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fcontent%2FContentObservable.java?ref=4ee7528efcdb58c5f28cea2907afe4b63928ae2a",
+      "patch": "@@ -28,7 +28,7 @@ private ContentObservable() {\n     }\n \n     /**\n-     * Create Observable that wraps BroadcastReceiver and emmit received intents.\n+     * Create Observable that wraps BroadcastReceiver and emits received intents.\n      *\n      * @param filter Selects the Intent broadcasts to be received.\n      */\n@@ -37,7 +37,7 @@ public static Observable<Intent> fromBroadcast(Context context, IntentFilter fil\n     }\n \n     /**\n-     * Create Observable that wraps BroadcastReceiver and emmit received intents.\n+     * Create Observable that wraps BroadcastReceiver and emits received intents.\n      *\n      * @param filter Selects the Intent broadcasts to be received.\n      * @param broadcastPermission String naming a permissions that a\n@@ -52,7 +52,7 @@ public static Observable<Intent> fromBroadcast(Context context, IntentFilter fil\n \n     /**\n      * Create Observable that wraps BroadcastReceiver and connects to LocalBroadcastManager\n-     * to emmit received intents.\n+     * to emit received intents.\n      *\n      * @param filter Selects the Intent broadcasts to be received.\n      */",
+      "parent_sha": "f5edaf16e8bd7772e4acc4314d2a16e30fad87df"
+    }
+  },
+  {
+    "oid": "c4ef6b0acc6d8fedbf90a06bcdc7112d59442bc3",
+    "message": "Remove handler callbacks before setting disposed.\n\nThis change ensures that you can never observe `disposed` being set to `true` inside `run()`. `removeCallbacks` and the mechanism by which a `Looper` retrieves the head of the message queue are both governed by a lock. When `dispose()` is called on a non-main thread taking this lock is the race which determines cancelation and **not** the boolean.\r\n\r\nInclude a comment emphasizing that the boolean is tracked solely for the purposes of accurate `isDisposed()` reporting.",
+    "date": "2018-05-03T03:14:50Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/c4ef6b0acc6d8fedbf90a06bcdc7112d59442bc3",
+    "details": {
+      "sha": "6e2824ee597fd5ec74f3304f7b278c5a75c1492f",
+      "filename": "rxandroid/src/main/java/io/reactivex/android/schedulers/HandlerScheduler.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/c4ef6b0acc6d8fedbf90a06bcdc7112d59442bc3/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fschedulers%2FHandlerScheduler.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/c4ef6b0acc6d8fedbf90a06bcdc7112d59442bc3/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fschedulers%2FHandlerScheduler.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fschedulers%2FHandlerScheduler.java?ref=c4ef6b0acc6d8fedbf90a06bcdc7112d59442bc3",
+      "patch": "@@ -96,7 +96,7 @@ private static final class ScheduledRunnable implements Runnable, Disposable {\n         private final Handler handler;\n         private final Runnable delegate;\n \n-        private volatile boolean disposed;\n+        private volatile boolean disposed; // Tracked solely for isDisposed().\n \n         ScheduledRunnable(Handler handler, Runnable delegate) {\n             this.handler = handler;\n@@ -114,8 +114,8 @@ public void run() {\n \n         @Override\n         public void dispose() {\n-            disposed = true;\n             handler.removeCallbacks(this);\n+            disposed = true;\n         }\n \n         @Override",
+      "parent_sha": "5cb239130dceab95797b7313b19f2d8e95407d8f"
+    }
+  },
+  {
+    "oid": "8f421bf80f15a0ad99aefcabde12f905fd11da34",
+    "message": "Remove isFinishing check when calling back to activities\n\nWe decided it's sufficient for the callback to be safe as long as the caller unsubscribes in onDestroy",
+    "date": "2013-10-14T08:26:44Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/8f421bf80f15a0ad99aefcabde12f905fd11da34",
+    "details": {
+      "sha": "ad363f79124cad26bec2356d81d2d13fa6cb37c3",
+      "filename": "src/main/java/rx/operators/OperationObserveFromAndroidComponent.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 45,
+      "changes": 50,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/8f421bf80f15a0ad99aefcabde12f905fd11da34/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/8f421bf80f15a0ad99aefcabde12f905fd11da34/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java?ref=8f421bf80f15a0ad99aefcabde12f905fd11da34",
+      "patch": "@@ -44,10 +44,10 @@ public static <T> Observable<T> observeFromAndroidComponent(Observable<T> source\n     }\n \n     public static <T> Observable<T> observeFromAndroidComponent(Observable<T> source, Activity activity) {\n-        return Observable.create(new OnSubscribeActivity<T>(source, activity));\n+        return Observable.create(new OnSubscribeBase<T, Activity>(source, activity));\n     }\n \n-    private static abstract class OnSubscribeBase<T, AndroidComponent> implements Observable.OnSubscribeFunc<T> {\n+    private static class OnSubscribeBase<T, AndroidComponent> implements Observable.OnSubscribeFunc<T> {\n \n         private static final String LOG_TAG = OperationObserveFromAndroidComponent.class.getSimpleName();\n \n@@ -68,7 +68,9 @@ private void log(String message) {\n             }\n         }\n \n-        protected abstract boolean isComponentValid(AndroidComponent component);\n+        protected boolean isComponentValid(AndroidComponent component) {\n+            return true;\n+        }\n \n         @Override\n         public Subscription onSubscribe(Observer<? super T> observer) {\n@@ -148,18 +150,6 @@ protected boolean isComponentValid(android.support.v4.app.Fragment fragment) {\n         }\n     }\n \n-    private static final class OnSubscribeActivity<T> extends OnSubscribeBase<T, Activity> {\n-\n-        private OnSubscribeActivity(Observable<T> source, Activity activity) {\n-            super(source, activity);\n-        }\n-\n-        @Override\n-        protected boolean isComponentValid(Activity activity) {\n-            return !activity.isFinishing();\n-        }\n-    }\n-\n     @RunWith(RobolectricTestRunner.class)\n     @Config(manifest = Config.NONE)\n     public static final class UnitTest {\n@@ -292,36 +282,6 @@ public void itDoesNotForwardOnErrorIfFragmentIsDetached() {\n             verify(mockObserver, never()).onError(any(Exception.class));\n         }\n \n-        @Test\n-        public void isDoesNotForwardOnNextOnCompletedSequenceIfActivityIsFinishing() {\n-            PublishSubject<Integer> source = PublishSubject.create();\n-            OperationObserveFromAndroidComponent.observeFromAndroidComponent(source, mockActivity).subscribe(mockObserver);\n-\n-            source.onNext(1);\n-\n-            when(mockActivity.isFinishing()).thenReturn(true);\n-            source.onNext(2);\n-            source.onNext(3);\n-            source.onCompleted();\n-\n-            verify(mockObserver).onNext(1);\n-            verify(mockObserver, never()).onCompleted();\n-        }\n-\n-        @Test\n-        public void itDoesNotForwardOnErrorIfActivityIsFinishing() {\n-            PublishSubject<Integer> source = PublishSubject.create();\n-            OperationObserveFromAndroidComponent.observeFromAndroidComponent(source, mockActivity).subscribe(mockObserver);\n-\n-            source.onNext(1);\n-\n-            when(mockActivity.isFinishing()).thenReturn(true);\n-            source.onError(new Exception());\n-\n-            verify(mockObserver).onNext(1);\n-            verify(mockObserver, never()).onError(any(Exception.class));\n-        }\n-\n         @Test\n         public void itUnsubscribesFromTheSourceSequence() {\n             Subscription underlying = mock(Subscription.class);",
+      "parent_sha": "936c68ef4934fd504ac75262069109acbddd3bf3"
+    }
+  },
+  {
+    "oid": "13092f7303d11cccb64a02eb24731faf629c7197",
+    "message": "Drop volatile in favor of failing fast if not subscribed from UI thread",
+    "date": "2013-10-14T08:14:25Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/13092f7303d11cccb64a02eb24731faf629c7197",
+    "details": {
+      "sha": "8d945fba516bb74eaeb6ee2e82612e8fc5602438",
+      "filename": "src/main/java/rx/operators/OperationObserveFromAndroidComponent.java",
+      "status": "modified",
+      "additions": 29,
+      "deletions": 2,
+      "changes": 31,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/13092f7303d11cccb64a02eb24731faf629c7197/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/13092f7303d11cccb64a02eb24731faf629c7197/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java?ref=13092f7303d11cccb64a02eb24731faf629c7197",
+      "patch": "@@ -24,9 +24,14 @@\n \n import android.app.Activity;\n import android.app.Fragment;\n+import android.os.Looper;\n import android.util.Log;\n \n import java.lang.reflect.Field;\n+import java.util.concurrent.Callable;\n+import java.util.concurrent.Executors;\n+import java.util.concurrent.Future;\n+import java.util.concurrent.TimeUnit;\n \n public class OperationObserveFromAndroidComponent {\n \n@@ -47,8 +52,8 @@ private static abstract class OnSubscribeBase<T, AndroidComponent> implements Ob\n         private static final String LOG_TAG = OperationObserveFromAndroidComponent.class.getSimpleName();\n \n         private final Observable<T> source;\n-        private volatile AndroidComponent componentRef;\n-        private volatile Observer<? super T> observerRef;\n+        private AndroidComponent componentRef;\n+        private Observer<? super T> observerRef;\n \n         private OnSubscribeBase(Observable<T> source, AndroidComponent component) {\n             this.source = source;\n@@ -65,6 +70,7 @@ private void log(String message) {\n \n         @Override\n         public Subscription onSubscribe(Observer<? super T> observer) {\n+            assertUiThread();\n             observerRef = observer;\n             final Subscription sourceSub = source.observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<T>() {\n                 @Override\n@@ -111,6 +117,12 @@ private void releaseReferences() {\n             observerRef = null;\n             componentRef = null;\n         }\n+\n+        private void assertUiThread() {\n+            if (Looper.getMainLooper() != Looper.myLooper()) {\n+                throw new IllegalStateException(\"Observers must subscribe from the main UI thread, but was \" + Thread.currentThread());\n+            }\n+        }\n     }\n \n     private static final class OnSubscribeFragment<T> extends OnSubscribeBase<T, android.app.Fragment> {\n@@ -171,6 +183,21 @@ public void setupMocks() {\n             when(mockFragment.isAdded()).thenReturn(true);\n         }\n \n+        @Test\n+        public void itThrowsIfObserverSubscribesFromBackgroundThread() throws Exception {\n+            final Future<Object> future = Executors.newSingleThreadExecutor().submit(new Callable<Object>() {\n+                @Override\n+                public Object call() throws Exception {\n+                    OperationObserveFromAndroidComponent.observeFromAndroidComponent(\n+                            mockObservable, mockFragment).subscribe(mockObserver);\n+                    return null;\n+                }\n+            });\n+            future.get(1, TimeUnit.SECONDS);\n+            verify(mockObserver).onError(any(IllegalStateException.class));\n+            verifyNoMoreInteractions(mockObserver);\n+        }\n+\n         @Test\n         public void itObservesTheSourceSequenceOnTheMainUIThread() {\n             OperationObserveFromAndroidComponent.observeFromAndroidComponent(mockObservable, mockFragment).subscribe(mockObserver);",
+      "parent_sha": "52b01f1ad897aaa7417ef40bbc91e1bbab24dafe"
+    }
+  },
+  {
+    "oid": "80c4d7133bfb0e2eed20641114be79098861f84d",
+    "message": "Remove creation of synthetic accessor method.",
+    "date": "2015-12-22T06:41:32Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/80c4d7133bfb0e2eed20641114be79098861f84d",
+    "details": {
+      "sha": "46d12f8de9356a6dac50aec164ace6967b24ff7d",
+      "filename": "rxandroid/src/main/java/rx/android/schedulers/HandlerScheduler.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/80c4d7133bfb0e2eed20641114be79098861f84d/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerScheduler.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/80c4d7133bfb0e2eed20641114be79098861f84d/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerScheduler.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerScheduler.java?ref=80c4d7133bfb0e2eed20641114be79098861f84d",
+      "patch": "@@ -45,7 +45,7 @@ public Worker createWorker() {\n \n     static class HandlerWorker extends Worker {\n \n-        private final Handler handler;\n+        final Handler handler;\n \n         private final CompositeSubscription compositeSubscription = new CompositeSubscription();\n ",
+      "parent_sha": "508eada444bb926ff826c662e754d3ce5b26fb2c"
+    }
+  },
+  {
+    "oid": "46ea1a046735fd49ad7632542d8eb780fca21d8c",
+    "message": "Make OnItemClickEvent class non-final",
+    "date": "2014-10-08T15:42:55Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/46ea1a046735fd49ad7632542d8eb780fca21d8c",
+    "details": {
+      "sha": "48de57a9beb73749b471cef0fcbb2d508dc387b0",
+      "filename": "src/main/java/rx/android/events/OnItemClickEvent.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/46ea1a046735fd49ad7632542d8eb780fca21d8c/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fevents%2FOnItemClickEvent.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/46ea1a046735fd49ad7632542d8eb780fca21d8c/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fevents%2FOnItemClickEvent.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fevents%2FOnItemClickEvent.java?ref=46ea1a046735fd49ad7632542d8eb780fca21d8c",
+      "patch": "@@ -4,7 +4,7 @@\n import android.widget.Adapter;\n import android.widget.AdapterView;\n \n-public final class OnItemClickEvent {\n+public class OnItemClickEvent {\n     public final AdapterView<?> parent;\n     public final View view;\n     public final int position;",
+      "parent_sha": "c26f2e29892858b788b300bd005e123495d02b86"
+    }
+  },
+  {
+    "oid": "8ab3ac147b4ad0c85c91459b20cbb52a8ca07650",
+    "message": "Renamed the log tag as it was too long",
+    "date": "2013-10-29T10:25:50Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/8ab3ac147b4ad0c85c91459b20cbb52a8ca07650",
+    "details": {
+      "sha": "a1aaff535440164b847e482cbd6aa6beddb50d96",
+      "filename": "src/main/java/rx/operators/OperationObserveFromAndroidComponent.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/8ab3ac147b4ad0c85c91459b20cbb52a8ca07650/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/8ab3ac147b4ad0c85c91459b20cbb52a8ca07650/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java?ref=8ab3ac147b4ad0c85c91459b20cbb52a8ca07650",
+      "patch": "@@ -49,7 +49,7 @@ public static <T> Observable<T> observeFromAndroidComponent(Observable<T> source\n \n     private static class OnSubscribeBase<T, AndroidComponent> implements Observable.OnSubscribeFunc<T> {\n \n-        private static final String LOG_TAG = OperationObserveFromAndroidComponent.class.getSimpleName();\n+        private static final String LOG_TAG = \"AndroidObserver\";\n \n         private final Observable<T> source;\n         private AndroidComponent componentRef;",
+      "parent_sha": "8f421bf80f15a0ad99aefcabde12f905fd11da34"
+    }
+  },
+  {
+    "oid": "3adab7f134965076987c4e17c947adc1b8c7c82c",
+    "message": "Adding ScheduledSubscription to parent in order to properly chain unsubscribe.\n\nSigned-off-by: David Marques <dpsmarques@gmail.com>",
+    "date": "2014-06-05T13:52:36Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/3adab7f134965076987c4e17c947adc1b8c7c82c",
+    "details": {
+      "sha": "fec2eb80df5b8fa4c4e161cf6eab81fea4bbae2f",
+      "filename": "src/main/java/rx/android/schedulers/HandlerThreadScheduler.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/3adab7f134965076987c4e17c947adc1b8c7c82c/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerThreadScheduler.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/3adab7f134965076987c4e17c947adc1b8c7c82c/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerThreadScheduler.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerThreadScheduler.java?ref=3adab7f134965076987c4e17c947adc1b8c7c82c",
+      "patch": "@@ -72,13 +72,14 @@ public boolean isUnsubscribed() {\n         @Override\n         public Subscription schedule(final Action0 action, long delayTime, TimeUnit unit) {\n             final ScheduledAction scheduledAction = new ScheduledAction(action);\n-            scheduledAction.addParent(mCompositeSubscription);\n             scheduledAction.add(Subscriptions.create(new Action0() {\n                 @Override\n                 public void call() {\n                     handler.removeCallbacks(scheduledAction);\n                 }\n             }));\n+            scheduledAction.addParent(mCompositeSubscription);\n+            mCompositeSubscription.add(scheduledAction);\n \n             handler.postDelayed(scheduledAction, unit.toMillis(delayTime));\n \n@@ -91,5 +92,4 @@ public Subscription schedule(final Action0 action) {\n         }\n \n     }\n-\n }",
+      "parent_sha": "354d0af78a671b90df34fac775de592e5c7f7c7e"
+    }
+  },
+  {
+    "oid": "9824509c328660289b5c794da3f45bea86f5055c",
+    "message": "Rewrite HandlerScheduler tests to be black box.\n\nPreviously we mocked a Handler and relied on verifying the correct methods were called. This meant that changing the implementation of HandlerScheduler meant changing the tests. This is prone to masking errors since it focuses on *what* the implementation does instead of *how* it behaves. All we care about is behavior, and all these new tests do is verify behavior.\n\nIt should be noted that these new tests (just like the old ones) are still reliant on the behavior of Robolectric's fake Looper.",
+    "date": "2016-04-22T20:33:41Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/9824509c328660289b5c794da3f45bea86f5055c",
+    "details": {
+      "sha": "4dc2161688a0f5a97ea65dbd273b26fd710df2ec",
+      "filename": "rxandroid/src/test/java/rx/android/schedulers/HandlerSchedulerTest.java",
+      "status": "modified",
+      "additions": 190,
+      "deletions": 132,
+      "changes": 322,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/9824509c328660289b5c794da3f45bea86f5055c/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerSchedulerTest.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/9824509c328660289b5c794da3f45bea86f5055c/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerSchedulerTest.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Ftest%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerSchedulerTest.java?ref=9824509c328660289b5c794da3f45bea86f5055c",
+      "patch": "@@ -14,230 +14,288 @@\n package rx.android.schedulers;\n \n import android.os.Handler;\n-import android.os.Message;\n+import android.os.Looper;\n+import java.lang.Thread.UncaughtExceptionHandler;\n+import java.util.concurrent.atomic.AtomicReference;\n import org.junit.After;\n import org.junit.Before;\n import org.junit.Test;\n import org.junit.runner.RunWith;\n-import org.mockito.ArgumentCaptor;\n import org.robolectric.RobolectricTestRunner;\n import org.robolectric.annotation.Config;\n-import org.robolectric.shadows.ShadowLooper;\n-\n-import rx.Observable;\n import rx.Scheduler;\n import rx.Scheduler.Worker;\n-import rx.Subscriber;\n import rx.Subscription;\n import rx.android.plugins.RxAndroidPlugins;\n import rx.android.plugins.RxAndroidSchedulersHook;\n-import rx.android.schedulers.HandlerScheduler.HandlerWorker;\n+import rx.exceptions.OnErrorNotImplementedException;\n import rx.functions.Action0;\n \n-import java.util.concurrent.TimeUnit;\n-import java.util.concurrent.atomic.AtomicBoolean;\n-import java.util.concurrent.atomic.AtomicReference;\n-\n import static java.util.concurrent.TimeUnit.MINUTES;\n-import static java.util.concurrent.TimeUnit.SECONDS;\n import static org.junit.Assert.assertEquals;\n+import static org.junit.Assert.assertFalse;\n import static org.junit.Assert.assertSame;\n import static org.junit.Assert.assertTrue;\n import static org.junit.Assert.fail;\n-import static org.mockito.Matchers.any;\n-import static org.mockito.Matchers.eq;\n import static org.mockito.Mockito.mock;\n import static org.mockito.Mockito.never;\n-import static org.mockito.Mockito.spy;\n import static org.mockito.Mockito.verify;\n+import static org.robolectric.shadows.ShadowLooper.idleMainLooper;\n+import static org.robolectric.shadows.ShadowLooper.pauseMainLooper;\n+import static org.robolectric.shadows.ShadowLooper.runUiThreadTasks;\n+import static org.robolectric.shadows.ShadowLooper.runUiThreadTasksIncludingDelayedTasks;\n+import static org.robolectric.shadows.ShadowLooper.unPauseMainLooper;\n \n @RunWith(RobolectricTestRunner.class)\n @Config(manifest=Config.NONE)\n public class HandlerSchedulerTest {\n \n-    @Before @After\n-    public void setUpAndTearDown() {\n+    @Before\n+    public void setUp() {\n         RxAndroidPlugins.getInstance().reset();\n+        pauseMainLooper(); // Take manual control of looper task queue.\n     }\n \n-    @Test\n-    public void fromNullThrows() {\n-        try {\n-            HandlerScheduler.from(null);\n-            fail();\n-        } catch (NullPointerException e) {\n-            assertEquals(\"handler == null\", e.getMessage());\n-        }\n+    @After\n+    public void tearDown() {\n+        RxAndroidPlugins.getInstance().reset();\n+        unPauseMainLooper();\n     }\n \n+    private Scheduler scheduler = HandlerScheduler.from(new Handler(Looper.getMainLooper()));\n+\n     @Test\n-    public void shouldScheduleImmediateActionOnHandlerThread() {\n-        Handler handler = mock(Handler.class);\n+    public void schedulePostsActionImmediately() {\n+        Worker worker = scheduler.createWorker();\n+\n         Action0 action = mock(Action0.class);\n+        worker.schedule(action);\n+\n+        runUiThreadTasks();\n+        verify(action).call();\n+    }\n+\n+    @Test\n+    public void scheduleWithDelayPostsActionWithDelay() {\n+        Worker worker = scheduler.createWorker();\n \n-        Scheduler scheduler = HandlerScheduler.from(handler);\n-        Worker inner = scheduler.createWorker();\n-        inner.schedule(action);\n+        Action0 action = mock(Action0.class);\n+        worker.schedule(action, 1, MINUTES);\n \n-        // verify that we post to the given Handler\n-        ArgumentCaptor<Message> message = ArgumentCaptor.forClass(Message.class);\n-        verify(handler).sendMessageDelayed(message.capture(), eq(0L));\n+        runUiThreadTasks();\n+        verify(action, never()).call();\n \n-        // verify that the given handler delegates to our action\n-        message.getValue().getCallback().run();\n+        idleMainLooper(MINUTES.toMillis(1));\n+        runUiThreadTasks();\n         verify(action).call();\n     }\n \n     @Test\n-    public void shouldScheduleDelayedActionOnHandlerThread() {\n-        Handler handler = mock(Handler.class);\n+    public void unsubscribeCancelsScheduledAction() {\n+        Worker worker = scheduler.createWorker();\n+\n         Action0 action = mock(Action0.class);\n+        Subscription subscription = worker.schedule(action);\n+        subscription.unsubscribe();\n+\n+        runUiThreadTasks();\n+        verify(action, never()).call();\n+    }\n \n-        Scheduler scheduler = HandlerScheduler.from(handler);\n-        Worker inner = scheduler.createWorker();\n-        inner.schedule(action, 1, SECONDS);\n+    @Test\n+    public void unsubscribeCancelsScheduledActionWithDelay() {\n+        Worker worker = scheduler.createWorker();\n \n-        // verify that we post to the given Handler\n-        ArgumentCaptor<Message> message = ArgumentCaptor.forClass(Message.class);\n-        verify(handler).sendMessageDelayed(message.capture(), eq(1000L));\n+        Action0 action = mock(Action0.class);\n+        Subscription subscription = worker.schedule(action, 1, MINUTES);\n+        subscription.unsubscribe();\n \n-        // verify that the given handler delegates to our action\n-        message.getValue().getCallback().run();\n-        verify(action).call();\n+        runUiThreadTasksIncludingDelayedTasks();\n+        verify(action, never()).call();\n     }\n \n     @Test\n-    public void shouldRemoveCallbacksFromHandlerWhenUnsubscribedSubscription() {\n-        Handler handler = spy(new Handler());\n-        Observable.OnSubscribe<Integer> onSubscribe = mock(Observable.OnSubscribe.class);\n-        Subscription subscription = Observable.create(onSubscribe)\n-                .subscribeOn(HandlerScheduler.from(handler))\n-                .subscribe();\n+    public void unsubscribeState() {\n+        Worker worker = scheduler.createWorker();\n \n-        verify(onSubscribe).call(any(Subscriber.class));\n+        Action0 action = mock(Action0.class);\n+        Subscription subscription = worker.schedule(action);\n+        assertFalse(subscription.isUnsubscribed());\n \n         subscription.unsubscribe();\n-\n-        verify(handler).removeCallbacksAndMessages(any(HandlerWorker.class));\n+        assertTrue(subscription.isUnsubscribed());\n     }\n \n     @Test\n-    public void shouldNotCallOnSubscribeWhenSubscriptionUnsubscribedBeforeDelay() {\n-        Observable.OnSubscribe<Integer> onSubscribe = mock(Observable.OnSubscribe.class);\n-        Handler handler = spy(new Handler());\n-\n-        final Worker worker = spy(new HandlerWorker(handler));\n-        Scheduler scheduler = new Scheduler() {\n-            @Override public Worker createWorker() {\n-                return worker;\n+    public void schedulerHookIsUsed() {\n+        final Action0 newAction = mock(Action0.class);\n+        final AtomicReference<Action0> actionRef = new AtomicReference<>();\n+        RxAndroidPlugins.getInstance().registerSchedulersHook(new RxAndroidSchedulersHook() {\n+            @Override public Action0 onSchedule(Action0 action) {\n+                actionRef.set(action); // Capture the original action.\n+                return newAction; // Return a different one.\n             }\n-        };\n+        });\n \n-        Subscription subscription = Observable.create(onSubscribe)\n-                .delaySubscription(1, MINUTES, scheduler)\n-                .subscribe();\n+        Worker worker = scheduler.createWorker();\n \n-        verify(worker).schedule(any(Action0.class), eq(1L), eq(MINUTES));\n-        verify(handler).sendMessageDelayed(any(Message.class), eq(MINUTES.toMillis(1)));\n+        Action0 action = mock(Action0.class);\n+        worker.schedule(action);\n \n-        subscription.unsubscribe();\n+        // Verify our action was passed to the schedulers hook.\n+        assertSame(action, actionRef.get());\n \n-        ShadowLooper.runUiThreadTasksIncludingDelayedTasks();\n+        // Verify the scheduled action was the one returned from the hook.\n+        runUiThreadTasks();\n+        verify(newAction).call();\n+        verify(action, never()).call();\n+    }\n \n-        verify(onSubscribe, never()).call(any(Subscriber.class));\n-        verify(handler).removeCallbacksAndMessages(worker);\n+    @Test\n+    public void workerUnsubscriptionPreventsScheduling() {\n+        Worker worker = scheduler.createWorker();\n+        worker.unsubscribe();\n+\n+        Action0 action = mock(Action0.class);\n+        worker.schedule(action);\n+\n+        runUiThreadTasks();\n+        verify(action, never()).call();\n     }\n \n     @Test\n-    public void handlerSchedulerCallsThroughToHook() {\n-        final AtomicReference<Action0> actionRef = new AtomicReference<Action0>();\n+    public void workerUnsubscriptionDuringSchedulingCancelsScheduledAction() {\n+        final Scheduler.Worker worker = scheduler.createWorker();\n+\n         RxAndroidPlugins.getInstance().registerSchedulersHook(new RxAndroidSchedulersHook() {\n             @Override public Action0 onSchedule(Action0 action) {\n-                actionRef.set(action);\n+                // Purposefully unsubscribe in an asinine point after the normal unsubscribed check.\n+                worker.unsubscribe();\n                 return super.onSchedule(action);\n             }\n         });\n \n-        Handler handler = mock(Handler.class);\n         Action0 action = mock(Action0.class);\n+        worker.schedule(action);\n+\n+        runUiThreadTasks();\n+        verify(action, never()).call();\n+    }\n \n-        Scheduler scheduler = HandlerScheduler.from(handler);\n-        Worker inner = scheduler.createWorker();\n-        inner.schedule(action);\n+    @Test\n+    public void workerUnsubscriptionCancelsScheduled() {\n+        Worker worker = scheduler.createWorker();\n \n-        // Verify the action was passed through the schedulers hook.\n-        assertSame(action, actionRef.get());\n+        Action0 action = mock(Action0.class);\n+        worker.schedule(action, 1, MINUTES);\n \n-        // Verify that we post to the given Handler.\n-        ArgumentCaptor<Message> message = ArgumentCaptor.forClass(Message.class);\n-        verify(handler).sendMessageDelayed(message.capture(), eq(0L));\n+        worker.unsubscribe();\n \n-        // Verify that the given handler delegates to our action.\n-        message.getValue().getCallback().run();\n-        verify(action).call();\n+        runUiThreadTasks();\n+        verify(action, never()).call();\n     }\n \n     @Test\n-    public void shouldNotScheduleAfterUnsubscribe() {\n-        Scheduler scheduler = HandlerScheduler.from(new Handler());\n-        Worker inner = scheduler.createWorker();\n-        inner.unsubscribe();\n-\n-        // Assert that work scheduled after unsubscribe() is never called\n-        final AtomicBoolean neverCalled = new AtomicBoolean(true);\n-        inner.schedule(new Action0() {\n-            @Override\n-            public void call() {\n-                neverCalled.set(false);\n-            }\n-        });\n-        assertTrue(neverCalled.get());\n+    public void workerUnsubscriptionDoesNotAffectOtherWorkers() {\n+        Scheduler.Worker workerA = scheduler.createWorker();\n+        Action0 actionA = mock(Action0.class);\n+        workerA.schedule(actionA, 1, MINUTES);\n+\n+        Scheduler.Worker workerB = scheduler.createWorker();\n+        Action0 actionB = mock(Action0.class);\n+        workerB.schedule(actionB, 1, MINUTES);\n+\n+        workerA.unsubscribe();\n+\n+        runUiThreadTasksIncludingDelayedTasks();\n+        verify(actionA, never()).call();\n+        verify(actionB).call();\n     }\n \n     @Test\n-    public void shouldNotScheduleAfterUnsubscribeRaceCondition() {\n-        Scheduler scheduler = HandlerScheduler.from(new Handler());\n-        final Scheduler.Worker inner = scheduler.createWorker();\n+    public void workerUnsubscribeState() {\n+        Worker worker = scheduler.createWorker();\n+        assertFalse(worker.isUnsubscribed());\n \n-        RxAndroidPlugins.getInstance().registerSchedulersHook(new RxAndroidSchedulersHook() {\n-            @Override public Action0 onSchedule(Action0 action) {\n-                // Purposefully unsubscribe in an asinine point,\n-                // after the normal isUnsubscribed() check\n-                inner.unsubscribe();\n-                return super.onSchedule(action);\n+        worker.unsubscribe();\n+        assertTrue(worker.isUnsubscribed());\n+    }\n+\n+    @Test public void throwingActionRoutedToHookAndThreadHandler() {\n+        // TODO Test hook as well. Requires https://github.com/ReactiveX/RxJava/pull/3820.\n+        \n+        Thread thread = Thread.currentThread();\n+        UncaughtExceptionHandler originalHandler = thread.getUncaughtExceptionHandler();\n+\n+        final AtomicReference<Throwable> throwableRef = new AtomicReference<>();\n+        thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {\n+            @Override public void uncaughtException(Thread thread, Throwable ex) {\n+                throwableRef.set(ex);\n             }\n         });\n \n-        final AtomicBoolean neverCalled = new AtomicBoolean(true);\n-        inner.schedule(new Action0() {\n-            @Override\n-            public void call() {\n-                neverCalled.set(false);\n+        Worker worker = scheduler.createWorker();\n+\n+        final NullPointerException npe = new NullPointerException();\n+        Action0 action = new Action0() {\n+            @Override public void call() {\n+                throw npe;\n             }\n-        }, 1, TimeUnit.MILLISECONDS);\n+        };\n+        worker.schedule(action);\n \n-        ShadowLooper.runUiThreadTasksIncludingDelayedTasks();\n+        runUiThreadTasks();\n+        Throwable throwable = throwableRef.get();\n+        assertTrue(throwable instanceof IllegalStateException);\n+        assertEquals(\"Fatal Exception thrown on Scheduler.Worker thread.\", throwable.getMessage());\n+        assertSame(npe, throwable.getCause());\n \n-        assertTrue(neverCalled.get());\n+        // Restore the original uncaught exception handler.\n+        thread.setUncaughtExceptionHandler(originalHandler);\n     }\n \n-    @Test\n-    public void schedulerWorkerCancellationDoesNotAffectOtherWorkers() {\n-        Scheduler scheduler = HandlerScheduler.from(new Handler());\n+    @Test public void actionMissingErrorHandlerRoutedToHookAndThreadHandler() {\n+        // TODO Test hook as well. Requires https://github.com/ReactiveX/RxJava/pull/3820.\n+\n+        Thread thread = Thread.currentThread();\n+        UncaughtExceptionHandler originalHandler = thread.getUncaughtExceptionHandler();\n \n-        Scheduler.Worker worker1 = scheduler.createWorker();\n-        Action0 action1 = mock(Action0.class);\n-        worker1.schedule(action1, 1, MINUTES);\n+        final AtomicReference<Throwable> throwableRef = new AtomicReference<>();\n+        thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {\n+            @Override public void uncaughtException(Thread thread, Throwable ex) {\n+                throwableRef.set(ex);\n+            }\n+        });\n \n-        Scheduler.Worker worker2 = scheduler.createWorker();\n-        Action0 action2 = mock(Action0.class);\n-        worker2.schedule(action2, 1, MINUTES);\n+        Worker worker = scheduler.createWorker();\n \n-        worker1.unsubscribe();\n+        final OnErrorNotImplementedException oenie =\n+            new OnErrorNotImplementedException(new NullPointerException());\n+        Action0 action = new Action0() {\n+            @Override public void call() {\n+                throw oenie;\n+            }\n+        };\n+        worker.schedule(action);\n \n-        ShadowLooper.runUiThreadTasksIncludingDelayedTasks();\n+        runUiThreadTasks();\n+        Throwable throwable = throwableRef.get();\n+        assertTrue(throwable instanceof IllegalStateException);\n+        assertEquals(\"Exception thrown on Scheduler.Worker thread. Add `onError` handling.\",\n+            throwable.getMessage());\n+        assertSame(oenie, throwable.getCause());\n \n-        verify(action1, never()).call();\n-        verify(action2).call();\n+        // Restore the original uncaught exception handler.\n+        thread.setUncaughtExceptionHandler(originalHandler);\n+    }\n+\n+    @Test\n+    public void fromNullThrows() {\n+        try {\n+            HandlerScheduler.from(null);\n+            fail();\n+        } catch (NullPointerException e) {\n+            assertEquals(\"handler == null\", e.getMessage());\n+        }\n     }\n }",
+      "parent_sha": "168f59fd2489d4dd4e77bc9aea4de4b83ad21963"
+    }
+  },
+  {
+    "oid": "402d01b67278a24dbd3ece83365eb9a7f2840297",
+    "message": "Correct rendered output of '@' in Javadoc.",
+    "date": "2016-05-02T03:25:18Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/402d01b67278a24dbd3ece83365eb9a7f2840297",
+    "details": {
+      "sha": "94fd53f615530a7b4e131d202e4520181d2467e2",
+      "filename": "rxandroid/src/main/java/rx/android/MainThreadSubscription.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/402d01b67278a24dbd3ece83365eb9a7f2840297/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2FMainThreadSubscription.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/402d01b67278a24dbd3ece83365eb9a7f2840297/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2FMainThreadSubscription.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Frx%2Fandroid%2FMainThreadSubscription.java?ref=402d01b67278a24dbd3ece83365eb9a7f2840297",
+      "patch": "@@ -30,7 +30,7 @@\n  * A {@link #verifyMainThread() convenience method} is also provided for validating whether code\n  * is being called on the main thread. Calls to this method along with instances of this class are\n  * commonly used when creating custom observables using the following pattern:\n- * <pre>{@code\n+ * <pre><code>\n  * &#064;Override public void call(Subscriber<? extends T> subscriber) {\n  *   MainThreadSubscription.verifyMainThread();\n  *\n@@ -42,7 +42,7 @@\n  *     }\n  *   });\n  * }\n- * }</pre>\n+ * </code></pre>\n  */\n public abstract class MainThreadSubscription implements Subscription {\n   /**",
+      "parent_sha": "57d7a4c484579e88b3a65eaaa1352d013b99cae9"
+    }
+  },
+  {
+    "oid": "9dfcc194d280ea16a9ef088bbb747300769250c9",
+    "message": "Guard the log calls",
+    "date": "2014-03-12T17:31:12Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/9dfcc194d280ea16a9ef088bbb747300769250c9",
+    "details": {
+      "sha": "986341396fca3a8ef8d2b8e4b577d9b8e9b0c141",
+      "filename": "src/main/java/rx/operators/OperatorWeakBinding.java",
+      "status": "modified",
+      "additions": 10,
+      "deletions": 4,
+      "changes": 14,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/9dfcc194d280ea16a9ef088bbb747300769250c9/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperatorWeakBinding.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/9dfcc194d280ea16a9ef088bbb747300769250c9/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperatorWeakBinding.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperatorWeakBinding.java?ref=9dfcc194d280ea16a9ef088bbb747300769250c9",
+      "patch": "@@ -87,18 +87,24 @@ private boolean shouldForwardNotification(Subscriber<? super T> sub) {\n \n         private void handleLostBinding(Subscriber<? super T> sub, String context) {\n             if (sub == null) {\n-                Log.d(LOG_TAG, \"subscriber gone; skipping \" + context);\n+                log(\"subscriber gone; skipping \" + context);\n             } else {\n                 final R r = boundRef.get();\n                 if (r != null) {\n                     // the predicate failed to validate\n-                    Log.d(LOG_TAG, \"bound component has become invalid; skipping \" + context);\n+                    log(\"bound component has become invalid; skipping \" + context);\n                 } else {\n-                    Log.d(LOG_TAG, \"bound component gone; skipping \" + context);\n+                    log(\"bound component gone; skipping \" + context);\n                 }\n             }\n-            Log.d(LOG_TAG, \"unsubscribing...\");\n+            log(\"unsubscribing...\");\n             unsubscribe();\n         }\n+\n+        private void log(String message) {\n+            if (Log.isLoggable(LOG_TAG, Log.DEBUG)) {\n+                Log.d(LOG_TAG, message);\n+            }\n+        }\n     }\n }",
+      "parent_sha": "d7cc2149114f0d66466b7886fd7351f68ace512b"
+    }
+  },
+  {
+    "oid": "6797179f2db50bca3440ef9c3350ad64d9b2d012",
+    "message": "Make Observable Methods Final\n\nTheir behavior is interrelated and co-dependent and should therefore not be over-written.\nObservable itself is not made final as there are some limited reasons for inheritance (such as GroupedObservable and Subjects).",
+    "date": "2014-01-15T07:36:48Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/6797179f2db50bca3440ef9c3350ad64d9b2d012",
+    "details": {
+      "sha": "3aa84f8199c0963298300619d1381771f2eeeca6",
+      "filename": "src/test/java/rx/android/operators/OperationObserveFromAndroidComponentTest.java",
+      "status": "modified",
+      "additions": 77,
+      "deletions": 37,
+      "changes": 114,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/6797179f2db50bca3440ef9c3350ad64d9b2d012/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperationObserveFromAndroidComponentTest.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/6797179f2db50bca3440ef9c3350ad64d9b2d012/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperationObserveFromAndroidComponentTest.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Ftest%2Fjava%2Frx%2Fandroid%2Foperators%2FOperationObserveFromAndroidComponentTest.java?ref=6797179f2db50bca3440ef9c3350ad64d9b2d012",
+      "patch": "@@ -1,55 +1,54 @@\n /**\n  * Copyright 2013 Netflix, Inc.\n- *\n+ * \n  * Licensed under the Apache License, Version 2.0 (the \"License\");\n  * you may not use this file except in compliance with the License.\n  * You may obtain a copy of the License at\n- *\n- *     http://www.apache.org/licenses/LICENSE-2.0\n- *\n+ * \n+ * http://www.apache.org/licenses/LICENSE-2.0\n+ * \n  * Unless required by applicable law or agreed to in writing, software\n  * distributed under the License is distributed on an \"AS IS\" BASIS,\n  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n  * See the License for the specific language governing permissions and\n  * limitations under the License.\n  */\n-package rx.operators;\n+package rx.android.operators;\n \n-import static org.mockito.Matchers.any;\n-import static org.mockito.Matchers.anyInt;\n-import static org.mockito.Mockito.mock;\n-import static org.mockito.Mockito.never;\n-import static org.mockito.Mockito.times;\n-import static org.mockito.Mockito.verify;\n-import static org.mockito.Mockito.verifyNoMoreInteractions;\n-import static org.mockito.Mockito.when;\n+import static org.junit.Assert.*;\n+import static org.mockito.Matchers.*;\n+import static org.mockito.Mockito.*;\n+\n+import java.lang.reflect.Constructor;\n+import java.lang.reflect.Field;\n+import java.lang.reflect.InvocationTargetException;\n+import java.util.concurrent.Callable;\n+import java.util.concurrent.Executors;\n+import java.util.concurrent.Future;\n+import java.util.concurrent.TimeUnit;\n+import java.util.concurrent.atomic.AtomicReference;\n \n import org.junit.Before;\n+import org.junit.Ignore;\n import org.junit.Test;\n import org.junit.runner.RunWith;\n-import static org.junit.Assert.*;\n import org.mockito.Mock;\n import org.mockito.MockitoAnnotations;\n import org.robolectric.RobolectricTestRunner;\n import org.robolectric.annotation.Config;\n \n import rx.Observable;\n+import rx.Observable.OnSubscribeFunc;\n import rx.Observer;\n import rx.Subscription;\n import rx.android.schedulers.AndroidSchedulers;\n+import rx.operators.OperationObserveFromAndroidComponent;\n+import rx.schedulers.Schedulers;\n import rx.subjects.PublishSubject;\n+import rx.subscriptions.BooleanSubscription;\n+import rx.util.functions.Action1;\n import android.app.Activity;\n import android.app.Fragment;\n-import android.os.Looper;\n-import android.util.Log;\n-\n-import java.lang.reflect.Field;\n-import java.lang.reflect.Constructor;\n-import java.lang.reflect.InvocationTargetException;\n-import java.util.concurrent.Callable;\n-import java.util.concurrent.Executors;\n-import java.util.concurrent.Future;\n-import java.util.concurrent.TimeUnit;\n \n @RunWith(RobolectricTestRunner.class)\n @Config(manifest = Config.NONE)\n@@ -64,9 +63,6 @@ public class OperationObserveFromAndroidComponentTest {\n     @Mock\n     private Activity mockActivity;\n \n-    @Mock\n-    private Observable<Integer> mockObservable;\n-\n     @Before\n     public void setupMocks() {\n         MockitoAnnotations.initMocks(this);\n@@ -75,11 +71,12 @@ public void setupMocks() {\n \n     @Test\n     public void itThrowsIfObserverSubscribesFromBackgroundThread() throws Exception {\n+        final Observable<Integer> testObservable = Observable.from(1);\n         final Future<Object> future = Executors.newSingleThreadExecutor().submit(new Callable<Object>() {\n             @Override\n             public Object call() throws Exception {\n                 OperationObserveFromAndroidComponent.observeFromAndroidComponent(\n-                        mockObservable, mockFragment).subscribe(mockObserver);\n+                        testObservable, mockFragment).subscribe(mockObserver);\n                 return null;\n             }\n         });\n@@ -88,10 +85,44 @@ public Object call() throws Exception {\n         verifyNoMoreInteractions(mockObserver);\n     }\n \n-    @Test\n+    // TODO needs to be fixed, see comments inline below\n+    @Ignore\n     public void itObservesTheSourceSequenceOnTheMainUIThread() {\n-        OperationObserveFromAndroidComponent.observeFromAndroidComponent(mockObservable, mockFragment).subscribe(mockObserver);\n-        verify(mockObservable).observeOn(AndroidSchedulers.mainThread());\n+        final Observable<Integer> testObservable = Observable.from(1)\n+                .observeOn(Schedulers.newThread())\n+                .doOnNext(new Action1<Integer>() {\n+\n+                    @Override\n+                    public void call(Integer t1) {\n+                        System.out.println(\"threadA: \" + Thread.currentThread());\n+                    }\n+                })\n+                .observeOn(AndroidSchedulers.mainThread())\n+                .doOnNext(new Action1<Integer>() {\n+\n+                    @Override\n+                    public void call(Integer t1) {\n+                        System.out.println(\"threadB: \" + Thread.currentThread());\n+                    }\n+                });\n+\n+        final AtomicReference<String> currentThreadName = new AtomicReference<String>();\n+        OperationObserveFromAndroidComponent.observeFromAndroidComponent(testObservable, mockFragment).subscribe(new Action1<Integer>() {\n+\n+            @Override\n+            public void call(Integer i) {\n+                System.out.println(\"threadV: \" + Thread.currentThread());\n+                currentThreadName.set(Thread.currentThread().getName());\n+            }\n+        });\n+\n+        assertEquals(\"androidMainThreadName???\", currentThreadName.get());\n+\n+        //TODO Can't use Mockito to validate Observable.observeOn as it is now marked as final.\n+        //     I can't figure out what to validate about the AndroidSchedulers.mainThread()\n+        //     as the code above doesn't print `threadB` so I can't see what Thread it should be.\n+        //     I was going to run it on NewThread then observeOn to AndroidThread and validate it jumped\n+        //     to the correct thread, but it doesn't do anything. Need to work with Android devs.\n     }\n \n     @Test\n@@ -147,7 +178,7 @@ public void itDropsOnErrorIfTargetComponentIsGone() throws Throwable {\n         verifyNoMoreInteractions(mockObserver);\n     }\n \n-    private Observable.OnSubscribeFunc<Integer> newOnSubscribeFragmentInstance(Observable<Integer> source, Fragment fragment) throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException  {\n+    private Observable.OnSubscribeFunc<Integer> newOnSubscribeFragmentInstance(Observable<Integer> source, Fragment fragment) throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {\n         final Class[] klasses = OperationObserveFromAndroidComponent.class.getDeclaredClasses();\n         Class onSubscribeFragmentClass = null;\n         for (Class klass : klasses) {\n@@ -200,14 +231,23 @@ public void itDoesNotForwardOnErrorIfFragmentIsDetached() {\n \n     @Test\n     public void itUnsubscribesFromTheSourceSequence() {\n-        Subscription underlying = mock(Subscription.class);\n-        when(mockObservable.observeOn(AndroidSchedulers.mainThread())).thenReturn(mockObservable);\n-        when(mockObservable.subscribe(any(Observer.class))).thenReturn(underlying);\n+        final BooleanSubscription s = new BooleanSubscription();\n+        Observable<Integer> testObservable = Observable.create(new OnSubscribeFunc<Integer>() {\n+\n+            @Override\n+            public Subscription onSubscribe(Observer<? super Integer> o) {\n+                o.onNext(1);\n+                o.onCompleted();\n+                return s;\n+            }\n+\n+        });\n \n         Subscription sub = OperationObserveFromAndroidComponent.observeFromAndroidComponent(\n-                mockObservable, mockActivity).subscribe(mockObserver);\n+                testObservable, mockActivity).subscribe(mockObserver);\n         sub.unsubscribe();\n \n-        verify(underlying).unsubscribe();\n+        assertTrue(s.isUnsubscribed());\n     }\n+\n }",
+      "parent_sha": "8b37d79b3f871300cd973e82e7540dd6f75d3cfd"
+    }
+  },
+  {
+    "oid": "936c68ef4934fd504ac75262069109acbddd3bf3",
+    "message": "Add guards around log statements",
+    "date": "2013-10-14T08:23:18Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/936c68ef4934fd504ac75262069109acbddd3bf3",
+    "details": {
+      "sha": "b2ce5b0bf67fb364f200dd7fa8b769bb0e3e6c69",
+      "filename": "src/main/java/rx/operators/OperationObserveFromAndroidComponent.java",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 3,
+      "changes": 8,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/936c68ef4934fd504ac75262069109acbddd3bf3/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/936c68ef4934fd504ac75262069109acbddd3bf3/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Foperators%2FOperationObserveFromAndroidComponent.java?ref=936c68ef4934fd504ac75262069109acbddd3bf3",
+      "patch": "@@ -61,9 +61,11 @@ private OnSubscribeBase(Observable<T> source, AndroidComponent component) {\n         }\n \n         private void log(String message) {\n-            Log.d(LOG_TAG, \"componentRef = \" + componentRef);\n-            Log.d(LOG_TAG, \"observerRef = \" + observerRef);\n-            Log.d(LOG_TAG, message);\n+            if (Log.isLoggable(LOG_TAG, Log.DEBUG)) {\n+                Log.d(LOG_TAG, \"componentRef = \" + componentRef);\n+                Log.d(LOG_TAG, \"observerRef = \" + observerRef);\n+                Log.d(LOG_TAG, message);\n+            }\n         }\n \n         protected abstract boolean isComponentValid(AndroidComponent component);",
+      "parent_sha": "24a2e03da78963d98b9d3efba9ae0bde73e86575"
+    }
+  },
+  {
+    "oid": "354d0af78a671b90df34fac775de592e5c7f7c7e",
+    "message": "Using a ScheduledAction in order to ensure correct subscription behaviour.\n\nSigned-off-by: David Marques <dpsmarques@gmail.com>",
+    "date": "2014-06-05T00:52:28Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/354d0af78a671b90df34fac775de592e5c7f7c7e",
+    "details": {
+      "sha": "ccd8aeda228dd1a90143c5b27e91cccf2494203e",
+      "filename": "src/main/java/rx/android/schedulers/HandlerThreadScheduler.java",
+      "status": "modified",
+      "additions": 9,
+      "deletions": 17,
+      "changes": 26,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/354d0af78a671b90df34fac775de592e5c7f7c7e/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerThreadScheduler.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/354d0af78a671b90df34fac775de592e5c7f7c7e/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerThreadScheduler.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/src%2Fmain%2Fjava%2Frx%2Fandroid%2Fschedulers%2FHandlerThreadScheduler.java?ref=354d0af78a671b90df34fac775de592e5c7f7c7e",
+      "patch": "@@ -21,6 +21,7 @@\n import rx.Subscription;\n import rx.functions.Action0;\n import rx.functions.Action1;\n+import rx.internal.schedulers.ScheduledAction;\n import rx.subscriptions.BooleanSubscription;\n import rx.subscriptions.CompositeSubscription;\n import rx.subscriptions.Subscriptions;\n@@ -70,27 +71,18 @@ public boolean isUnsubscribed() {\n \n         @Override\n         public Subscription schedule(final Action0 action, long delayTime, TimeUnit unit) {\n-            final Runnable runnable = new Runnable() {\n-                @Override\n-                public void run() {\n-                    if (isUnsubscribed()) {\n-                        return;\n-                    }\n-                    action.call();\n-                }\n-            };\n-            handler.postDelayed(runnable, unit.toMillis(delayTime));\n-\n-            final Subscription subscription = Subscriptions.create(new Action0() {\n+            final ScheduledAction scheduledAction = new ScheduledAction(action);\n+            scheduledAction.addParent(mCompositeSubscription);\n+            scheduledAction.add(Subscriptions.create(new Action0() {\n                 @Override\n                 public void call() {\n-                    handler.removeCallbacks(runnable);\n-\n+                    handler.removeCallbacks(scheduledAction);\n                 }\n-            });\n-            mCompositeSubscription.add(subscription);\n+            }));\n+\n+            handler.postDelayed(scheduledAction, unit.toMillis(delayTime));\n \n-            return Subscriptions.empty();\n+            return scheduledAction;\n         }\n \n         @Override",
+      "parent_sha": "54c514a38de78cf693115329f30d7acb10de7937"
+    }
+  },
+  {
+    "oid": "a7e888adc388a0d0722ea5822a32dc589364e5a1",
+    "message": "isn't superfluous negative check?",
+    "date": "2018-01-13T20:49:36Z",
+    "url": "https://github.com/ReactiveX/RxAndroid/commit/a7e888adc388a0d0722ea5822a32dc589364e5a1",
+    "details": {
+      "sha": "8fd010348cb4efe2267eacf78a13324f893e886b",
+      "filename": "rxandroid/src/main/java/io/reactivex/android/schedulers/HandlerScheduler.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/ReactiveX/RxAndroid/blob/a7e888adc388a0d0722ea5822a32dc589364e5a1/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fschedulers%2FHandlerScheduler.java",
+      "raw_url": "https://github.com/ReactiveX/RxAndroid/raw/a7e888adc388a0d0722ea5822a32dc589364e5a1/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fschedulers%2FHandlerScheduler.java",
+      "contents_url": "https://api.github.com/repos/ReactiveX/RxAndroid/contents/rxandroid%2Fsrc%2Fmain%2Fjava%2Fio%2Freactivex%2Fandroid%2Fschedulers%2FHandlerScheduler.java?ref=a7e888adc388a0d0722ea5822a32dc589364e5a1",
+      "patch": "@@ -35,7 +35,7 @@ public Disposable scheduleDirect(Runnable run, long delay, TimeUnit unit) {\n \n         run = RxJavaPlugins.onSchedule(run);\n         ScheduledRunnable scheduled = new ScheduledRunnable(handler, run);\n-        handler.postDelayed(scheduled, Math.max(0L, unit.toMillis(delay)));\n+        handler.postDelayed(scheduled, unit.toMillis(delay));\n         return scheduled;\n     }\n ",
+      "parent_sha": "0dc3d9d36928c7f1e8ebd042187309fcd09df9ef"
+    }
+  }
+]

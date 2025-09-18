@@ -1,0 +1,553 @@
+[
+  {
+    "oid": "4b8cc02e2294f3711dbe273d2973d9f84d73718e",
+    "message": "Guard setting color filter by null check\n\nThis fixes a regression introduced with 528125cae927614a63ffc0b9314cd8b9fd6326fd.\nAdd comment to make sure the check stays this time. See #326 and #105.",
+    "date": "2020-01-01T13:52:01Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/4b8cc02e2294f3711dbe273d2973d9f84d73718e",
+    "details": {
+      "sha": "77f9917d1aeea62884afa5abdf2b95a01b2111e1",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 1,
+      "changes": 7,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/4b8cc02e2294f3711dbe273d2973d9f84d73718e/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/4b8cc02e2294f3711dbe273d2973d9f84d73718e/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=4b8cc02e2294f3711dbe273d2973d9f84d73718e",
+      "patch": "@@ -291,8 +291,13 @@ public ColorFilter getColorFilter() {\n         return mColorFilter;\n     }\n \n+    @SuppressWarnings(\"ConstantConditions\")\n     private void applyColorFilter() {\n-        mBitmapPaint.setColorFilter(mColorFilter);\n+        // This might be called from setColorFilter during ImageView construction\n+        // before member initialization has finished on API level <= 19.\n+        if (mBitmapPaint != null) {\n+            mBitmapPaint.setColorFilter(mColorFilter);\n+        }\n     }\n \n     private Bitmap getBitmapFromDrawable(Drawable drawable) {",
+      "parent_sha": "f03cd288f35a51a3ea854282fb483d8238559382"
+    }
+  },
+  {
+    "oid": "7b9e2fc8b0061273a47e2b9166b3661a40a78cd4",
+    "message": "Let border overlap image by 1px to avoid a hairline gap caused by antialising; resolves #131",
+    "date": "2016-05-16T15:20:04Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/7b9e2fc8b0061273a47e2b9166b3661a40a78cd4",
+    "details": {
+      "sha": "3216c16906d9d7f642ec734bfb8d8137f1622e9c",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/7b9e2fc8b0061273a47e2b9166b3661a40a78cd4/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/7b9e2fc8b0061273a47e2b9166b3661a40a78cd4/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=7b9e2fc8b0061273a47e2b9166b3661a40a78cd4",
+      "patch": "@@ -380,8 +380,8 @@ private void setup() {\n         mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2.0f, (mBorderRect.width() - mBorderWidth) / 2.0f);\n \n         mDrawableRect.set(mBorderRect);\n-        if (!mBorderOverlay) {\n-            mDrawableRect.inset(mBorderWidth, mBorderWidth);\n+        if (!mBorderOverlay && mBorderWidth > 0) {\n+            mDrawableRect.inset(mBorderWidth - 1.0f, mBorderWidth - 1.0f);\n         }\n         mDrawableRadius = Math.min(mDrawableRect.height() / 2.0f, mDrawableRect.width() / 2.0f);\n ",
+      "parent_sha": "d2cc96be774516b0d6711df4f7390d4b063298a0"
+    }
+  },
+  {
+    "oid": "fc36cfcf55a93cf02fd35166600738ea2e1e9634",
+    "message": "Fixed 1px border is drawn even when border width is set to 0",
+    "date": "2014-04-22T18:04:22Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/fc36cfcf55a93cf02fd35166600738ea2e1e9634",
+    "details": {
+      "sha": "1b8b05986ff967f8b784d7703f0a61e816baf613",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 1,
+      "changes": 4,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/fc36cfcf55a93cf02fd35166600738ea2e1e9634/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/fc36cfcf55a93cf02fd35166600738ea2e1e9634/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=fc36cfcf55a93cf02fd35166600738ea2e1e9634",
+      "patch": "@@ -93,7 +93,9 @@ protected void onDraw(Canvas canvas) {\n         }\n \n         canvas.drawCircle(getWidth() / 2, getHeight() / 2, mDrawableRadius, mBitmapPaint);\n-        canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, mBorderPaint);\n+        if(mBorderWidth != 0){\n+          canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, mBorderPaint);\n+        }\n     }\n \n     @Override",
+      "parent_sha": "c1b3705252b879064ef560a059d854e4b2e13233"
+    }
+  },
+  {
+    "oid": "6d5d5306e760148680e08d85cc2747d2c844b348",
+    "message": "Fix bitmap not being cleared after set to null",
+    "date": "2015-09-14T14:03:59Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/6d5d5306e760148680e08d85cc2747d2c844b348",
+    "details": {
+      "sha": "f607bd4193fe34de4d7c96ea26f59bcaa5b2602b",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 2,
+      "changes": 5,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/6d5d5306e760148680e08d85cc2747d2c844b348/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/6d5d5306e760148680e08d85cc2747d2c844b348/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=6d5d5306e760148680e08d85cc2747d2c844b348",
+      "patch": "@@ -110,7 +110,7 @@ public void setAdjustViewBounds(boolean adjustViewBounds) {\n \n     @Override\n     protected void onDraw(Canvas canvas) {\n-        if (getDrawable() == null) {\n+        if (mBitmap == null) {\n             return;\n         }\n \n@@ -194,7 +194,7 @@ public void setImageResource(@DrawableRes int resId) {\n     @Override\n     public void setImageURI(Uri uri) {\n         super.setImageURI(uri);\n-        mBitmap = getBitmapFromDrawable(getDrawable());\n+        mBitmap = uri != null ? getBitmapFromDrawable(getDrawable()) : null;\n         setup();\n     }\n \n@@ -243,6 +243,7 @@ private void setup() {\n         }\n \n         if (mBitmap == null) {\n+            invalidate();\n             return;\n         }\n ",
+      "parent_sha": "cb2ac0c059864021b8e4acde6f17db91c846e282"
+    }
+  },
+  {
+    "oid": "d2bfacd8d4922b0e3bc0a3986514d6ddcc7de976",
+    "message": "Fix and improve ColorFilter implementation",
+    "date": "2015-01-14T10:39:59Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/d2bfacd8d4922b0e3bc0a3986514d6ddcc7de976",
+    "details": {
+      "sha": "344da44591545cb5241c49a94f7c5e80188cc322",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 4,
+      "changes": 6,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/d2bfacd8d4922b0e3bc0a3986514d6ddcc7de976/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/d2bfacd8d4922b0e3bc0a3986514d6ddcc7de976/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=d2bfacd8d4922b0e3bc0a3986514d6ddcc7de976",
+      "patch": "@@ -183,7 +183,8 @@ public void setColorFilter(ColorFilter cf) {\n         }\n \n         mColorFilter = cf;\n-        setup();\n+        mBitmapPaint.setColorFilter(mColorFilter);\n+        invalidate();\n     }\n \n     private Bitmap getBitmapFromDrawable(Drawable drawable) {\n@@ -227,9 +228,6 @@ private void setup() {\n \n         mBitmapPaint.setAntiAlias(true);\n         mBitmapPaint.setShader(mBitmapShader);\n-        if (mColorFilter != null) {\n-            mBitmapPaint.setColorFilter(mColorFilter);\n-        }\n \n         mBorderPaint.setStyle(Paint.Style.STROKE);\n         mBorderPaint.setAntiAlias(true);",
+      "parent_sha": "ca1782a210929f472cbdb33b498c3536962c9c2c"
+    }
+  },
+  {
+    "oid": "0d9f88a94732741abae1494a9b3a034c51951383",
+    "message": "Reorder setup condition checks",
+    "date": "2015-09-15T09:50:23Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/0d9f88a94732741abae1494a9b3a034c51951383",
+    "details": {
+      "sha": "2cc2cee3bdff1dbc8688af37c8b47c3756445e47",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 3,
+      "changes": 6,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/0d9f88a94732741abae1494a9b3a034c51951383/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/0d9f88a94732741abae1494a9b3a034c51951383/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=0d9f88a94732741abae1494a9b3a034c51951383",
+      "patch": "@@ -259,12 +259,12 @@ private Bitmap getBitmapFromDrawable(Drawable drawable) {\n     }\n \n     private void setup() {\n-        if (getWidth() == 0 && getHeight() == 0) {\n+        if (!mReady) {\n+            mSetupPending = true;\n             return;\n         }\n \n-        if (!mReady) {\n-            mSetupPending = true;\n+        if (getWidth() == 0 && getHeight() == 0) {\n             return;\n         }\n ",
+      "parent_sha": "ee01fb41031e12316d022848f07e9e8e4c63ff2c"
+    }
+  },
+  {
+    "oid": "accab583560892497a45a36848e8b77f6daf2d53",
+    "message": "Restructure initialization and property updates",
+    "date": "2020-03-13T13:48:38Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/accab583560892497a45a36848e8b77f6daf2d53",
+    "details": {
+      "sha": "a89ae10f59a882bd30592d8af3dcc3b327ce0515",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 82,
+      "deletions": 76,
+      "changes": 158,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/accab583560892497a45a36848e8b77f6daf2d53/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/accab583560892497a45a36848e8b77f6daf2d53/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=accab583560892497a45a36848e8b77f6daf2d53",
+      "patch": "@@ -72,15 +72,15 @@ public class CircleImageView extends ImageView {\n     private int mImageAlpha = DEFAULT_IMAGE_ALPHA;\n \n     private Bitmap mBitmap;\n-    private BitmapShader mBitmapShader;\n \n     private float mDrawableRadius;\n     private float mBorderRadius;\n \n     private ColorFilter mColorFilter;\n \n-    private boolean mReady;\n-    private boolean mSetupPending;\n+    private boolean mInitialized;\n+    private boolean mRebuildShader;\n+\n     private boolean mBorderOverlay;\n     private boolean mDisableCircularTransformation;\n \n@@ -110,17 +110,28 @@ public CircleImageView(Context context, AttributeSet attrs, int defStyle) {\n     }\n \n     private void init() {\n+        mInitialized = true;\n+\n         super.setScaleType(SCALE_TYPE);\n-        mReady = true;\n+\n+        mBitmapPaint.setAntiAlias(true);\n+        mBitmapPaint.setDither(true);\n+        mBitmapPaint.setFilterBitmap(true);\n+        mBitmapPaint.setAlpha(mImageAlpha);\n+        mBitmapPaint.setColorFilter(mColorFilter);\n+\n+        mBorderPaint.setStyle(Paint.Style.STROKE);\n+        mBorderPaint.setAntiAlias(true);\n+        mBorderPaint.setColor(mBorderColor);\n+        mBorderPaint.setStrokeWidth(mBorderWidth);\n+\n+        mCircleBackgroundPaint.setStyle(Paint.Style.FILL);\n+        mCircleBackgroundPaint.setAntiAlias(true);\n+        mCircleBackgroundPaint.setColor(mCircleBackgroundColor);\n \n         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {\n             setOutlineProvider(new OutlineProvider());\n         }\n-\n-        if (mSetupPending) {\n-            setup();\n-            mSetupPending = false;\n-        }\n     }\n \n     @Override\n@@ -148,6 +159,15 @@ protected void onDraw(Canvas canvas) {\n             return;\n         }\n \n+        if (mRebuildShader) {\n+            mRebuildShader = false;\n+\n+            BitmapShader bitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);\n+            bitmapShader.setLocalMatrix(mShaderMatrix);\n+\n+            mBitmapPaint.setShader(bitmapShader);\n+        }\n+\n         if (mCircleBackgroundColor != Color.TRANSPARENT) {\n             canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mCircleBackgroundPaint);\n         }\n@@ -160,19 +180,22 @@ protected void onDraw(Canvas canvas) {\n     @Override\n     protected void onSizeChanged(int w, int h, int oldw, int oldh) {\n         super.onSizeChanged(w, h, oldw, oldh);\n-        setup();\n+        updateDimensions();\n+        invalidate();\n     }\n \n     @Override\n     public void setPadding(int left, int top, int right, int bottom) {\n         super.setPadding(left, top, right, bottom);\n-        setup();\n+        updateDimensions();\n+        invalidate();\n     }\n \n     @Override\n     public void setPaddingRelative(int start, int top, int end, int bottom) {\n         super.setPaddingRelative(start, top, end, bottom);\n-        setup();\n+        updateDimensions();\n+        invalidate();\n     }\n \n     public int getBorderColor() {\n@@ -185,7 +208,7 @@ public void setBorderColor(@ColorInt int borderColor) {\n         }\n \n         mBorderColor = borderColor;\n-        mBorderPaint.setColor(mBorderColor);\n+        mBorderPaint.setColor(borderColor);\n         invalidate();\n     }\n \n@@ -217,7 +240,9 @@ public void setBorderWidth(int borderWidth) {\n         }\n \n         mBorderWidth = borderWidth;\n-        setup();\n+        mBorderPaint.setStrokeWidth(borderWidth);\n+        updateDimensions();\n+        invalidate();\n     }\n \n     public boolean isBorderOverlay() {\n@@ -230,44 +255,57 @@ public void setBorderOverlay(boolean borderOverlay) {\n         }\n \n         mBorderOverlay = borderOverlay;\n-        setup();\n+        updateDimensions();\n+        invalidate();\n     }\n \n     public boolean isDisableCircularTransformation() {\n         return mDisableCircularTransformation;\n     }\n \n     public void setDisableCircularTransformation(boolean disableCircularTransformation) {\n-        if (mDisableCircularTransformation == disableCircularTransformation) {\n+        if (disableCircularTransformation == mDisableCircularTransformation) {\n             return;\n         }\n \n         mDisableCircularTransformation = disableCircularTransformation;\n-        initializeBitmap();\n+\n+        if (disableCircularTransformation) {\n+            mBitmap = null;\n+            mBitmapPaint.setShader(null);\n+        } else {\n+            initializeBitmap();\n+        }\n+\n+        invalidate();\n     }\n \n     @Override\n     public void setImageBitmap(Bitmap bm) {\n         super.setImageBitmap(bm);\n         initializeBitmap();\n+        invalidate();\n     }\n \n     @Override\n     public void setImageDrawable(Drawable drawable) {\n         super.setImageDrawable(drawable);\n         initializeBitmap();\n+        invalidate();\n     }\n \n     @Override\n     public void setImageResource(@DrawableRes int resId) {\n         super.setImageResource(resId);\n         initializeBitmap();\n+        invalidate();\n     }\n \n     @Override\n     public void setImageURI(Uri uri) {\n         super.setImageURI(uri);\n         initializeBitmap();\n+        invalidate();\n     }\n \n     @Override\n@@ -279,8 +317,13 @@ public void setImageAlpha(int alpha) {\n         }\n \n         mImageAlpha = alpha;\n-        applyImageAlpha();\n-        invalidate();\n+\n+        // This might be called during ImageView construction before\n+        // member initialization has finished on API level >= 16.\n+        if (mInitialized) {\n+            mBitmapPaint.setAlpha(alpha);\n+            invalidate();\n+        }\n     }\n \n     @Override\n@@ -295,33 +338,20 @@ public void setColorFilter(ColorFilter cf) {\n         }\n \n         mColorFilter = cf;\n-        applyColorFilter();\n-        invalidate();\n+\n+        // This might be called during ImageView construction before\n+        // member initialization has finished on API level <= 19.\n+        if (mInitialized) {\n+            mBitmapPaint.setColorFilter(cf);\n+            invalidate();\n+        }\n     }\n \n     @Override\n     public ColorFilter getColorFilter() {\n         return mColorFilter;\n     }\n \n-    @SuppressWarnings(\"ConstantConditions\")\n-    private void applyImageAlpha() {\n-        // This might be called from setImageAlpha during ImageView construction\n-        // before member initialization has finished on API level <= 19.\n-        if (mBitmapPaint != null) {\n-            mBitmapPaint.setAlpha(mImageAlpha);\n-        }\n-    }\n-\n-    @SuppressWarnings(\"ConstantConditions\")\n-    private void applyColorFilter() {\n-        // This might be called from setColorFilter during ImageView construction\n-        // before member initialization has finished on API level <= 19.\n-        if (mBitmapPaint != null) {\n-            mBitmapPaint.setColorFilter(mColorFilter);\n-        }\n-    }\n-\n     private Bitmap getBitmapFromDrawable(Drawable drawable) {\n         if (drawable == null) {\n             return null;\n@@ -351,45 +381,20 @@ private Bitmap getBitmapFromDrawable(Drawable drawable) {\n     }\n \n     private void initializeBitmap() {\n-        if (mDisableCircularTransformation) {\n-            mBitmap = null;\n-        } else {\n-            mBitmap = getBitmapFromDrawable(getDrawable());\n-        }\n-        setup();\n-    }\n-\n-    private void setup() {\n-        if (!mReady) {\n-            mSetupPending = true;\n-            return;\n-        }\n+        mBitmap = getBitmapFromDrawable(getDrawable());\n \n-        if (getWidth() == 0 && getHeight() == 0) {\n+        if (!mInitialized) {\n             return;\n         }\n \n-        if (mBitmap == null) {\n-            invalidate();\n-            return;\n+        if (mBitmap != null) {\n+            updateShaderMatrix();\n+        } else {\n+            mBitmapPaint.setShader(null);\n         }\n+    }\n \n-        mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);\n-\n-        mBitmapPaint.setAntiAlias(true);\n-        mBitmapPaint.setDither(true);\n-        mBitmapPaint.setFilterBitmap(true);\n-        mBitmapPaint.setShader(mBitmapShader);\n-\n-        mBorderPaint.setStyle(Paint.Style.STROKE);\n-        mBorderPaint.setAntiAlias(true);\n-        mBorderPaint.setColor(mBorderColor);\n-        mBorderPaint.setStrokeWidth(mBorderWidth);\n-\n-        mCircleBackgroundPaint.setStyle(Paint.Style.FILL);\n-        mCircleBackgroundPaint.setAntiAlias(true);\n-        mCircleBackgroundPaint.setColor(mCircleBackgroundColor);\n-\n+    private void updateDimensions() {\n         mBorderRect.set(calculateBounds());\n         mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2.0f, (mBorderRect.width() - mBorderWidth) / 2.0f);\n \n@@ -399,10 +404,7 @@ private void setup() {\n         }\n         mDrawableRadius = Math.min(mDrawableRect.height() / 2.0f, mDrawableRect.width() / 2.0f);\n \n-        applyImageAlpha();\n-        applyColorFilter();\n         updateShaderMatrix();\n-        invalidate();\n     }\n \n     private RectF calculateBounds() {\n@@ -418,6 +420,10 @@ private RectF calculateBounds() {\n     }\n \n     private void updateShaderMatrix() {\n+        if (mBitmap == null) {\n+            return;\n+        }\n+\n         float scale;\n         float dx = 0;\n         float dy = 0;\n@@ -438,7 +444,7 @@ private void updateShaderMatrix() {\n         mShaderMatrix.setScale(scale, scale);\n         mShaderMatrix.postTranslate((int) (dx + 0.5f) + mDrawableRect.left, (int) (dy + 0.5f) + mDrawableRect.top);\n \n-        mBitmapShader.setLocalMatrix(mShaderMatrix);\n+        mRebuildShader = true;\n     }\n \n     @SuppressLint(\"ClickableViewAccessibility\")",
+      "parent_sha": "ec54e53022dd1dd1e0dcd84fb944b95d437366cc"
+    }
+  },
+  {
+    "oid": "754a6b508e18d8b6fc9f580a64d371122ccdcb36",
+    "message": "More support annotations; missing setter for fill color",
+    "date": "2015-09-20T13:37:15Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/754a6b508e18d8b6fc9f580a64d371122ccdcb36",
+    "details": {
+      "sha": "ce6cdaa54f38f5009e8a22a7e281eb1bef892df0",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 2,
+      "changes": 9,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/754a6b508e18d8b6fc9f580a64d371122ccdcb36/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/754a6b508e18d8b6fc9f580a64d371122ccdcb36/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=754a6b508e18d8b6fc9f580a64d371122ccdcb36",
+      "patch": "@@ -15,6 +15,7 @@\n import android.graphics.drawable.ColorDrawable;\n import android.graphics.drawable.Drawable;\n import android.net.Uri;\n+import android.support.annotation.ColorInt;\n import android.support.annotation.ColorRes;\n import android.support.annotation.DrawableRes;\n import android.util.AttributeSet;\n@@ -137,7 +138,7 @@ public int getBorderColor() {\n         return mBorderColor;\n     }\n \n-    public void setBorderColor(int borderColor) {\n+    public void setBorderColor(@ColorInt int borderColor) {\n         if (borderColor == mBorderColor) {\n             return;\n         }\n@@ -155,7 +156,7 @@ public int getFillColor() {\n         return mFillColor;\n     }\n \n-    public void setFillColor(int fillColor) {\n+    public void setFillColor(@ColorInt int fillColor) {\n         if (fillColor == mFillColor) {\n             return;\n         }\n@@ -165,6 +166,10 @@ public void setFillColor(int fillColor) {\n         invalidate();\n     }\n \n+    public void setFillColorResource(@ColorRes int fillColorRes) {\n+        setFillColor(getContext().getResources().getColor(fillColorRes));\n+    }\n+\n     public int getBorderWidth() {\n         return mBorderWidth;\n     }",
+      "parent_sha": "0d9f88a94732741abae1494a9b3a034c51951383"
+    }
+  },
+  {
+    "oid": "7c20cf09aca9116710799f96452d80fb57e21ebd",
+    "message": "Use float numbers in division otherwise the edge of the circle can be\ncut down on small images.",
+    "date": "2015-05-25T21:07:37Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/7c20cf09aca9116710799f96452d80fb57e21ebd",
+    "details": {
+      "sha": "e4c489976d1d0f008e4f9e0d8e749a2f45c1ed19",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 4,
+      "changes": 8,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/7c20cf09aca9116710799f96452d80fb57e21ebd/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/7c20cf09aca9116710799f96452d80fb57e21ebd/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=7c20cf09aca9116710799f96452d80fb57e21ebd",
+      "patch": "@@ -114,9 +114,9 @@ protected void onDraw(Canvas canvas) {\n             return;\n         }\n \n-        canvas.drawCircle(getWidth() / 2, getHeight() / 2, mDrawableRadius, mBitmapPaint);\n+        canvas.drawCircle(getWidth() / 2.0f, getHeight() / 2.0f, mDrawableRadius, mBitmapPaint);\n         if (mBorderWidth != 0) {\n-            canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, mBorderPaint);\n+            canvas.drawCircle(getWidth() / 2.0f, getHeight() / 2.0f, mBorderRadius, mBorderPaint);\n         }\n     }\n \n@@ -260,13 +260,13 @@ private void setup() {\n         mBitmapWidth = mBitmap.getWidth();\n \n         mBorderRect.set(0, 0, getWidth(), getHeight());\n-        mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2, (mBorderRect.width() - mBorderWidth) / 2);\n+        mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2.0f, (mBorderRect.width() - mBorderWidth) / 2.0f);\n \n         mDrawableRect.set(mBorderRect);\n         if (!mBorderOverlay) {\n             mDrawableRect.inset(mBorderWidth, mBorderWidth);\n         }\n-        mDrawableRadius = Math.min(mDrawableRect.height() / 2, mDrawableRect.width() / 2);\n+        mDrawableRadius = Math.min(mDrawableRect.height() / 2.0f, mDrawableRect.width() / 2.0f);\n \n         updateShaderMatrix();\n         invalidate();",
+      "parent_sha": "70b48104b21bdf03073aa5f4f89fbb54d584da08"
+    }
+  },
+  {
+    "oid": "5977670894c6983bcd954f5977457af6b98855f5",
+    "message": "Default border_overlay to false, invert its meaning",
+    "date": "2015-05-06T10:08:42Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/5977670894c6983bcd954f5977457af6b98855f5",
+    "details": {
+      "sha": "b2a67ee6d098db4784c6fd35d9ad9bc640adef93",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/5977670894c6983bcd954f5977457af6b98855f5/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/5977670894c6983bcd954f5977457af6b98855f5/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=5977670894c6983bcd954f5977457af6b98855f5",
+      "patch": "@@ -27,7 +27,7 @@ public class CircleImageView extends ImageView {\n \n     private static final int DEFAULT_BORDER_WIDTH = 0;\n     private static final int DEFAULT_BORDER_COLOR = Color.BLACK;\n-    private static final boolean DEFAULT_BORDER_OVERLAY = true;\n+    private static final boolean DEFAULT_BORDER_OVERLAY = false;\n \n     private final RectF mDrawableRect = new RectF();\n     private final RectF mBorderRect = new RectF();\n@@ -257,7 +257,7 @@ private void setup() {\n         mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2, (mBorderRect.width() - mBorderWidth) / 2);\n \n         mDrawableRect.set(mBorderRect);\n-        if (mBorderOverlay) {\n+        if (!mBorderOverlay) {\n             mDrawableRect.inset(mBorderWidth, mBorderWidth);\n         }\n         mDrawableRadius = Math.min(mDrawableRect.height() / 2, mDrawableRect.width() / 2);",
+      "parent_sha": "d9b70755b7acf8a6b796ba6615a8b26d9a9775eb"
+    }
+  },
+  {
+    "oid": "bdc3be7ef345919add9f26b5abc0ba408d8d0dc8",
+    "message": "Throw proper exception in case of unsupported ScaleType",
+    "date": "2014-02-09T15:42:16Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/bdc3be7ef345919add9f26b5abc0ba408d8d0dc8",
+    "details": {
+      "sha": "c4447ee4c30c0bf740b0bc3d5e8292e7e72a84f8",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/bdc3be7ef345919add9f26b5abc0ba408d8d0dc8/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/bdc3be7ef345919add9f26b5abc0ba408d8d0dc8/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=bdc3be7ef345919add9f26b5abc0ba408d8d0dc8",
+      "patch": "@@ -82,7 +82,7 @@ public ScaleType getScaleType() {\n     @Override\n     public void setScaleType(ScaleType scaleType) {\n         if (scaleType != SCALE_TYPE) {\n-            throw new RuntimeException(); // TODO\n+            throw new IllegalArgumentException(String.format(\"ScaleType %s not supported.\", scaleType));\n         }\n     }\n ",
+      "parent_sha": "10d741b4b963087b37c6e38f01c114951790192b"
+    }
+  },
+  {
+    "oid": "e8428bf9876129d511bc0e96157f2d8ee95af733",
+    "message": "properly initialize in CircleImageView(Context) constructor",
+    "date": "2014-07-16T03:17:06Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/e8428bf9876129d511bc0e96157f2d8ee95af733",
+    "details": {
+      "sha": "f0a9103742b497288630ba2e2911ad298848d119",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 1,
+      "changes": 8,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/e8428bf9876129d511bc0e96157f2d8ee95af733/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/e8428bf9876129d511bc0e96157f2d8ee95af733/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=e8428bf9876129d511bc0e96157f2d8ee95af733",
+      "patch": "@@ -49,6 +49,8 @@ public class CircleImageView extends ImageView {\n \n     public CircleImageView(Context context) {\n         super(context);\n+\n+        init();\n     }\n \n     public CircleImageView(Context context, AttributeSet attrs) {\n@@ -57,7 +59,6 @@ public CircleImageView(Context context, AttributeSet attrs) {\n \n     public CircleImageView(Context context, AttributeSet attrs, int defStyle) {\n         super(context, attrs, defStyle);\n-        super.setScaleType(SCALE_TYPE);\n \n         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyle, 0);\n \n@@ -66,6 +67,11 @@ public CircleImageView(Context context, AttributeSet attrs, int defStyle) {\n \n         a.recycle();\n \n+        init();\n+    }\n+\n+    private void init() {\n+        super.setScaleType(SCALE_TYPE);\n         mReady = true;\n \n         if (mSetupPending) {",
+      "parent_sha": "21027940da0d0011b7b6a72ce3b9cf09ce0cb65e"
+    }
+  },
+  {
+    "oid": "af3982c2acf94b150cd1eaf7720d14476f6f167d",
+    "message": "Add option to disable circular transformation; #111",
+    "date": "2016-04-29T21:51:22Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/af3982c2acf94b150cd1eaf7720d14476f6f167d",
+    "details": {
+      "sha": "24b08ff0d3ca4864d62c098b10bda17149725459",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 32,
+      "deletions": 8,
+      "changes": 40,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/af3982c2acf94b150cd1eaf7720d14476f6f167d/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/af3982c2acf94b150cd1eaf7720d14476f6f167d/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=af3982c2acf94b150cd1eaf7720d14476f6f167d",
+      "patch": "@@ -73,6 +73,7 @@ public class CircleImageView extends ImageView {\n     private boolean mReady;\n     private boolean mSetupPending;\n     private boolean mBorderOverlay;\n+    private boolean mDisableCircularTransformation;\n \n     public CircleImageView(Context context) {\n         super(context);\n@@ -130,6 +131,11 @@ public void setAdjustViewBounds(boolean adjustViewBounds) {\n \n     @Override\n     protected void onDraw(Canvas canvas) {\n+        if (mDisableCircularTransformation) {\n+            super.onDraw(canvas);\n+            return;\n+        }\n+\n         if (mBitmap == null) {\n             return;\n         }\n@@ -211,32 +217,41 @@ public void setBorderOverlay(boolean borderOverlay) {\n         setup();\n     }\n \n+    public boolean isDisableCircularTransformation() {\n+        return mDisableCircularTransformation;\n+    }\n+\n+    public void setDisableCircularTransformation(boolean disableCircularTransformation) {\n+        if (mDisableCircularTransformation == disableCircularTransformation) {\n+            return;\n+        }\n+\n+        mDisableCircularTransformation = disableCircularTransformation;\n+        initializeBitmap();\n+    }\n+\n     @Override\n     public void setImageBitmap(Bitmap bm) {\n         super.setImageBitmap(bm);\n-        mBitmap = bm;\n-        setup();\n+        initializeBitmap();\n     }\n \n     @Override\n     public void setImageDrawable(Drawable drawable) {\n         super.setImageDrawable(drawable);\n-        mBitmap = getBitmapFromDrawable(drawable);\n-        setup();\n+        initializeBitmap();\n     }\n \n     @Override\n     public void setImageResource(@DrawableRes int resId) {\n         super.setImageResource(resId);\n-        mBitmap = getBitmapFromDrawable(getDrawable());\n-        setup();\n+        initializeBitmap();\n     }\n \n     @Override\n     public void setImageURI(Uri uri) {\n         super.setImageURI(uri);\n-        mBitmap = uri != null ? getBitmapFromDrawable(getDrawable()) : null;\n-        setup();\n+        initializeBitmap();\n     }\n \n     @Override\n@@ -289,6 +304,15 @@ private Bitmap getBitmapFromDrawable(Drawable drawable) {\n         }\n     }\n \n+    private void initializeBitmap() {\n+        if (mDisableCircularTransformation) {\n+            mBitmap = null;\n+        } else {\n+            mBitmap = getBitmapFromDrawable(getDrawable());\n+        }\n+        setup();\n+    }\n+\n     private void setup() {\n         if (!mReady) {\n             mSetupPending = true;",
+      "parent_sha": "ec75ff77607c5a5f340141bc3bcae662f1a68d80"
+    }
+  },
+  {
+    "oid": "3d8ea5c80684f92394b6d906061b72ae55b34693",
+    "message": "Fix NPE caused by tint attribute on api levels < 21; #105",
+    "date": "2016-04-17T11:22:45Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/3d8ea5c80684f92394b6d906061b72ae55b34693",
+    "details": {
+      "sha": "8e1e0b2b062905bfa7dfd39f2681cf0fa900bdaa",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 1,
+      "changes": 9,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/3d8ea5c80684f92394b6d906061b72ae55b34693/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/3d8ea5c80684f92394b6d906061b72ae55b34693/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=3d8ea5c80684f92394b6d906061b72ae55b34693",
+      "patch": "@@ -246,10 +246,16 @@ public void setColorFilter(ColorFilter cf) {\n         }\n \n         mColorFilter = cf;\n-        mBitmapPaint.setColorFilter(mColorFilter);\n+        applyColorFilter();\n         invalidate();\n     }\n \n+    private void applyColorFilter() {\n+        if (mBitmapPaint != null) {\n+            mBitmapPaint.setColorFilter(mColorFilter);\n+        }\n+    }\n+\n     private Bitmap getBitmapFromDrawable(Drawable drawable) {\n         if (drawable == null) {\n             return null;\n@@ -319,6 +325,7 @@ private void setup() {\n         }\n         mDrawableRadius = Math.min(mDrawableRect.height() / 2.0f, mDrawableRect.width() / 2.0f);\n \n+        applyColorFilter();\n         updateShaderMatrix();\n         invalidate();\n     }",
+      "parent_sha": "aedcf629aa7481e245337988e6744fc05de46a8d"
+    }
+  },
+  {
+    "oid": "27735dec6e01a024d793df18879c090b1ae9dd28",
+    "message": "Remove traces of ColorStateList as it's ignored anyways",
+    "date": "2014-02-09T15:42:16Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/27735dec6e01a024d793df18879c090b1ae9dd28",
+    "details": {
+      "sha": "0682c1e7f2534f6f4a15b8758df661680df7d746",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 6,
+      "deletions": 11,
+      "changes": 17,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/27735dec6e01a024d793df18879c090b1ae9dd28/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/27735dec6e01a024d793df18879c090b1ae9dd28/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=27735dec6e01a024d793df18879c090b1ae9dd28",
+      "patch": "@@ -1,7 +1,6 @@\n package de.hdodenhof.circleimageview;\n \n import android.content.Context;\n-import android.content.res.ColorStateList;\n import android.content.res.TypedArray;\n import android.graphics.Bitmap;\n import android.graphics.BitmapShader;\n@@ -34,7 +33,7 @@ public class CircleImageView extends ImageView {\n     private final Paint mBitmapPaint = new Paint();\n     private final Paint mBorderPaint = new Paint();\n \n-    private ColorStateList mBorderColor = ColorStateList.valueOf(DEFAULT_BORDER_COLOR);\n+    private int mBorderColor = DEFAULT_BORDER_COLOR;\n     private int mBorderWidth = DEFAULT_BORDER_WIDTH;\n \n     private Bitmap mBitmap;\n@@ -63,14 +62,10 @@ public CircleImageView(Context context, AttributeSet attrs, int defStyle) {\n         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyle, 0);\n \n         mBorderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_border_width, 0);\n-        mBorderColor = a.getColorStateList(R.styleable.CircleImageView_border_color);\n+        mBorderColor = a.getColor(R.styleable.CircleImageView_border_color, DEFAULT_BORDER_COLOR);\n \n         a.recycle();\n \n-        if (mBorderColor == null){\n-            mBorderColor = ColorStateList.valueOf(DEFAULT_BORDER_COLOR);\n-        }\n-\n         mReady = true;\n \n         if (mSetupPending){\n@@ -108,12 +103,12 @@ protected void onSizeChanged(int w, int h, int oldw, int oldh) {\n     }\n \n     public void setBorderColor(int borderColor) {\n-        if (borderColor == mBorderColor.getDefaultColor()){\n+        if (borderColor == mBorderColor){\n             return;\n         }\n \n-        mBorderColor = ColorStateList.valueOf(borderColor);\n-        mBorderPaint.setColor(mBorderColor.getDefaultColor());\n+        mBorderColor = borderColor;\n+        mBorderPaint.setColor(mBorderColor);\n         invalidate();\n     }\n \n@@ -191,7 +186,7 @@ private void setup(){\n \n         mBorderPaint.setStyle(Paint.Style.STROKE);\n         mBorderPaint.setAntiAlias(true);\n-        mBorderPaint.setColor(mBorderColor.getDefaultColor());\n+        mBorderPaint.setColor(mBorderColor);\n         mBorderPaint.setStrokeWidth(mBorderWidth);\n \n         mBitmapHeight = mBitmap.getHeight();",
+      "parent_sha": "701e2a6d43d5187d98031cabf6415313180e6a61"
+    }
+  },
+  {
+    "oid": "90f6250218c7bdfdbaa6e13f2d0534595830db52",
+    "message": "Don't crash when fed with incompatible drawables",
+    "date": "2015-09-14T17:26:21Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/90f6250218c7bdfdbaa6e13f2d0534595830db52",
+    "details": {
+      "sha": "331e79510d06a32c17db4cc6a68b1d5a6f50af5a",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "changes": 3,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/90f6250218c7bdfdbaa6e13f2d0534595830db52/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/90f6250218c7bdfdbaa6e13f2d0534595830db52/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=90f6250218c7bdfdbaa6e13f2d0534595830db52",
+      "patch": "@@ -252,7 +252,8 @@ private Bitmap getBitmapFromDrawable(Drawable drawable) {\n             drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());\n             drawable.draw(canvas);\n             return bitmap;\n-        } catch (OutOfMemoryError e) {\n+        } catch (Exception e) {\n+            e.printStackTrace();\n             return null;\n         }\n     }",
+      "parent_sha": "1f5c50cfaefb0b6354ebe555a7885a05f4f2f009"
+    }
+  },
+  {
+    "oid": "7163ea389252feeb9a9cb4eaa82aaae9c93f8b85",
+    "message": "Draw circle background and border even if no bitmap is set",
+    "date": "2020-03-17T15:53:24Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/7163ea389252feeb9a9cb4eaa82aaae9c93f8b85",
+    "details": {
+      "sha": "a4a430bdb66e83e4303019a6e9fd3ff1675263c5",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 11,
+      "deletions": 11,
+      "changes": 22,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/7163ea389252feeb9a9cb4eaa82aaae9c93f8b85/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/7163ea389252feeb9a9cb4eaa82aaae9c93f8b85/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=7163ea389252feeb9a9cb4eaa82aaae9c93f8b85",
+      "patch": "@@ -155,23 +155,23 @@ protected void onDraw(Canvas canvas) {\n             return;\n         }\n \n-        if (mBitmap == null) {\n-            return;\n+        if (mCircleBackgroundColor != Color.TRANSPARENT) {\n+            canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mCircleBackgroundPaint);\n         }\n \n-        if (mRebuildShader) {\n-            mRebuildShader = false;\n+        if (mBitmap != null) {\n+            if (mRebuildShader) {\n+                mRebuildShader = false;\n+\n+                BitmapShader bitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);\n+                bitmapShader.setLocalMatrix(mShaderMatrix);\n \n-            BitmapShader bitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);\n-            bitmapShader.setLocalMatrix(mShaderMatrix);\n+                mBitmapPaint.setShader(bitmapShader);\n+            }\n \n-            mBitmapPaint.setShader(bitmapShader);\n+            canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mBitmapPaint);\n         }\n \n-        if (mCircleBackgroundColor != Color.TRANSPARENT) {\n-            canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mCircleBackgroundPaint);\n-        }\n-        canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mBitmapPaint);\n         if (mBorderWidth > 0) {\n             canvas.drawCircle(mBorderRect.centerX(), mBorderRect.centerY(), mBorderRadius, mBorderPaint);\n         }",
+      "parent_sha": "b33f76d28bc7abee0a29e8727db71e1e68407f3c"
+    }
+  },
+  {
+    "oid": "af72a113fca09463a1b43bf3c6621efd1973a62e",
+    "message": "Code style",
+    "date": "2014-07-06T09:32:34Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/af72a113fca09463a1b43bf3c6621efd1973a62e",
+    "details": {
+      "sha": "a1796af006b3c8d173126d7d076ae32140fb97a6",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/af72a113fca09463a1b43bf3c6621efd1973a62e/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/af72a113fca09463a1b43bf3c6621efd1973a62e/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=af72a113fca09463a1b43bf3c6621efd1973a62e",
+      "patch": "@@ -93,8 +93,8 @@ protected void onDraw(Canvas canvas) {\n         }\n \n         canvas.drawCircle(getWidth() / 2, getHeight() / 2, mDrawableRadius, mBitmapPaint);\n-        if(mBorderWidth != 0){\n-          canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, mBorderPaint);\n+        if (mBorderWidth != 0) {\n+            canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, mBorderPaint);\n         }\n     }\n ",
+      "parent_sha": "3738115e3027243b6e3814f4a7d7f96024cd39e7"
+    }
+  },
+  {
+    "oid": "528125cae927614a63ffc0b9314cd8b9fd6326fd",
+    "message": "Remove unnecessary null check",
+    "date": "2019-01-06T10:54:07Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/528125cae927614a63ffc0b9314cd8b9fd6326fd",
+    "details": {
+      "sha": "251a7606be440dd4f236ac539a623acfbcc5de72",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 3,
+      "changes": 4,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/528125cae927614a63ffc0b9314cd8b9fd6326fd/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/528125cae927614a63ffc0b9314cd8b9fd6326fd/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=528125cae927614a63ffc0b9314cd8b9fd6326fd",
+      "patch": "@@ -290,9 +290,7 @@ public ColorFilter getColorFilter() {\n     }\n \n     private void applyColorFilter() {\n-        if (mBitmapPaint != null) {\n-            mBitmapPaint.setColorFilter(mColorFilter);\n-        }\n+        mBitmapPaint.setColorFilter(mColorFilter);\n     }\n \n     private Bitmap getBitmapFromDrawable(Drawable drawable) {",
+      "parent_sha": "4676cd5a28c28af4f2c4bd2e82f7ce4c25a7f8a1"
+    }
+  },
+  {
+    "oid": "3d10e243cc27267f5eeae848f44e6d5ae58d9bf3",
+    "message": "Replace fields holding bitmap dimensions with local variables",
+    "date": "2020-03-13T13:48:38Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/3d10e243cc27267f5eeae848f44e6d5ae58d9bf3",
+    "details": {
+      "sha": "c6f516f35cad3e903c7432a8e685c531c1455ef8",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 10,
+      "changes": 18,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/3d10e243cc27267f5eeae848f44e6d5ae58d9bf3/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/3d10e243cc27267f5eeae848f44e6d5ae58d9bf3/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=3d10e243cc27267f5eeae848f44e6d5ae58d9bf3",
+      "patch": "@@ -73,8 +73,6 @@ public class CircleImageView extends ImageView {\n \n     private Bitmap mBitmap;\n     private BitmapShader mBitmapShader;\n-    private int mBitmapWidth;\n-    private int mBitmapHeight;\n \n     private float mDrawableRadius;\n     private float mBorderRadius;\n@@ -397,9 +395,6 @@ private void setup() {\n         mCircleBackgroundPaint.setAntiAlias(true);\n         mCircleBackgroundPaint.setColor(mCircleBackgroundColor);\n \n-        mBitmapHeight = mBitmap.getHeight();\n-        mBitmapWidth = mBitmap.getWidth();\n-\n         mBorderRect.set(calculateBounds());\n         mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2.0f, (mBorderRect.width() - mBorderWidth) / 2.0f);\n \n@@ -434,12 +429,15 @@ private void updateShaderMatrix() {\n \n         mShaderMatrix.set(null);\n \n-        if (mBitmapWidth * mDrawableRect.height() > mDrawableRect.width() * mBitmapHeight) {\n-            scale = mDrawableRect.height() / (float) mBitmapHeight;\n-            dx = (mDrawableRect.width() - mBitmapWidth * scale) * 0.5f;\n+        int bitmapHeight = mBitmap.getHeight();\n+        int bitmapWidth = mBitmap.getWidth();\n+\n+        if (bitmapWidth * mDrawableRect.height() > mDrawableRect.width() * bitmapHeight) {\n+            scale = mDrawableRect.height() / (float) bitmapHeight;\n+            dx = (mDrawableRect.width() - bitmapWidth * scale) * 0.5f;\n         } else {\n-            scale = mDrawableRect.width() / (float) mBitmapWidth;\n-            dy = (mDrawableRect.height() - mBitmapHeight * scale) * 0.5f;\n+            scale = mDrawableRect.width() / (float) bitmapWidth;\n+            dy = (mDrawableRect.height() - bitmapHeight * scale) * 0.5f;\n         }\n \n         mShaderMatrix.setScale(scale, scale);",
+      "parent_sha": "7ad4632d37dec6c6f2d6814664ffd2f7835c8213"
+    }
+  },
+  {
+    "oid": "3fef33b9fbd8df45a7c6134f50e2acbbecf75a0f",
+    "message": "Fall back to default outline provider if circular transformation is disabled",
+    "date": "2019-08-28T09:44:09Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/3fef33b9fbd8df45a7c6134f50e2acbbecf75a0f",
+    "details": {
+      "sha": "b8670bf1a5be8cafc4b38698abfe2f2ae6d33ff9",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 7,
+      "deletions": 3,
+      "changes": 10,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/3fef33b9fbd8df45a7c6134f50e2acbbecf75a0f/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/3fef33b9fbd8df45a7c6134f50e2acbbecf75a0f/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=3fef33b9fbd8df45a7c6134f50e2acbbecf75a0f",
+      "patch": "@@ -434,9 +434,13 @@ private class OutlineProvider extends ViewOutlineProvider {\n \n         @Override\n         public void getOutline(View view, Outline outline) {\n-            Rect bounds = new Rect();\n-            mBorderRect.roundOut(bounds);\n-            outline.setRoundRect(bounds, bounds.width() / 2.0f);\n+            if (mDisableCircularTransformation) {\n+                ViewOutlineProvider.BACKGROUND.getOutline(view, outline);\n+            } else {\n+                Rect bounds = new Rect();\n+                mBorderRect.roundOut(bounds);\n+                outline.setRoundRect(bounds, bounds.width() / 2.0f);\n+            }\n         }\n \n     }",
+      "parent_sha": "e593101e57ff543ab902c012e8915fb43a6b7e5c"
+    }
+  },
+  {
+    "oid": "d3ced7d5e3a2651e3b1a1afa1b0723cf7b855166",
+    "message": "Add support for padding",
+    "date": "2016-04-29T21:51:27Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/d3ced7d5e3a2651e3b1a1afa1b0723cf7b855166",
+    "details": {
+      "sha": "4fb1769b398dec5bbde6dd169a3fbcaeed6d4007",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 16,
+      "deletions": 4,
+      "changes": 20,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/d3ced7d5e3a2651e3b1a1afa1b0723cf7b855166/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/d3ced7d5e3a2651e3b1a1afa1b0723cf7b855166/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=d3ced7d5e3a2651e3b1a1afa1b0723cf7b855166",
+      "patch": "@@ -141,11 +141,11 @@ protected void onDraw(Canvas canvas) {\n         }\n \n         if (mFillColor != Color.TRANSPARENT) {\n-            canvas.drawCircle(getWidth() / 2.0f, getHeight() / 2.0f, mDrawableRadius, mFillPaint);\n+            canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mFillPaint);\n         }\n-        canvas.drawCircle(getWidth() / 2.0f, getHeight() / 2.0f, mDrawableRadius, mBitmapPaint);\n+        canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mBitmapPaint);\n         if (mBorderWidth != 0) {\n-            canvas.drawCircle(getWidth() / 2.0f, getHeight() / 2.0f, mBorderRadius, mBorderPaint);\n+            canvas.drawCircle(mBorderRect.centerX(), mBorderRect.centerY(), mBorderRadius, mBorderPaint);\n         }\n     }\n \n@@ -345,7 +345,7 @@ private void setup() {\n         mBitmapHeight = mBitmap.getHeight();\n         mBitmapWidth = mBitmap.getWidth();\n \n-        mBorderRect.set(0, 0, getWidth(), getHeight());\n+        mBorderRect.set(calculateBounds());\n         mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2.0f, (mBorderRect.width() - mBorderWidth) / 2.0f);\n \n         mDrawableRect.set(mBorderRect);\n@@ -359,6 +359,18 @@ private void setup() {\n         invalidate();\n     }\n \n+    private RectF calculateBounds() {\n+        int availableWidth  = getWidth() - getPaddingLeft() - getPaddingRight();\n+        int availableHeight = getHeight() - getPaddingTop() - getPaddingBottom();\n+\n+        int sideLength = Math.min(availableWidth, availableHeight);\n+\n+        float left = getPaddingLeft() + (availableWidth - sideLength) / 2f;\n+        float top = getPaddingTop() + (availableHeight - sideLength) / 2f;\n+\n+        return new RectF(left, top, left + sideLength, top + sideLength);\n+    }\n+\n     private void updateShaderMatrix() {\n         float scale;\n         float dx = 0;",
+      "parent_sha": "af3982c2acf94b150cd1eaf7720d14476f6f167d"
+    }
+  },
+  {
+    "oid": "a74cbbf3b87a557f02ad2609451b10d650f89ad4",
+    "message": "Style cleanup",
+    "date": "2015-05-03T11:44:40Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/a74cbbf3b87a557f02ad2609451b10d650f89ad4",
+    "details": {
+      "sha": "344baf5720062a6cdd4aac33cde1a8c6a85ff396",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 14,
+      "deletions": 12,
+      "changes": 26,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/a74cbbf3b87a557f02ad2609451b10d650f89ad4/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/a74cbbf3b87a557f02ad2609451b10d650f89ad4/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=a74cbbf3b87a557f02ad2609451b10d650f89ad4",
+      "patch": "@@ -70,7 +70,7 @@ public CircleImageView(Context context, AttributeSet attrs, int defStyle) {\n \n         mBorderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_border_width, DEFAULT_BORDER_WIDTH);\n         mBorderColor = a.getColor(R.styleable.CircleImageView_border_color, DEFAULT_BORDER_COLOR);\n-        mBorderInset = a.getBoolean(R.styleable.CircleImageView_border_inset, DEFAULT_BORDER_INSET );\n+        mBorderInset = a.getBoolean(R.styleable.CircleImageView_border_inset, DEFAULT_BORDER_INSET);\n \n         a.recycle();\n \n@@ -151,18 +151,18 @@ public void setBorderWidth(int borderWidth) {\n         setup();\n     }\n \n-\tpublic boolean getBorderInset() {\n-\t\treturn mBorderInset;\n-\t}\n+    public boolean getBorderInset() {\n+        return mBorderInset;\n+    }\n \n-\tpublic void setBorderInset(boolean borderInset) {\n-\t\tif (borderInset == mBorderInset) {\n-\t\t\treturn;\n-\t\t}\n+    public void setBorderInset(boolean borderInset) {\n+        if (borderInset == mBorderInset) {\n+            return;\n+        }\n \n-\t\tmBorderInset = borderInset;\n-\t\tsetup();\n-\t}\n+        mBorderInset = borderInset;\n+        setup();\n+    }\n \n     @Override\n     public void setImageBitmap(Bitmap bm) {\n@@ -257,7 +257,9 @@ private void setup() {\n         mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2, (mBorderRect.width() - mBorderWidth) / 2);\n \n         mDrawableRect.set(mBorderRect);\n-        if (mBorderInset) mDrawableRect.inset(mBorderWidth, mBorderWidth);\n+        if (mBorderInset) {\n+            mDrawableRect.inset(mBorderWidth, mBorderWidth);\n+        }\n         mDrawableRadius = Math.min(mDrawableRect.height() / 2, mDrawableRect.width() / 2);\n \n         updateShaderMatrix();",
+      "parent_sha": "969a7ee74c26dfca311048ed09e96a23588539aa"
+    }
+  },
+  {
+    "oid": "92416911dae505a227f08581d0c799073761336c",
+    "message": "Fix ColorDrawables not being rendered properly on Lollipop; closes #23",
+    "date": "2014-11-17T17:11:28Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/92416911dae505a227f08581d0c799073761336c",
+    "details": {
+      "sha": "acfd72b9b650c8514f6d292018ae1b72308ffda1",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/92416911dae505a227f08581d0c799073761336c/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/92416911dae505a227f08581d0c799073761336c/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=92416911dae505a227f08581d0c799073761336c",
+      "patch": "@@ -22,7 +22,7 @@ public class CircleImageView extends ImageView {\n     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;\n \n     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;\n-    private static final int COLORDRAWABLE_DIMENSION = 1;\n+    private static final int COLORDRAWABLE_DIMENSION = 2;\n \n     private static final int DEFAULT_BORDER_WIDTH = 0;\n     private static final int DEFAULT_BORDER_COLOR = Color.BLACK;",
+      "parent_sha": "d5b672bfb818fa2453c28f0164ba794ba1bdb1e3"
+    }
+  },
+  {
+    "oid": "521277b65db235c7834d96b4fb4494e7e74f6605",
+    "message": "Add support for ColorDrawables, fixes #1",
+    "date": "2014-02-09T15:42:16Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/521277b65db235c7834d96b4fb4494e7e74f6605",
+    "details": {
+      "sha": "110876a6ef4926fb1ac8ac4c62ae4043e393c4b3",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 12,
+      "deletions": 1,
+      "changes": 13,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/521277b65db235c7834d96b4fb4494e7e74f6605/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/521277b65db235c7834d96b4fb4494e7e74f6605/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=521277b65db235c7834d96b4fb4494e7e74f6605",
+      "patch": "@@ -12,6 +12,7 @@\n import android.graphics.RectF;\n import android.graphics.Shader;\n import android.graphics.drawable.BitmapDrawable;\n+import android.graphics.drawable.ColorDrawable;\n import android.graphics.drawable.Drawable;\n import android.util.AttributeSet;\n import android.widget.ImageView;\n@@ -20,6 +21,9 @@ public class CircleImageView extends ImageView {\n \n     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;\n \n+    private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;\n+    private static final int COLORDRAWABLE_DIMENSION = 1;\n+\n     private static final int DEFAULT_BORDER_WIDTH = 0;\n     private static final int DEFAULT_BORDER_COLOR = Color.BLACK;\n \n@@ -134,7 +138,14 @@ private Bitmap getBitmapFromDrawable(Drawable drawable){\n         }\n \n         try {\n-            Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);\n+            Bitmap bitmap;\n+\n+            if (drawable instanceof ColorDrawable){\n+                bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);\n+            } else {\n+                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);\n+            }\n+\n             Canvas canvas = new Canvas(bitmap);\n             drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());\n             drawable.draw(canvas);",
+      "parent_sha": "a56a7d920986e97cd6bc50b258512924a9912535"
+    }
+  },
+  {
+    "oid": "10d741b4b963087b37c6e38f01c114951790192b",
+    "message": "Reformat code",
+    "date": "2014-02-09T15:42:16Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/10d741b4b963087b37c6e38f01c114951790192b",
+    "details": {
+      "sha": "2e0272cec6e74f8d6cadede5678377489f9f6f61",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 16,
+      "deletions": 16,
+      "changes": 32,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/10d741b4b963087b37c6e38f01c114951790192b/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/10d741b4b963087b37c6e38f01c114951790192b/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=10d741b4b963087b37c6e38f01c114951790192b",
+      "patch": "@@ -68,7 +68,7 @@ public CircleImageView(Context context, AttributeSet attrs, int defStyle) {\n \n         mReady = true;\n \n-        if (mSetupPending){\n+        if (mSetupPending) {\n             setup();\n             mSetupPending = false;\n         }\n@@ -81,19 +81,19 @@ public ScaleType getScaleType() {\n \n     @Override\n     public void setScaleType(ScaleType scaleType) {\n-        if (scaleType != SCALE_TYPE){\n+        if (scaleType != SCALE_TYPE) {\n             throw new RuntimeException(); // TODO\n         }\n     }\n \n     @Override\n     protected void onDraw(Canvas canvas) {\n-        if (getDrawable() == null){\n+        if (getDrawable() == null) {\n             return;\n         }\n \n-        canvas.drawCircle(getWidth()/2, getHeight()/2, mDrawableRadius, mBitmapPaint);\n-        canvas.drawCircle(getWidth()/2, getHeight()/2, mBorderRadius, mBorderPaint);\n+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, mDrawableRadius, mBitmapPaint);\n+        canvas.drawCircle(getWidth() / 2, getHeight() / 2, mBorderRadius, mBorderPaint);\n     }\n \n     @Override\n@@ -103,7 +103,7 @@ protected void onSizeChanged(int w, int h, int oldw, int oldh) {\n     }\n \n     public void setBorderColor(int borderColor) {\n-        if (borderColor == mBorderColor){\n+        if (borderColor == mBorderColor) {\n             return;\n         }\n \n@@ -113,7 +113,7 @@ public void setBorderColor(int borderColor) {\n     }\n \n     public void setBorderWidth(int borderWidth) {\n-        if (borderWidth == mBorderWidth){\n+        if (borderWidth == mBorderWidth) {\n             return;\n         }\n \n@@ -142,8 +142,8 @@ public void setImageResource(int resId) {\n         setup();\n     }\n \n-    private Bitmap getBitmapFromDrawable(Drawable drawable){\n-        if (drawable == null){\n+    private Bitmap getBitmapFromDrawable(Drawable drawable) {\n+        if (drawable == null) {\n             return null;\n         }\n \n@@ -154,7 +154,7 @@ private Bitmap getBitmapFromDrawable(Drawable drawable){\n         try {\n             Bitmap bitmap;\n \n-            if (drawable instanceof ColorDrawable){\n+            if (drawable instanceof ColorDrawable) {\n                 bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);\n             } else {\n                 bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);\n@@ -164,18 +164,18 @@ private Bitmap getBitmapFromDrawable(Drawable drawable){\n             drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());\n             drawable.draw(canvas);\n             return bitmap;\n-        } catch (OutOfMemoryError e){\n+        } catch (OutOfMemoryError e) {\n             return null;\n         }\n     }\n \n-    private void setup(){\n-        if (!mReady){\n+    private void setup() {\n+        if (!mReady) {\n             mSetupPending = true;\n             return;\n         }\n \n-        if (mBitmap == null){\n+        if (mBitmap == null) {\n             return;\n         }\n \n@@ -193,10 +193,10 @@ private void setup(){\n         mBitmapWidth = mBitmap.getWidth();\n \n         mBorderRect.set(0, 0, getWidth(), getHeight());\n-        mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth)/2, (mBorderRect.width() - mBorderWidth)/2);\n+        mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2, (mBorderRect.width() - mBorderWidth) / 2);\n \n         mDrawableRect.set(mBorderWidth, mBorderWidth, mBorderRect.width() - mBorderWidth, mBorderRect.height() - mBorderWidth);\n-        mDrawableRadius = Math.min(mDrawableRect.height()/2, mDrawableRect.width()/2);\n+        mDrawableRadius = Math.min(mDrawableRect.height() / 2, mDrawableRect.width() / 2);\n \n         updateShaderMatrix();\n         invalidate();",
+      "parent_sha": "6e8c49c9a49681a9b7a957474a86824bd231ae30"
+    }
+  },
+  {
+    "oid": "673efdd55f60ededcf6afbdefb6cbf73916cd118",
+    "message": "Improve Drawable to Bitmap conversion",
+    "date": "2014-01-23T20:31:13Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/673efdd55f60ededcf6afbdefb6cbf73916cd118",
+    "details": {
+      "sha": "3d34440314783cae32da199d0af0376d54386e24",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 15,
+      "deletions": 5,
+      "changes": 20,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/673efdd55f60ededcf6afbdefb6cbf73916cd118/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/673efdd55f60ededcf6afbdefb6cbf73916cd118/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=673efdd55f60ededcf6afbdefb6cbf73916cd118",
+      "patch": "@@ -11,6 +11,7 @@\n import android.graphics.Paint;\n import android.graphics.RectF;\n import android.graphics.Shader;\n+import android.graphics.drawable.BitmapDrawable;\n import android.graphics.drawable.Drawable;\n import android.util.AttributeSet;\n import android.widget.ImageView;\n@@ -127,11 +128,20 @@ private Bitmap getBitmapFromDrawable(Drawable drawable){\n         if (drawable == null){\n             return null;\n         }\n-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);\n-        Canvas canvas = new Canvas(bitmap);\n-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());\n-        drawable.draw(canvas);\n-        return bitmap;\n+\n+        if (drawable instanceof BitmapDrawable) {\n+            return ((BitmapDrawable) drawable).getBitmap();\n+        }\n+\n+        try {\n+            Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);\n+            Canvas canvas = new Canvas(bitmap);\n+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());\n+            drawable.draw(canvas);\n+            return bitmap;\n+        } catch (OutOfMemoryError e){\n+            return null;\n+        }\n     }\n \n     private void setup(){",
+      "parent_sha": "db8b8e909ad8711de0a4ed18468d8263c25b9f9c"
+    }
+  },
+  {
+    "oid": "f98b11c3867b5ad28b66717e6149fe4e86fe6f8b",
+    "message": "Tweak border drawing condition",
+    "date": "2016-05-16T15:23:35Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/f98b11c3867b5ad28b66717e6149fe4e86fe6f8b",
+    "details": {
+      "sha": "39cf234cc7f422d6a51fa6f2f13b04c1ac15378f",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/f98b11c3867b5ad28b66717e6149fe4e86fe6f8b/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/f98b11c3867b5ad28b66717e6149fe4e86fe6f8b/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=f98b11c3867b5ad28b66717e6149fe4e86fe6f8b",
+      "patch": "@@ -144,7 +144,7 @@ protected void onDraw(Canvas canvas) {\n             canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mFillPaint);\n         }\n         canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mBitmapPaint);\n-        if (mBorderWidth != 0) {\n+        if (mBorderWidth > 0) {\n             canvas.drawCircle(mBorderRect.centerX(), mBorderRect.centerY(), mBorderRadius, mBorderPaint);\n         }\n     }",
+      "parent_sha": "7b9e2fc8b0061273a47e2b9166b3661a40a78cd4"
+    }
+  },
+  {
+    "oid": "6e8c49c9a49681a9b7a957474a86824bd231ae30",
+    "message": "Get rid of magic number in favor of a constant",
+    "date": "2014-02-09T15:42:16Z",
+    "url": "https://github.com/hdodenhof/CircleImageView/commit/6e8c49c9a49681a9b7a957474a86824bd231ae30",
+    "details": {
+      "sha": "7199e20271239cdbb28ff8d1c9ecce606f9986df",
+      "filename": "circleimageview/src/main/java/de/hdodenhof/circleimageview/CircleImageView.java",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/hdodenhof/CircleImageView/blob/6e8c49c9a49681a9b7a957474a86824bd231ae30/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "raw_url": "https://github.com/hdodenhof/CircleImageView/raw/6e8c49c9a49681a9b7a957474a86824bd231ae30/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java",
+      "contents_url": "https://api.github.com/repos/hdodenhof/CircleImageView/contents/circleimageview%2Fsrc%2Fmain%2Fjava%2Fde%2Fhdodenhof%2Fcircleimageview%2FCircleImageView.java?ref=6e8c49c9a49681a9b7a957474a86824bd231ae30",
+      "patch": "@@ -61,7 +61,7 @@ public CircleImageView(Context context, AttributeSet attrs, int defStyle) {\n \n         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyle, 0);\n \n-        mBorderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_border_width, 0);\n+        mBorderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_border_width, DEFAULT_BORDER_WIDTH);\n         mBorderColor = a.getColor(R.styleable.CircleImageView_border_color, DEFAULT_BORDER_COLOR);\n \n         a.recycle();",
+      "parent_sha": "27735dec6e01a024d793df18879c090b1ae9dd28"
+    }
+  }
+]
